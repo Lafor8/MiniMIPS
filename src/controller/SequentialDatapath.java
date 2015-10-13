@@ -5,77 +5,109 @@ import com.sun.javafx.css.Selector;
 import model.MIPSInstruction;
 
 public class SequentialDatapath {
+	// Program Counter
 	private long pc;
-	private InternalRegisters internalRegisters;
-	private boolean keepRunning;
-
+	
+	// Internal Registers
+	private InternalRegisters if_id;
+	private InternalRegisters id_ex;
+	private InternalRegisters ex_mem;
+	private InternalRegisters mem_wb;
+	
+	// Registers and Memory
 	private InstructionMemory instructionMemory;
 	private Registers registers;
 	private DataMemory dataMemory;
 
+	// Operators
 	private ALU alu;
 	private AdderALU adderAlu;
 	private Multiplexer multiplexer;
 	private ZeroCondition zeroCondition;
 	private SignExtend signExtend;
 
-	public int runCycles() {
-		pc = 0;
+	// Auxillary variables
+	private boolean keepRunning;
+	private int cycles;
 
+	
+	public int run() {
+		pc = 0;
+		
+		cycles = 0;
 		while (keepRunning) {
-			IF();
-			ID();
-			EX();
-			MEM();
-			WB();
+			runOneCycle();
 		}
 
 		return 0;
 	}
+	
+	public int runOneCycle(){
+		if(mem_wb != null)
+			WB();
+		if(ex_mem != null)
+			MEM();
+		if(id_ex != null)
+			EX();
+		if(if_id != null)
+			ID();
+		IF();
+			
+		return 0;
+	}
 
 	public int IF() {
-		internalRegisters.npc = adderAlu.add(pc, 4);
-		internalRegisters.ir = instructionMemory.getInstructionAddress(pc);
+		if_id.npc = adderAlu.add(pc, 4);
+		if_id.ir = instructionMemory.getInstructionAddress(pc);
 
 		return 0;
 	}
 
 	public int ID() {
-		internalRegisters.a = Registers.getA(internalRegisters.ir);
-		internalRegisters.b = Registers.getB(internalRegisters.ir);
-		internalRegisters.imm = SignExtend.getImmAndExtend(internalRegisters.ir);
+		id_ex.ir = if_id.ir;
+		id_ex.npc = if_id.npc;
+		
+		id_ex.a = Registers.getA(if_id.ir);
+		id_ex.b = Registers.getB(if_id.ir);
+		id_ex.imm = SignExtend.getImmAndExtend(if_id.ir);
 
 		return 0;
 	}
 
 	public int EX() {
-		switch (MIPSInstruction.getInstructionType(internalRegisters.ir)) {
+		ex_mem.ir = id_ex.ir;
+		ex_mem.b = id_ex.b;
+		
+		switch (MIPSInstruction.getInstructionType(id_ex.ir)) {
 			case MIPSInstruction.BRANCH:
-				internalRegisters.aluOutput = internalRegister.npc + internalRegiters.imm << 2;
-				internalRegisters.cond = zeroCondition.check(internalRegisters.a);
+				ex_mem.aluOutput = id_ex.npc + id_ex.imm << 2;
+				ex_mem.cond = zeroCondition.check(id_ex.a);
 				break;
 			case MIPSInstruction.JUMP:
-				internalRegisters.aluOutput = internalRegiters.imm << 2;
-				internalRegisters.cond = 1;
+				ex_mem.aluOutput = id_ex.imm << 2;
+				ex_mem.cond = 1;
 				break; 
 			default:
-				long param1 = multiplexer.select(internalRegisters.npc, internalRegisters.a, internalRegisters.ir);
-				long param2 = multiplexer.select(internalRegisters.b, internalRegisters.imm, internalRegisters.ir);
-				internalRegisters.aluOutput = alu.apply(param1, param2,internalRegisters.ir);
+				long param1 = multiplexer.select(id_ex.npc, id_ex.a, id_ex.ir);
+				long param2 = multiplexer.select(id_ex.b, id_ex.imm, id_ex.ir);
+				ex_mem.aluOutput = alu.apply(param1, param2, id_ex.ir);
 		}
 
 		return 0;
 	}
 
 	public int MEM() {
-		pc = multiplexer.select(internalRegisters.npc, internalRegisters.aluOutput, internalRegisters.cond);
+		mem_wb.ir = ex_mem.ir;
+		mem_wb.aluOutput = ex_mem.aluOutput;
 		
-		switch(MIPSInstruction.getInstructionType(internalRegisters.ir)){
+		pc = multiplexer.select(if_id.npc, ex_mem.aluOutput, ex_mem.cond);
+		
+		switch(MIPSInstruction.getInstructionType(ex_mem.ir)){
 			case MIPSInstruction.LOAD:
-				internalRegisters.lmd = dataMemory.getDataFromMemory(internalRegisters.aluOutput);
+				mem_wb.lmd = dataMemory.getDataFromMemory(ex_mem.aluOutput);
 				break;
 			case MIPSInstruction.STORE:
-				internalRegisters.lmd = dataMemory.getDataFromMemory(internalRegisters.b);
+				mem_wb.lmd = dataMemory.getDataFromMemory(ex_mem.b);
 				break;
 		}
 		
@@ -83,16 +115,19 @@ public class SequentialDatapath {
 	}
 
 	public int WB() {
+		// TODO: MEM/WB apparently writes IR back to Registers??
+		// 		I wasn't sure what this meant so I'm leaving this out for now
+		
 		// This is a Multiplexer... kinda
-		switch(MIPSInstruction.getInstructionType(internalRegisters.ir)){
+		switch(MIPSInstruction.getInstructionType(mem_wb.ir)){
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setRegister(internalRegisters.aluOutput, internalRegisters.ir,internalRegisters.IR16_20);
+			registers.setRegister(mem_wb.aluOutput, mem_wb.ir, mem_wb.IR16_20);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
-			registers.setRegister(internalRegisters.aluOutput, internalRegisters.ir,internalRegisters.IR11_15);
+			registers.setRegister(mem_wb.aluOutput, mem_wb.ir, mem_wb.IR11_15);
 			break;
 		case MIPSInstruction.LOAD:
-			registers.setRegister(internalRegisters.lmd, internalRegisters.ir,internalRegisters.IR11_15);
+			registers.setRegister(mem_wb.lmd, mem_wb.ir, mem_wb.IR11_15);
 			break;
 		}
 		
