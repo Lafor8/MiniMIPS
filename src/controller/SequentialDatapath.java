@@ -3,6 +3,7 @@ package controller;
 import com.sun.javafx.css.Selector;
 
 import model.MIPSInstruction;
+import model.*;
 
 public class SequentialDatapath {
 	// Program Counter
