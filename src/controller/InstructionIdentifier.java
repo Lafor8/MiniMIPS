@@ -8,7 +8,7 @@ public class InstructionIdentifier {
 
 	public static void main(String args[]){
 		InstructionIdentifier identifier = new InstructionIdentifier();
-		MIPSInstruction thing = identifier.identify("DADDU R3, R0, R1");
+		MIPSInstruction thing = identifier.identify("BEQ R3, R0, R1");
 		System.out.println(thing.getOpcodeInBinary());
 		System.out.println(thing.getOpcodeInHex());
 	}
@@ -51,21 +51,23 @@ public class InstructionIdentifier {
 		case "OR":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.OR); break;
 		case "SLT":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.SLT); break;
 		case "ADD.S":	MIPSInst = new RTypeInstruction(RTypeInstruction.OP,RTypeInstruction.EXTOP,regs[2],regs[1],regs[0],RTypeInstruction.ADDS); break;
-		
-		//TODO:
 		case "MUL.S":	MIPSInst = new RTypeInstruction(RTypeInstruction.OP,RTypeInstruction.EXTOP,regs[2],regs[1],regs[0],RTypeInstruction.MULS); break;
-		case "BEQ":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "LW":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "LWU":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "SW":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
+		case "DSLL":	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DSLL); break;
 		
-		case "DSLL":	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "ANDI":	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "DADDIU":	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "L.S":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
-		case "S.S": 	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
+		// I -type // fix for offset
+		case "BEQ":		MIPSInst = new ITypeInstruction(ITypeInstruction.BEQ, regs[0], regs[1], regs[2]); break;
+		case "LW":		MIPSInst = new ITypeInstruction(ITypeInstruction.LW, regs[0], regs[1], regs[2]); break;
+		case "LWU":		MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[0], regs[1], regs[2]); break;
+		case "SW":		MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[0], regs[1], regs[2]); break;
 		
-		case "J": 		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DADDU); break;
+		
+		case "ANDI":	MIPSInst = new ITypeInstruction(ITypeInstruction.ANDI, regs[0], regs[1], regs[2]); break;
+		case "DADDIU":	MIPSInst = new ITypeInstruction(ITypeInstruction.DADDIU, regs[0], regs[1], regs[2]); break;
+		case "L.S":		MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[0], regs[1], regs[2]); break;
+		case "S.S": 	MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[0], regs[1], regs[2]); break;
+		
+		// j - type
+		case "J": 		MIPSInst = new JTypeInstruction(JTypeInstruction.J, regs[0]); break;
 		}
 
 		return MIPSInst;

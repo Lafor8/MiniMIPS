@@ -14,6 +14,10 @@ public class RTypeInstruction extends MIPSInstruction {
 	public static final int MULS = 2;
 	public static final int OP = 17;
 	public static final int EXTOP = 16;
+	
+	// shift instructions
+	public static final int DSLL = 56;
+
 
 	int op;
 	int val1;
@@ -31,7 +35,7 @@ public class RTypeInstruction extends MIPSInstruction {
 		this.val3 = val3;
 		this.val4 = val4;
 		this.func = func;
-		System.out.println("test: "+ Long.toBinaryString(val3 << 11));
+		
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
