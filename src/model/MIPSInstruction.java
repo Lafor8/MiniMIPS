@@ -45,4 +45,21 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
+	public static String getInstructionType(long IR) {
+		String op = Long.toHexString(IR << 26);
+		
+		switch(op){
+			case "2": return JUMP; 
+			case "4": return BRANCH;			
+			case "35":
+			case "39":
+			case "49":
+			case "53": return LOAD;
+			case "43": return STORE;
+			case "12": 
+			case "25": return REGISTER_IMMEDIATE;
+			default:   return REGISTER_REGISTER;	
+		}
+	}
+
 }

@@ -2,15 +2,15 @@ package controller;
 
 public class InternalRegisters {
 	
-	public int IR;
-	public int NPC;
-	public int PC;
+	public long IR;
+	public long NPC;
+	public long PC;
 	
-	public int A;
-	public int B;
-	public int IMM;
+	public long A;
+	public long B;
+	public long IMM;
 	
-	public int ALUOutput;
+	public long ALUOutput;
 	public Boolean Cond;
 	
 	public int LMD;

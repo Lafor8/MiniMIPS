@@ -7,7 +7,7 @@ import model.*;
 
 public class SequentialDatapath {
 	// Program Counter
-	private long pc;
+	private long pc = 0000000000000000;
 	
 	// Internal Registers
 	private InternalRegisters if_id;
@@ -97,9 +97,11 @@ public class SequentialDatapath {
 				ex_mem.Cond = true;
 				break; 
 			default:
-				long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
+				//long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
+				long param1 = id_ex.A; 
 				long param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR);
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
+				//ex_mem.Cond = false;
 		}
 
 		return 0;
