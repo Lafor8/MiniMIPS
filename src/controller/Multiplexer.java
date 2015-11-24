@@ -4,7 +4,7 @@ import model.MIPSInstruction;
 
 public class Multiplexer {
 
-	public long select(long B, long IMM, long IR) {
+	public long select(long B, long IMM, String IR) {
 		
 		switch(MIPSInstruction.getInstructionType(IR)){
 		case "LOAD":

@@ -45,9 +45,9 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
-	public static String getInstructionType(long IR) {
-		String op = Long.toHexString(IR << 26);
+	public static String getInstructionType(String IR) {
 		
+		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
 		switch(op){
 			case "2": return JUMP; 
 			case "4": return BRANCH;			

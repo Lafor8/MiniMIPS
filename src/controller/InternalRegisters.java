@@ -2,7 +2,7 @@ package controller;
 
 public class InternalRegisters {
 	
-	public long IR;
+	public String IR;
 	public long NPC;
 	public long PC;
 	

@@ -5,21 +5,21 @@ import model.RTypeInstruction;
 
 public class ALU {
 
-	public long apply(long param1, long param2, long IR) {
+	public static long apply(long param1, long param2, String IR) {
 		long answer = 0;
 		int op;
 		
-		if(IR >> 26 != 0)
-			op = (int) (IR >> 26);
+		if(IR.substring(0, 6).equals("000000"))
+			op = Integer.parseInt(IR.substring(26, 32), 2);
 		else
-			op = (int) (IR << 26);
-			
+			op = Integer.parseInt(IR.substring(0, 6), 2);
+		// TO ADD op for Floating Number Instructions
 		
 		switch(op){
 		case RTypeInstruction.DADDU:
 		case ITypeInstruction.DADDIU:
 			answer = param1 + param2; break;
-		case RTypeInstruction.MULS:
+		case RTypeInstruction.DMULT:
 			answer = param1 * param2; break;
 		case RTypeInstruction.OR:
 			answer = param1 | param2; break;

@@ -9,8 +9,9 @@ public class InstructionIdentifier {
 	public static void main(String args[]){
 		InstructionIdentifier identifier = new InstructionIdentifier();
 		MIPSInstruction thing = identifier.identify("BEQ R3, R0, R1");
+		System.out.println(Long.toBinaryString(thing.getOpcode()));
 		System.out.println(thing.getOpcodeInBinary());
-		System.out.println(thing.getOpcodeInHex());
+		
 	}
 	
 	public InstructionIdentifier(){
