@@ -4,6 +4,15 @@ public class MIPSInstruction {
 
 	protected String instruction;
 	protected long opcode;
+	
+	public static final String BRANCH = "Branch";
+	public static final String JUMP = "Jump";
+	public static final String LOAD = "Load";
+	public static final String STORE = "Store";
+	public static final String REGISTER_REGISTER = "Register_Register";
+	public static final String REGISTER_IMMEDIATE = "Register_Immediate";
+	
+	
 
 	public String getOpcodeInHex() {
 		String paddedOpcode = Long.toHexString(opcode);

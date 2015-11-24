@@ -58,57 +58,65 @@ public class SequentialDatapath {
 	}
 
 	public int IF() {
-		if_id.npc = adderAlu.add(pc, 4);
-		if_id.ir = instructionMemory.getInstructionAddress(pc);
+		
+		if(ex_mem.Opcode == branch && ex_mem.Cond){
+			if_id.NPC = ex_mem.ALUOutput;
+		}else
+		{
+			if_id.NPC = adderAlu.add(pc, 4);
+		}
+		
+		
+		if_id.IR = instructionMemory.getInstructionAddress(pc);
 
 		return 0;
 	}
 
 	public int ID() {
-		id_ex.ir = if_id.ir;
-		id_ex.npc = if_id.npc;
+		id_ex.IR = if_id.IR;
+		id_ex.NPC = if_id.NPC;
 		
-		id_ex.a = Registers.getA(if_id.ir);
-		id_ex.b = Registers.getB(if_id.ir);
-		id_ex.imm = SignExtend.getImmAndExtend(if_id.ir);
+		id_ex.A = Registers.getA(if_id.IR);
+		id_ex.B = Registers.getB(if_id.IR);
+		id_ex.IMM = SignExtend.getImmAndExtend(if_id.IR);
 
 		return 0;
 	}
 
 	public int EX() {
-		ex_mem.ir = id_ex.ir;
-		ex_mem.b = id_ex.b;
+		ex_mem.IR = id_ex.IR;
+		ex_mem.B = id_ex.B;
 		
-		switch (MIPSInstruction.getInstructionType(id_ex.ir)) {
+		switch (MIPSInstruction.getInstructionType(id_ex.IR)) {
 			case MIPSInstruction.BRANCH:
-				ex_mem.aluOutput = id_ex.npc + id_ex.imm << 2;
-				ex_mem.cond = zeroCondition.check(id_ex.a);
+				ex_mem.ALUOutput = id_ex.NPC + id_ex.IMM << 2;
+				ex_mem.Cond = zeroCondition.check(id_ex.A);
 				break;
 			case MIPSInstruction.JUMP:
-				ex_mem.aluOutput = id_ex.imm << 2;
-				ex_mem.cond = 1;
+				ex_mem.ALUOutput = id_ex.IMM << 2;
+				ex_mem.Cond = true;
 				break; 
 			default:
-				long param1 = multiplexer.select(id_ex.npc, id_ex.a, id_ex.ir);
-				long param2 = multiplexer.select(id_ex.b, id_ex.imm, id_ex.ir);
-				ex_mem.aluOutput = alu.apply(param1, param2, id_ex.ir);
+				long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
+				long param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR);
+				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 		}
 
 		return 0;
 	}
 
 	public int MEM() {
-		mem_wb.ir = ex_mem.ir;
-		mem_wb.aluOutput = ex_mem.aluOutput;
+		mem_wb.IR = ex_mem.IR;
+		mem_wb.ALUOutput = ex_mem.ALUOutput;
 		
-		pc = multiplexer.select(if_id.npc, ex_mem.aluOutput, ex_mem.cond);
+		pc = multiplexer.select(if_id.NPC, ex_mem.ALUOutput, ex_mem.Cond);
 		
-		switch(MIPSInstruction.getInstructionType(ex_mem.ir)){
+		switch(MIPSInstruction.getInstructionType(ex_mem.IR)){
 			case MIPSInstruction.LOAD:
-				mem_wb.lmd = dataMemory.getDataFromMemory(ex_mem.aluOutput);
+				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
 				break;
 			case MIPSInstruction.STORE:
-				mem_wb.lmd = dataMemory.getDataFromMemory(ex_mem.b);
+				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.B);
 				break;
 		}
 		
@@ -120,15 +128,15 @@ public class SequentialDatapath {
 		// 		I wasn't sure what this meant so I'm leaving this out for now
 		
 		// This is a Multiplexer... kinda
-		switch(MIPSInstruction.getInstructionType(mem_wb.ir)){
+		switch(MIPSInstruction.getInstructionType(mem_wb.IR)){
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setRegister(mem_wb.aluOutput, mem_wb.ir, mem_wb.IR16_20);
+			registers.setRegister(mem_wb.ALUOutput, mem_wb.IR, mem_wb.IR16_20);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
-			registers.setRegister(mem_wb.aluOutput, mem_wb.ir, mem_wb.IR11_15);
+			registers.setRegister(mem_wb.ALUOutput, mem_wb.IR, mem_wb.IR11_15);
 			break;
 		case MIPSInstruction.LOAD:
-			registers.setRegister(mem_wb.lmd, mem_wb.ir, mem_wb.IR11_15);
+			registers.setRegister(mem_wb.LMD, mem_wb.IR, mem_wb.IR11_15);
 			break;
 		}
 		
