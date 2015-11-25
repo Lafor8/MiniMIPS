@@ -59,7 +59,7 @@ public class SequentialDatapath {
 
 	public int IF() {
 		
-		if(ex_mem.Opcode == branch && ex_mem.Cond){
+		if(MIPSInstruction.getInstructionType(ex_mem.IR) == "BRANCH" && ex_mem.Cond){
 			if_id.NPC = ex_mem.ALUOutput;
 		}else
 		{
@@ -75,6 +75,8 @@ public class SequentialDatapath {
 	public int ID() {
 		id_ex.IR = if_id.IR;
 		id_ex.NPC = if_id.NPC;
+		
+		// need to add special case when instruction is DSLL and floating 
 		
 		id_ex.A = Registers.getA(if_id.IR);
 		id_ex.B = Registers.getB(if_id.IR);

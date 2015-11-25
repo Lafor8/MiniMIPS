@@ -5,7 +5,7 @@ import model.RTypeInstruction;
 
 public class ALU {
 
-	public static long apply(long param1, long param2, String IR) {
+	public long apply(long param1, long param2, String IR) {
 		long answer = 0;
 		int op;
 		

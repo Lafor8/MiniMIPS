@@ -1,5 +1,6 @@
 package controller;
 
+import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 import model.*;
@@ -11,7 +12,7 @@ public class InstructionIdentifier {
 		MIPSInstruction thing = identifier.identify("BEQ R3, R0, R1");
 		System.out.println(Long.toBinaryString(thing.getOpcode()));
 		System.out.println(thing.getOpcodeInBinary());
-		
+
 	}
 	
 	public InstructionIdentifier(){
