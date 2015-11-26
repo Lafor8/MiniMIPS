@@ -8,18 +8,18 @@ public class InstructionIdentifier {
 
 	public static void main(String args[]){
 		InstructionIdentifier identifier = new InstructionIdentifier();
-		MIPSInstruction thing = identifier.identify("DADDU R3, R1, R1");
+		
+		MIPSInstruction thing = identifier.identifyInstruction("DADDU R3, R1, R1");
+		
 		System.out.println(Long.toBinaryString(thing.getOpcode()));
 		System.out.println(thing.getOpcodeInBinary());		
-		
-	
 	}
 	
 	public InstructionIdentifier(){
 		
 	}
 	
-	public MIPSInstruction identify(String instruction) {
+	public MIPSInstruction identifyInstruction(String instruction) {
 		MIPSInstruction MIPSInst = null;
 		
 		String inst[] = instruction.trim().split(" ");
@@ -75,7 +75,12 @@ public class InstructionIdentifier {
 		// j - type
 		case "J": 		MIPSInst = new JTypeInstruction(JTypeInstruction.J, regs[0]); break;
 		}
+		
+		if(MIPSInst == null)
+			MIPSInst = new MIPSInstruction();
 
+		MIPSInst.setInstruction(instruction);
+		
 		return MIPSInst;
 	}
 }
