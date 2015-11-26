@@ -30,6 +30,12 @@ public class SequentialDatapath {
 	private boolean keepRunning;
 	private int cycles;
 
+	// Pipeline Mapping
+	private PipelineMapManager pipelineMapManager;
+	
+	public SequentialDatapath(){
+		pipelineMapManager = pipelineMapManager.getInstance();
+	}
 	
 	public int run() {
 		pc = 0;
@@ -52,7 +58,9 @@ public class SequentialDatapath {
 		if(if_id != null)
 			ID();
 		IF();
-			
+		
+		cycles++;
+		
 		return 0;
 	}
 
@@ -68,6 +76,9 @@ public class SequentialDatapath {
 		
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
 		// need to create the MIPSInstruction object
+		
+		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
+		
 		return 0;
 	}
 
@@ -85,6 +96,8 @@ public class SequentialDatapath {
 		//get from F register
 		id_ex.IMM = SignExtend.getImmAndExtend(if_id.IR);
 
+		pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
+		
 		return 0;
 	}
 
@@ -108,6 +121,8 @@ public class SequentialDatapath {
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 				ex_mem.Cond = false;
 		}
+		
+		pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 
 		return 0;
 	}
@@ -126,6 +141,8 @@ public class SequentialDatapath {
 				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.B);
 				break;
 		}
+
+		pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 		
 		return 0;
 	}
@@ -146,6 +163,8 @@ public class SequentialDatapath {
 			registers.setRegister(mem_wb.LMD, mem_wb.IR, mem_wb.IR11_15);
 			break;
 		}
+		
+		pipelineMapManager.addEntry(cycles, PipelineMapManager.WB_STAGE, mem_wb.IR);
 		
 		return 0;
 	}
