@@ -9,6 +9,11 @@ public class JTypeInstruction extends MIPSInstruction {
 	long opcodeBinary;
 	String opcodeHex;
 	
+	
+	int val1;
+	int val2;
+	int imm;
+	
 	public JTypeInstruction(int op, int offset) {
 		this.op = op;
 		this.offset = offset;
@@ -19,5 +24,5 @@ public class JTypeInstruction extends MIPSInstruction {
 		
 		opcodeHex = Long.toHexString(opcodeBinary);
 	}
-	
+		
 }

@@ -1,11 +1,12 @@
 package controller;
 
+import java.math.BigInteger;
+
 public class AdderALU extends ALU {
 
-	public long add(long pc, int i) {
-		// TODO Auto-generated method stub
+	public BigInteger add(BigInteger pc, int i) {
 		
-		long newPC = pc + i;
+		BigInteger newPC = pc.add(BigInteger.valueOf(i));
 		return newPC;
 	}
 

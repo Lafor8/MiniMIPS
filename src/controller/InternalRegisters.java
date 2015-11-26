@@ -1,20 +1,24 @@
 package controller;
 
+import java.math.BigInteger;
+
+import model.MIPSInstruction;
+
 public class InternalRegisters {
 	
-	public String IR;
-	public long NPC;
-	public long PC;
+	public MIPSInstruction IR;
+	public BigInteger NPC;
+	public BigInteger PC;
 	
-	public long A;
-	public long B;
-	public long IMM;
+	public BigInteger A;
+	public BigInteger B;
+	public BigInteger IMM;
 	
-	public long ALUOutput;
+	public BigInteger ALUOutput;
 	public Boolean Cond;
 	
 	public int LMD;
 	
 	public long Opcode;
-
+	
 }

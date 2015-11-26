@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigInteger;
+
 public class RTypeInstruction extends MIPSInstruction {
 
 	// final values are for the func variable
@@ -18,13 +20,13 @@ public class RTypeInstruction extends MIPSInstruction {
 	// shift instructions
 	public static final int DSLL = 56;
 
-
-	int op;
-	int val1;
-	int val2;
-	int val3;
-	int val4;
-	int func;
+	
+	public int op;
+	public int val1;
+	public int val2;
+	public int val3;
+	public int val4;
+	public int func;
 	public long opcodeBinary;
 	public String opcodeHex;
 
@@ -45,4 +47,35 @@ public class RTypeInstruction extends MIPSInstruction {
 		opcode = opcodeBinary;
 		opcodeHex = Long.toHexString(opcodeBinary);
 	}
+	
+	public int getA(){
+		
+		if (func == 56)
+			return val2;
+		else if (func == 0 || func == 1)
+			return val3;
+		else
+			return val1;
+	}
+	
+	public int getB(){
+		
+		if (func == 65)
+			return val4;
+		else if (func == 0 || func == 1)
+			return val2;
+		else 
+			return val2;
+	}
+	
+	public int getIMM(){
+		int immediate = 0;
+		
+		immediate += val3 << 11;
+		immediate += val4 << 6;
+		immediate += func;
+		
+		return immediate;
+	}
+
 }

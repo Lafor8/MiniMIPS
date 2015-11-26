@@ -1,6 +1,5 @@
 package controller;
 
-import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 import model.*;
@@ -9,10 +8,11 @@ public class InstructionIdentifier {
 
 	public static void main(String args[]){
 		InstructionIdentifier identifier = new InstructionIdentifier();
-		MIPSInstruction thing = identifier.identify("BEQ R3, R0, R1");
+		MIPSInstruction thing = identifier.identify("DADDU R3, R1, R1");
 		System.out.println(Long.toBinaryString(thing.getOpcode()));
-		System.out.println(thing.getOpcodeInBinary());
-
+		System.out.println(thing.getOpcodeInBinary());		
+		
+	
 	}
 	
 	public InstructionIdentifier(){
@@ -31,7 +31,7 @@ public class InstructionIdentifier {
 		
 		String temp;
 		for (int i = 0, j = 0; i < param.length; ++i) {
-			System.out.println("param: "+param[i]);
+			//System.out.println("param: "+param[i]);
 			
 			temp = param[i].trim();
 			// TODO: check if any excess will be considered
@@ -54,6 +54,8 @@ public class InstructionIdentifier {
 		case "SLT":		MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.SLT); break;
 		case "ADD.S":	MIPSInst = new RTypeInstruction(RTypeInstruction.OP,RTypeInstruction.EXTOP,regs[2],regs[1],regs[0],RTypeInstruction.ADDS); break;
 		case "MUL.S":	MIPSInst = new RTypeInstruction(RTypeInstruction.OP,RTypeInstruction.EXTOP,regs[2],regs[1],regs[0],RTypeInstruction.MULS); break;
+		
+		//Change the values that are being passed
 		case "DSLL":	MIPSInst = new RTypeInstruction(0,regs[1],regs[2],regs[0],0,RTypeInstruction.DSLL); break;
 		
 		// I -type // fix for offset
@@ -65,6 +67,8 @@ public class InstructionIdentifier {
 		
 		case "ANDI":	MIPSInst = new ITypeInstruction(ITypeInstruction.ANDI, regs[0], regs[1], regs[2]); break;
 		case "DADDIU":	MIPSInst = new ITypeInstruction(ITypeInstruction.DADDIU, regs[0], regs[1], regs[2]); break;
+		
+		//Change the values that are being passed
 		case "L.S":		MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[0], regs[1], regs[2]); break;
 		case "S.S": 	MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[0], regs[1], regs[2]); break;
 		

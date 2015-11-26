@@ -1,13 +1,12 @@
 package controller;
 
-import com.sun.javafx.css.Selector;
+import java.math.BigInteger;
 
-import model.MIPSInstruction;
 import model.*;
 
 public class SequentialDatapath {
 	// Program Counter
-	private long pc = 0000000000000000;
+	private BigInteger pc = new BigInteger("0000000000000000");
 	
 	// Internal Registers
 	private InternalRegisters if_id;
@@ -68,7 +67,7 @@ public class SequentialDatapath {
 		
 		
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
-
+		// need to create the MIPSInstruction object
 		return 0;
 	}
 
@@ -78,8 +77,12 @@ public class SequentialDatapath {
 		
 		// need to add special case when instruction is DSLL and floating 
 		
-		id_ex.A = Registers.getA(if_id.IR);
-		id_ex.B = Registers.getB(if_id.IR);
+		
+		// get from R register
+		id_ex.A = registers.getR(if_id.IR.getA());
+		id_ex.B = registers.getR(if_id.IR.getB());
+		
+		//get from F register
 		id_ex.IMM = SignExtend.getImmAndExtend(if_id.IR);
 
 		return 0;
@@ -91,19 +94,19 @@ public class SequentialDatapath {
 		
 		switch (MIPSInstruction.getInstructionType(id_ex.IR)) {
 			case MIPSInstruction.BRANCH:
-				ex_mem.ALUOutput = id_ex.NPC + id_ex.IMM << 2;
+				ex_mem.ALUOutput = id_ex.NPC.add(id_ex.IMM.multiply(BigInteger.valueOf(4)));
 				ex_mem.Cond = zeroCondition.check(id_ex.A);
 				break;
 			case MIPSInstruction.JUMP:
-				ex_mem.ALUOutput = id_ex.IMM << 2;
+				ex_mem.ALUOutput = id_ex.IMM.multiply(BigInteger.valueOf(4));
 				ex_mem.Cond = true;
 				break; 
 			default:
 				//long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
-				long param1 = id_ex.A; 
-				long param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR);
+				BigInteger param1 = id_ex.A; 
+				BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, MIPSInstruction.getCondForMultiplexer(id_ex.IR));
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
-				//ex_mem.Cond = false;
+				ex_mem.Cond = false;
 		}
 
 		return 0;

@@ -1,27 +1,60 @@
 package controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Registers {
 	
-	List IntegerRegister = new ArrayList<>(31);
-	List<?> FloatingRegister = new ArrayList<>(11); // do we use all 31 registers?
-	long HI;
-	long LOW;
+	List<BigInteger> IntegerRegister = new ArrayList<>(32);
+	List<BigInteger> FloatingRegister = new ArrayList<>(32);
+	BigInteger HI;
+	BigInteger LOW;
 	
 	public void Initialize(){
-		long zero = 0000000000000001;
-		System.out.println(IntegerRegister.size());
 		int i = 0;
 		
 		do{
-			IntegerRegister.add(i, zero);
-			System.out.println(IntegerRegister.get(i));
+			IntegerRegister.add(i, BigInteger.ZERO);
+			FloatingRegister.add(i, BigInteger.ZERO);
 			i++;
-		}while (i < 31);
+		}while (i < 32);
+		
+		HI = BigInteger.ZERO;
+		LOW = BigInteger.ZERO;
+	}
+	
+	public BigInteger getR(int index){
+		return IntegerRegister.get(index);
+	}
+	
+	public BigInteger getF(int index){
+		return FloatingRegister.get(index);
+	}
+	
+	public void setR(int index, BigInteger value){
+		IntegerRegister.set(index, value);
+	}
+	
+	public void setF(int index, BigInteger value){
+		FloatingRegister.set(index, value);
 	}
 
+	public BigInteger getHI() {
+		return HI;
+	}
+
+	public void setHI(BigInteger hI) {
+		HI = hI;
+	}
+
+	public BigInteger getLOW() {
+		return LOW;
+	}
+
+	public void setLOW(BigInteger lOW) {
+		LOW = lOW;
+	}
 	
-	
+
 }

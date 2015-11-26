@@ -1,9 +1,12 @@
 package controller;
 
+import java.math.BigInteger;
+
 import model.MIPSInstruction;
 
 public class Multiplexer {
 
+	/*
 	public long select(long B, long IMM, String IR) {
 		
 		switch(MIPSInstruction.getInstructionType(IR)){
@@ -14,5 +17,15 @@ public class Multiplexer {
 		}
 		return 0;
 	}
+	*/
+	
+	public BigInteger select(BigInteger first, BigInteger second, Boolean cond) {
+			
+			if(cond)
+				return first;
+			else
+				return second;
+			
+		}
 
 }

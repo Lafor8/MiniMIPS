@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigInteger;
+
 public class ITypeInstruction extends MIPSInstruction {
 	
 	public static final int BEQ = 4;
@@ -35,5 +37,13 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);
+	}
+	
+	public int getA(){
+		return val1;
+	}
+	
+	public int getIMM(){
+		return immediate;
 	}
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigInteger;
+
 public class MIPSInstruction {
 
 	protected String instruction;
@@ -12,8 +14,6 @@ public class MIPSInstruction {
 	public static final String REGISTER_REGISTER = "Register_Register";
 	public static final String REGISTER_IMMEDIATE = "Register_Immediate";
 	
-	
-
 	public String getOpcodeInHex() {
 		String paddedOpcode = Long.toHexString(opcode);
 		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
@@ -45,6 +45,18 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
+	public int getA(){
+		return 0;
+	}
+	
+	public int getB(){
+		return 0;
+	}
+	
+	public int getIMM(){
+		return 0;
+	}
+	
 	public static String getInstructionType(String IR) {
 		
 		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
@@ -60,6 +72,20 @@ public class MIPSInstruction {
 			case "25": return REGISTER_IMMEDIATE;
 			default:   return REGISTER_REGISTER;	
 		}
+	}
+	
+	public static Boolean getCondForMultiplexer(String IR){
+		
+		switch(MIPSInstruction.getInstructionType(IR)){
+		
+			case "LOAD":
+			case "STORE":
+			case "REGISTER_IMMEDIATE": return false;
+			case "REGISTER_REGISTER":return true;
+			
+		}
+		return null;
+		
 	}
 
 }

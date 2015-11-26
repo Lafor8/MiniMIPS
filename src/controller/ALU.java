@@ -1,12 +1,14 @@
 package controller;
 
+import java.math.BigInteger;
+
 import model.ITypeInstruction;
 import model.RTypeInstruction;
 
 public class ALU {
 
-	public long apply(long param1, long param2, String IR) {
-		long answer = 0;
+	public BigInteger apply(BigInteger param1, BigInteger param2, String IR) {
+		BigInteger answer = BigInteger.valueOf(0);
 		int op;
 		
 		if(IR.substring(0, 6).equals("000000"))
@@ -18,18 +20,19 @@ public class ALU {
 		switch(op){
 		case RTypeInstruction.DADDU:
 		case ITypeInstruction.DADDIU:
-			answer = param1 + param2; break;
+			answer = param1.add(param2); break;
 		case RTypeInstruction.DMULT:
-			answer = param1 * param2; break;
+			answer = param1.multiply(param2); break;
+			// value of the answer should be placed in HI n LOW
 		case RTypeInstruction.OR:
-			answer = param1 | param2; break;
+			answer = param1.or(param2); break;
 		case RTypeInstruction.SLT:
-			if(param1 < param2)
-				answer = 1;
+			if(param1.compareTo(param2) == -1)
+				answer = BigInteger.valueOf(1);
 			else 
-				answer = 0; break;
+				answer = BigInteger.valueOf(0); break;
 		case ITypeInstruction.ANDI:
-			answer = param1 & param2; break;
+			answer = param1.and(param2); break;
 			
 		// TO ADD Floating Number Instructions
 			
