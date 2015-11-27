@@ -8,6 +8,10 @@ public class InstructionMemory {
 	
 	HashMap<BigInteger, MIPSInstruction> instructionMemory;
 	
+	public InstructionMemory(){
+		instructionMemory = new HashMap<>();
+	}
+	
 	public MIPSInstruction getInstructionAddress(BigInteger index){
 		return instructionMemory.get(index);
 	}

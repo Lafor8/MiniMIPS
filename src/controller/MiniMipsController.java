@@ -33,5 +33,10 @@ public class MiniMipsController {
 				System.out.println(paddedInst + " - " + inst.getOpcodeInHex());
 			}
 		}
+		
+		SequentialDatapath sequentialDatapath = new SequentialDatapath();
+		sequentialDatapath.loadInstructions(mipsInst);
+		
+		sequentialDatapath.runOneCycle();
 	}
 }
