@@ -140,13 +140,14 @@ public class InstructionIdentifier {
 			break;
 		case "LWU":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[1], regs[0], Integer.parseInt(label,16));
+			for (Integer reg : regs)
+			System.out.println(reg);
+		System.out.println(label);
 			break;
 		case "SW":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[1], regs[0], Integer.parseInt(label,16));
 
-//			for (Integer reg : regs)
-//				System.out.println(reg);
-//			System.out.println(label);
+
 			break;
 
 		case "ANDI":
