@@ -48,34 +48,34 @@ public class RTypeInstruction extends MIPSInstruction {
 		opcodeHex = Long.toHexString(opcodeBinary);
 	}
 	
-	public int getA(){
+	public BigInteger getA(){
 		
 		if (func == 56)
-			return val2;
+			return BigInteger.valueOf(val2);
 		else if (func == 0 || func == 1)
-			return val3;
+			return BigInteger.valueOf(val3);
 		else
-			return val1;
+			return BigInteger.valueOf(val1);
 	}
 	
-	public int getB(){
+	public BigInteger getB(){
 		
 		if (func == 65)
-			return val4;
+			return BigInteger.valueOf(val4);
 		else if (func == 0 || func == 1)
-			return val2;
+			return BigInteger.valueOf(val2);
 		else 
-			return val2;
+			return BigInteger.valueOf(val2);
 	}
 	
-	public int getIMM(){
+	public BigInteger getIMM(){
 		int immediate = 0;
 		
 		immediate += val3 << 11;
 		immediate += val4 << 6;
 		immediate += func;
 		
-		return immediate;
+		return BigInteger.valueOf(immediate);
 	}
 
 }

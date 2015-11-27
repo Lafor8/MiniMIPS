@@ -42,11 +42,11 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcodeHex = Long.toHexString(opcodeBinary);
 	}
 	
-	public int getA(){
-		return val1;
+	public BigInteger getA(){
+		return BigInteger.valueOf(val1);
 	}
 	
-	public int getIMM(){
-		return immediate;
+	public BigInteger getIMM(){
+		return BigInteger.valueOf(immediate);
 	}
 }
