@@ -1,6 +1,8 @@
 package model;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class ITypeInstruction extends MIPSInstruction {
 	
@@ -33,10 +35,21 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
-		opcodeBinary += immediate;
+
+		System.out.println("ITYPE: " + Long.toHexString(opcodeBinary));
+		//NumberFormat formatter = new HexaDecimalFormat("#0.0000000000000");    
+		//String paddedInst = String.format("%032X", Integer.toHexString(immediate));
+		System.out.println("ITYPE: " + Integer.toHexString(immediate));
+		System.out.println("ITYPE: " +  Integer.toHexString(immediate & 0xFFFF));
+		System.out.println("ITYPE: " +  Integer.toHexString(immediate & 0xFFFF));
+		System.out.println("ITYPE: " +  (immediate & 0x0FFFF));
+		//opcodeBinary += Integer.toHexString(immediate).substring(16);
+		opcodeBinary+= immediate & 0xFFFF;
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);
+		
+		System.out.println("ITYPE: " + op + " " + val1+ " " + val2+ " " +immediate);
 	}
 	
 	public int getA(){

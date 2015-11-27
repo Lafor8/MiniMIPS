@@ -9,7 +9,7 @@ public class RTypeInstruction extends MIPSInstruction {
 	public static final int DADDU = 45;
 	public static final int DMULT = 28;
 	public static final int OR = 37;
-	public static final int SLT = 43;
+	public static final int SLT = 42;
 
 	// extended R-type
 	public static final int ADDS = 0;
