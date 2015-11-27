@@ -35,11 +35,8 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
-		opcodeBinary+= immediate & 0x0FFFF;
-		System.out.println("TEST: "+Long.toHexString(Long.MAX_VALUE & 0x00000000FFFFFFF));
-		System.out.println("TEST: "+Long.toHexString(opcodeBinary));
-		System.out.println("TEST: "+Long.toHexString(opcodeBinary & 0x00000000FFFFFFFF));
-		opcodeBinary = opcodeBinary & 0x0FFFFFFFF;
+		opcodeBinary += immediate & 0x0FFFF;
+		opcodeBinary = opcodeBinary & 0x0FFFFFFFF; 
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);
