@@ -66,7 +66,7 @@ public class SequentialDatapath {
 
 	public int IF() {
 		
-		if(MIPSInstruction.getInstructionType(ex_mem.IR) == "BRANCH" && ex_mem.Cond){
+		if(ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond){
 			if_id.NPC = ex_mem.ALUOutput;
 		}else
 		{
@@ -94,7 +94,7 @@ public class SequentialDatapath {
 		id_ex.B = registers.getR(if_id.IR.getB());
 		
 		//get from F register
-		id_ex.IMM = SignExtend.getImmAndExtend(if_id.IR);
+		id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
 		
@@ -105,7 +105,7 @@ public class SequentialDatapath {
 		ex_mem.IR = id_ex.IR;
 		ex_mem.B = id_ex.B;
 		
-		switch (MIPSInstruction.getInstructionType(id_ex.IR)) {
+		switch (id_ex.IR.getInstructionType()) {
 			case MIPSInstruction.BRANCH:
 				ex_mem.ALUOutput = id_ex.NPC.add(id_ex.IMM.multiply(BigInteger.valueOf(4)));
 				ex_mem.Cond = zeroCondition.check(id_ex.A);
@@ -117,7 +117,7 @@ public class SequentialDatapath {
 			default:
 				//long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
 				BigInteger param1 = id_ex.A; 
-				BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, MIPSInstruction.getCondForMultiplexer(id_ex.IR));
+				BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 				ex_mem.Cond = false;
 		}
@@ -133,7 +133,7 @@ public class SequentialDatapath {
 		
 		pc = multiplexer.select(if_id.NPC, ex_mem.ALUOutput, ex_mem.Cond);
 		
-		switch(MIPSInstruction.getInstructionType(ex_mem.IR)){
+		switch(ex_mem.IR.getInstructionType()){
 			case MIPSInstruction.LOAD:
 				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
 				break;
@@ -152,7 +152,7 @@ public class SequentialDatapath {
 		// 		I wasn't sure what this meant so I'm leaving this out for now
 		
 		// This is a Multiplexer... kinda
-		switch(MIPSInstruction.getInstructionType(mem_wb.IR)){
+		switch(mem_wb.IR.getInstructionType()){
 		case MIPSInstruction.REGISTER_REGISTER:
 			registers.setRegister(mem_wb.ALUOutput, mem_wb.IR, mem_wb.IR16_20);
 			break;

@@ -13,6 +13,8 @@ public class InstructionIdentifier {
 		
 		System.out.println(Long.toBinaryString(thing.getOpcode()));
 		System.out.println(thing.getOpcodeInBinary());		
+		InternalRegisters r = null;
+		
 	}
 	
 	public InstructionIdentifier(){

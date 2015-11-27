@@ -10,10 +10,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		String a ="0000000000000100";
 		
+		BigInteger b = new BigInteger(a,2);
 		
-		
-		
-		System.out.println(10<<2);
+		System.out.println(b.bitLength());
 	}
 }

@@ -57,8 +57,8 @@ public class MIPSInstruction {
 		return 0;
 	}
 	
-	public static String getInstructionType(String IR) {
-		
+	public String getInstructionType() {
+		String IR = getOpcodeInBinary();
 		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
 		switch(op){
 			case "2": return JUMP; 
@@ -74,9 +74,9 @@ public class MIPSInstruction {
 		}
 	}
 	
-	public static Boolean getCondForMultiplexer(String IR){
-		
-		switch(MIPSInstruction.getInstructionType(IR)){
+	public Boolean getCondForMultiplexer(){
+	
+		switch(getInstructionType()){
 		
 			case "LOAD":
 			case "STORE":

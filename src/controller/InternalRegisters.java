@@ -17,7 +17,7 @@ public class InternalRegisters {
 	public BigInteger ALUOutput;
 	public Boolean Cond;
 	
-	public int LMD;
+	public BigInteger LMD;
 	
 	public long Opcode;
 	

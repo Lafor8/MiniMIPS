@@ -7,13 +7,15 @@ public class DataMemory {
 	
 	HashMap<BigInteger,BigInteger> dataMemory;
 
-	public BigInteger getDataMemory(BigInteger index){
-		// check if naka initialize if not create entry 
-		return null;
+	public BigInteger getDataFromMemory(BigInteger index){
+		if(!dataMemory.containsKey(index))
+			dataMemory.put(index, BigInteger.ZERO);
+		
+		return dataMemory.get(index);
 	}
 
-	public void setDataMemory(BigInteger index, BigInteger value){
-		
+	public void setDataFromMemory(BigInteger index, BigInteger value){
+		dataMemory.put(index, value);
 	}
 
 }

@@ -34,7 +34,7 @@ public class ALU {
 		case ITypeInstruction.ANDI:
 			answer = param1.and(param2); break;
 			
-		// TO ADD Floating Number Instructions
+		// TO ADD Floating Number Instructions and Shift instructions
 			
 		}
 		return answer;
