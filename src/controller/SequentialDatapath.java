@@ -50,6 +50,8 @@ public class SequentialDatapath {
 		id_ex = new InternalRegisters();
 		ex_mem = new InternalRegisters();
 		mem_wb = new InternalRegisters();
+
+		registers.Initialize();
 	}
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
@@ -69,14 +71,14 @@ public class SequentialDatapath {
 	}
 
 	public int runOneCycle() {
-//		if (mem_wb != null)
-//			WB();
-//		if (ex_mem != null)
-//			MEM();
-//		if (id_ex != null)
-//			EX();
-//		if (if_id != null)
-//			ID();
+		if (mem_wb.IR != null)
+			WB();
+		if (ex_mem.IR != null)
+			MEM();
+		if (id_ex.IR != null)
+			EX();
+		if (if_id.IR != null)
+			ID();
 		IF();
 
 		cycles++;
@@ -86,17 +88,17 @@ public class SequentialDatapath {
 
 	public int IF() {
 
-//		if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
-//			if_id.NPC = ex_mem.ALUOutput;
-//		}
-//		else {
-			if_id.NPC = adderAlu.add(pc, 4);
-//		}
+		// if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
+		// if_id.NPC = ex_mem.ALUOutput;
+		// }
+		// else {
+		if_id.NPC = adderAlu.add(pc, 4);
+		// }
 
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
 
 		System.out.println(instructionMemory.instructionMemory.size());
-		
+
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 
 		return 0;
@@ -135,7 +137,10 @@ public class SequentialDatapath {
 		default:
 			// long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
 			BigInteger param1 = id_ex.A;
+
 			BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
+
+			System.out.println(id_ex.B + " " + id_ex.IMM + " " + id_ex.IR.getCondForMultiplexer());
 			ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 			ex_mem.Cond = false;
 		}
@@ -172,13 +177,13 @@ public class SequentialDatapath {
 		// This is a Multiplexer... kinda
 		switch (mem_wb.IR.getInstructionType()) {
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setR(BigInteger.valueOf(Integer.parseInt(mem_wb.IR.getIMM().toString())<<11), mem_wb.ALUOutput);
+			registers.setR(BigInteger.valueOf(Integer.parseInt(mem_wb.IR.getIMM().toString()) << 11), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
 			registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.LOAD:
-			
+
 			// need to check to which register will be store R or F
 			registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
 			registers.setF(mem_wb.IR.getB(), mem_wb.LMD);

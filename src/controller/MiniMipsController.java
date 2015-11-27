@@ -33,14 +33,15 @@ public class MiniMipsController {
 				System.out.println(paddedInst + " - " + inst.getOpcodeInHex());
 			}
 		}
-		
+
 		SequentialDatapath sequentialDatapath = new SequentialDatapath();
 		sequentialDatapath.loadInstructions(mipsInst);
-		
-		sequentialDatapath.runOneCycle();
-		
+
+		for (int i = 0; i < Math.min(3, mipsInst.size()); ++i)
+			sequentialDatapath.runOneCycle();
+
 		System.out.println();
-		
+
 		System.out.println(PipelineMapManager.getInstance().toString());
 	}
 }
