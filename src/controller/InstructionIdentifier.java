@@ -128,6 +128,7 @@ public class InstructionIdentifier {
 		// Change the values that are being passed
 		case "DSLL":
 			MIPSInst = new RTypeInstruction(0, 0, regs[1], regs[0], Integer.parseInt(label), RTypeInstruction.DSLL);
+
 			break;
 
 		// I -type // fix for offset

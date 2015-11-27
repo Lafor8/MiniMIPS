@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class ITypeInstruction extends MIPSInstruction {
-
+	
 	public static final int BEQ = 4;
 	public static final int LW = 35;
 	public static final int LWU = 39;
@@ -31,23 +31,22 @@ public class ITypeInstruction extends MIPSInstruction {
 		this.val1 = val1;
 		this.val2 = val2;
 		this.immediate = immediate;
-
+		
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
 		opcodeBinary += immediate & 0x0FFFF;
-		opcodeBinary = opcodeBinary & 0x0FFFFFFFFL;
+		opcodeBinary = opcodeBinary & 0x0FFFFFFFF; 
 		opcode = opcodeBinary;
-//		System.out.println(op + " " + val1 + " " + val2 + " "+immediate + " " + Long.toHexString(opcodeBinary));
-
+		
 		opcodeHex = Long.toHexString(opcodeBinary);
 	}
-
-	public int getA() {
+	
+	public int getA(){
 		return val1;
 	}
-
-	public int getIMM() {
+	
+	public int getIMM(){
 		return immediate;
 	}
 }

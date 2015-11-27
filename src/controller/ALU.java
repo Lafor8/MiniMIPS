@@ -3,14 +3,15 @@ package controller;
 import java.math.BigInteger;
 
 import model.ITypeInstruction;
+import model.MIPSInstruction;
 import model.RTypeInstruction;
 
 public class ALU {
 
-	public BigInteger apply(BigInteger param1, BigInteger param2, String IR) {
+	public BigInteger apply(BigInteger param1, BigInteger param2, MIPSInstruction Instruction) {
 		BigInteger answer = BigInteger.valueOf(0);
 		int op;
-		
+		String IR = Instruction.getOpcodeInBinary();
 		if(IR.substring(0, 6).equals("000000"))
 			op = Integer.parseInt(IR.substring(26, 32), 2);
 		else
