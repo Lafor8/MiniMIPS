@@ -7,12 +7,21 @@ public class MIPSInstruction {
 	protected String instruction;
 	protected long opcode;
 	
+	public boolean isValid;
+	public String errorMsg;
+	public BigInteger address;
+	
 	public static final String BRANCH = "Branch";
 	public static final String JUMP = "Jump";
 	public static final String LOAD = "Load";
 	public static final String STORE = "Store";
 	public static final String REGISTER_REGISTER = "Register_Register";
 	public static final String REGISTER_IMMEDIATE = "Register_Immediate";
+	
+	public void setError(boolean isValid, String errorMsg){
+		this.isValid = isValid;
+		this.errorMsg = errorMsg;
+	}
 	
 	public String getOpcodeInHex() {
 		String paddedOpcode = Long.toHexString(opcode);
@@ -87,5 +96,4 @@ public class MIPSInstruction {
 		return null;
 		
 	}
-
 }

@@ -15,27 +15,23 @@ public class MiniMipsController {
 		InstructionIdentifier identifier = new InstructionIdentifier();
 		// ArrayList<MIPSInstruction> instructions = new ArrayList<>();
 
+		ArrayList<String> lines = new ArrayList<>();
+		ArrayList<MIPSInstruction> mipsInst;
+
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
 
-			MIPSInstruction inst;
-
-			if (line.trim().length() > 0) {
-				inst = identifier.identifyInstruction(line);
-
-				if (inst != null) {
-
-					String paddedInst = String.format("%1$-" + 30 + "s", inst.getInstruction());
-					System.out.println(paddedInst + " - " + inst.getOpcodeInHex());
-				}
-			} else
-				System.out.println();
+			if (line.length() > 0)
+				lines.add(line);
 		}
 
-		// for (MIPSInstruction inst : instructions) {
-		// if (inst != null)
-		// System.out.println(inst.getInstruction() + space + " - " + inst.getOpcodeInHex());
-		// }
-	}
+		mipsInst = identifier.parseInstructions(lines);
 
+		for (MIPSInstruction inst : mipsInst) {
+			if (inst != null) {
+				String paddedInst = String.format("%1$-" + 30 + "s", inst.getInstruction());
+				System.out.println(paddedInst + " - " + inst.getOpcodeInHex());
+			}
+		}
+	}
 }

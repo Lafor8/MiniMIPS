@@ -19,7 +19,7 @@ public class JTypeInstruction extends MIPSInstruction {
 		this.offset = offset;
 		
 		opcodeBinary += op << 26;
-		opcodeBinary += offset;
+		opcodeBinary += offset & 0x3FFFFFF;
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);

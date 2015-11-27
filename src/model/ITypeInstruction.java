@@ -1,6 +1,8 @@
 package model;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class ITypeInstruction extends MIPSInstruction {
 	
@@ -33,7 +35,8 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
-		opcodeBinary += immediate;
+		opcodeBinary += immediate & 0x0FFFF;
+		opcodeBinary = opcodeBinary & 0x0FFFFFFFF; 
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);
