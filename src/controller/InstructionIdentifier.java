@@ -75,7 +75,8 @@ public class InstructionIdentifier {
 		boolean isFloatInst = false;
 
 		String temp;
-
+		
+		
 		for (int i = 0, j = 0; i < param.length; ++i) {
 			// System.out.println("param: "+param[i]);
 
@@ -84,17 +85,23 @@ public class InstructionIdentifier {
 			if (Pattern.matches("[RrFf][1-3]?[0-9]", temp)) {
 				regs[j++] = Integer.parseInt(temp.substring(1));
 				regsFound++;
-			} else if (Pattern.matches("[A-z0-9]{1,}([RrFf][1-3]?[0-9])", temp)) {
-				label = temp.split("(")[0];
-				regs[j++] = Integer.parseInt(temp.substring(0, temp.length() - 1).split(")")[0].substring(1));
+
+			} else if (Pattern.matches("[A-z0-9]{1,}[ ]?\\([Rr][1-3]?[0-9]\\)", temp)) {
+				segments = temp.split("\\(");
+				label = segments[0].trim();
+				temp = segments[1].trim();
+				
+				regs[j++] = Integer.parseInt((temp.substring(1, temp.length() - 1)).trim());
 				regsFound++;
+
 			} else if (i == param.length - 1 && Pattern.matches("[A-z0-9]{1,}", temp)) {
+
 				label = temp;
+			} else {
+
+				System.out.println("ERROR: " + temp);
 			}
 		}
-
-		if (label.length() > 0)
-			System.out.println(instruction + " " + label);
 
 		switch (inst[0]) {
 		case "DADDU":
@@ -118,37 +125,42 @@ public class InstructionIdentifier {
 
 		// Change the values that are being passed
 		case "DSLL":
-			MIPSInst = new RTypeInstruction(0, 0, regs[1], regs[0], regs[0], RTypeInstruction.DSLL);
+			MIPSInst = new RTypeInstruction(0, 0, regs[1], regs[0], Integer.parseInt(label), RTypeInstruction.DSLL);
+
 			break;
 
 		// I -type // fix for offset
 		case "BEQ":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.BEQ, regs[0], regs[1], (int) (this.labelsMap.get(label) - Long.valueOf(address.toString()) -4>> 2));
-			System.out.println(regs[0] + " " + regs[1] +" "+ regs[2]+ " " + (int) (this.labelsMap.get(label) - Long.valueOf(address.toString())-4 >> 2));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.BEQ, regs[0], regs[1], (int) (this.labelsMap.get(label) - Long.valueOf(address.toString()) - 4 >> 2));
 			break;
 		case "LW":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LW, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LW, regs[1], regs[0], Integer.parseInt(label,16));
 			break;
 		case "LWU":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[1], regs[0], Integer.parseInt(label,16));
 			break;
 		case "SW":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[1], regs[0], Integer.parseInt(label,16));
+
+			for (Integer reg : regs)
+				System.out.println(reg);
+			System.out.println(label);
 			break;
 
 		case "ANDI":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.ANDI, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.ANDI, regs[1], regs[0], Integer.parseInt(label));
+
 			break;
 		case "DADDIU":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.DADDIU, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.DADDIU, regs[1], regs[0], Integer.parseInt(label));
 			break;
 
 		// Change the values that are being passed
 		case "L.S":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[1], regs[0],Integer.parseInt(label,16));
 			break;
 		case "S.S":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[0], regs[1], regs[2]);
+			MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[1], regs[0], Integer.parseInt(label,16));
 			break;
 
 		// j - type
