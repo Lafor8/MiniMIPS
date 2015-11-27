@@ -54,16 +54,16 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
-	public int getA(){
-		return 0;
+	public BigInteger getA(){
+		return BigInteger.ZERO;
 	}
 	
-	public int getB(){
-		return 0;
+	public BigInteger getB(){
+		return BigInteger.ZERO;
 	}
 	
-	public int getIMM(){
-		return 0;
+	public BigInteger getIMM(){
+		return BigInteger.ZERO;
 	}
 	
 	public String getInstructionType() {
