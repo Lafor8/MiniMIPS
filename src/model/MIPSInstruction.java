@@ -6,23 +6,23 @@ public class MIPSInstruction {
 
 	protected String instruction;
 	protected long opcode;
-	
+
 	public boolean isValid;
 	public String errorMsg;
 	public BigInteger address;
-	
+
 	public static final String BRANCH = "Branch";
 	public static final String JUMP = "Jump";
 	public static final String LOAD = "Load";
 	public static final String STORE = "Store";
 	public static final String REGISTER_REGISTER = "Register_Register";
 	public static final String REGISTER_IMMEDIATE = "Register_Immediate";
-	
-	public void setError(boolean isValid, String errorMsg){
+
+	public void setError(boolean isValid, String errorMsg) {
 		this.isValid = isValid;
 		this.errorMsg = errorMsg;
 	}
-	
+
 	public String getOpcodeInHex() {
 		String paddedOpcode = Long.toHexString(opcode);
 		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
@@ -54,47 +54,58 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
-	public BigInteger getA(){
+	public BigInteger getA() {
 		return BigInteger.ZERO;
 	}
-	
-	
-	public BigInteger getB(){
+
+	public BigInteger getB() {
 		return BigInteger.ZERO;
 	}
-	
-	public BigInteger getIMM(){
+
+	public BigInteger getIMM() {
 		return BigInteger.ZERO;
 	}
-	
+
 	public String getInstructionType() {
 		String IR = getOpcodeInBinary();
 		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
-		switch(op){
-			case "2": return JUMP; 
-			case "4": return BRANCH;			
-			case "35":
-			case "39":
-			case "49":
-			case "53": return LOAD;
-			case "43": return STORE;
-			case "12": 
-			case "25": return REGISTER_IMMEDIATE;
-			default:   return REGISTER_REGISTER;	
+		switch (op) {
+		case "2":
+			return JUMP;
+		case "4":
+			return BRANCH;
+		case "35":
+		case "39":
+		case "49":
+		case "53":
+			return LOAD;
+		case "43":
+			return STORE;
+		case "12":
+		case "25":
+			return REGISTER_IMMEDIATE;
+		default:
+			return REGISTER_REGISTER;
 		}
 	}
-	
-	public Boolean getCondForMultiplexer(){
-	
-		switch(getInstructionType()){
-		
-			case "LOAD":
-			case "STORE":
-			case "REGISTER_IMMEDIATE": return false;
-			case "REGISTER_REGISTER":return true;
-			
+
+	public Boolean getCondForMultiplexer() {
+
+		switch (getInstructionType()) {
+
+		case "LOAD":
+		case "STORE":
+		case "REGISTER_IMMEDIATE":
+			return false;
+		case "REGISTER_REGISTER":
+			return true;
+
 		}
 		return null;
-		
+
+	}
+
+	public String toString() {
+		return instruction;
 	}
 }

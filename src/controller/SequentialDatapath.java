@@ -69,14 +69,14 @@ public class SequentialDatapath {
 	}
 
 	public int runOneCycle() {
-		if (mem_wb != null)
-			WB();
-		if (ex_mem != null)
-			MEM();
-		if (id_ex != null)
-			EX();
-		if (if_id != null)
-			ID();
+//		if (mem_wb != null)
+//			WB();
+//		if (ex_mem != null)
+//			MEM();
+//		if (id_ex != null)
+//			EX();
+//		if (if_id != null)
+//			ID();
 		IF();
 
 		cycles++;
@@ -86,14 +86,17 @@ public class SequentialDatapath {
 
 	public int IF() {
 
-		if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
-			if_id.NPC = ex_mem.ALUOutput;
-		} else {
+//		if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
+//			if_id.NPC = ex_mem.ALUOutput;
+//		}
+//		else {
 			if_id.NPC = adderAlu.add(pc, 4);
-		}
+//		}
 
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
 
+		System.out.println(instructionMemory.instructionMemory.size());
+		
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 
 		return 0;

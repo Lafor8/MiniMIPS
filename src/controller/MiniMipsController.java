@@ -38,5 +38,9 @@ public class MiniMipsController {
 		sequentialDatapath.loadInstructions(mipsInst);
 		
 		sequentialDatapath.runOneCycle();
+		
+		System.out.println();
+		
+		System.out.println(PipelineMapManager.getInstance().toString());
 	}
 }

@@ -6,7 +6,7 @@ import model.MIPSInstruction;
 
 public class InstructionMemory {
 	
-	HashMap<BigInteger, MIPSInstruction> instructionMemory;
+	public HashMap<BigInteger, MIPSInstruction> instructionMemory;
 	
 	public InstructionMemory(){
 		instructionMemory = new HashMap<>();
