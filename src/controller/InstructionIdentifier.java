@@ -128,7 +128,6 @@ public class InstructionIdentifier {
 		// Change the values that are being passed
 		case "DSLL":
 			MIPSInst = new RTypeInstruction(0, 0, regs[1], regs[0], Integer.parseInt(label), RTypeInstruction.DSLL);
-
 			break;
 
 		// I -type // fix for offset
@@ -140,19 +139,13 @@ public class InstructionIdentifier {
 			break;
 		case "LWU":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[1], regs[0], Integer.parseInt(label,16));
-			for (Integer reg : regs)
-			System.out.println(reg);
-		System.out.println(label);
 			break;
 		case "SW":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[1], regs[0], Integer.parseInt(label,16));
-
-
 			break;
 
 		case "ANDI":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.ANDI, regs[1], regs[0], Integer.parseInt(label));
-
 			break;
 		case "DADDIU":
 			MIPSInst = new ITypeInstruction(ITypeInstruction.DADDIU, regs[1], regs[0], Integer.parseInt(label));
