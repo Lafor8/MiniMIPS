@@ -38,7 +38,6 @@ public class SequentialDatapath {
 	}
 	
 	public int run() {
-		pc = 0;
 		
 		cycles = 0;
 		while (keepRunning) {

@@ -24,12 +24,12 @@ public class Registers {
 		LOW = BigInteger.ZERO;
 	}
 	
-	public BigInteger getR(int index){
-		return IntegerRegister.get(index);
+	public BigInteger getR(BigInteger index){
+		return IntegerRegister.get(Integer.parseInt(index.toString()));
 	}
 	
-	public BigInteger getF(int index){
-		return FloatingRegister.get(index);
+	public BigInteger getF(BigInteger index){
+		return FloatingRegister.get(Integer.parseInt(index.toString()));
 	}
 	
 	public void setR(int index, BigInteger value){
