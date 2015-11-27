@@ -24,20 +24,22 @@ public class Registers {
 		LOW = BigInteger.ZERO;
 	}
 	
-	public BigInteger getR(int index){
-		return IntegerRegister.get(index);
+	public BigInteger getR(BigInteger index){
+		return IntegerRegister.get(Integer.parseInt(index.toString()));
 	}
 	
-	public BigInteger getF(int index){
-		return FloatingRegister.get(index);
+	public BigInteger getF(BigInteger index){
+		return FloatingRegister.get(Integer.parseInt(index.toString()));
 	}
 	
-	public void setR(int index, BigInteger value){
-		IntegerRegister.set(index, value);
+	public void setR(BigInteger index, BigInteger value){
+		if(!(index.compareTo(BigInteger.ZERO)==0))
+			IntegerRegister.set(Integer.parseInt(index.toString()), value);
 	}
 	
-	public void setF(int index, BigInteger value){
-		FloatingRegister.set(index, value);
+	public void setF(BigInteger index, BigInteger value){
+		if(!(index.compareTo(BigInteger.ZERO)==0))
+			FloatingRegister.set(Integer.parseInt(index.toString()), value);
 	}
 
 	public BigInteger getHI() {

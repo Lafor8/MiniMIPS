@@ -16,8 +16,7 @@ public class ALU {
 			op = Integer.parseInt(IR.substring(26, 32), 2);
 		else
 			op = Integer.parseInt(IR.substring(0, 6), 2);
-		// TO ADD op for Floating Number Instructions
-		
+	
 		switch(op){
 		case RTypeInstruction.DADDU:
 		case ITypeInstruction.DADDIU:
@@ -34,9 +33,14 @@ public class ALU {
 				answer = BigInteger.valueOf(0); break;
 		case ITypeInstruction.ANDI:
 			answer = param1.and(param2); break;
+		case RTypeInstruction.ADDS:
+			answer = param1.add(param2); break;
+		case RTypeInstruction.MULS:
+			answer = param1.multiply(param2); break;
+		case RTypeInstruction.DSLL:
+			answer = param1.multiply(param2); break;
 			
-		// TO ADD Floating Number Instructions and Shift instructions
-			
+			// Double check whether all the alu operations work
 		}
 		return answer;
 	}

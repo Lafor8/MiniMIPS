@@ -1,6 +1,7 @@
 package controller;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -92,7 +93,6 @@ public class SequentialDatapath {
 		}
 
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
-		// need to create the MIPSInstruction object
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 
@@ -105,11 +105,10 @@ public class SequentialDatapath {
 
 		// need to add special case when instruction is DSLL and floating
 
-		// get from R register
+		// get from R register and get from F register
 		id_ex.A = registers.getR(if_id.IR.getA());
 		id_ex.B = registers.getR(if_id.IR.getB());
 
-		// get from F register
 		id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
@@ -170,13 +169,16 @@ public class SequentialDatapath {
 		// This is a Multiplexer... kinda
 		switch (mem_wb.IR.getInstructionType()) {
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setRegister(mem_wb.ALUOutput, mem_wb.IR, mem_wb.IR16_20);
+			registers.setR(BigInteger.valueOf(Integer.parseInt(mem_wb.IR.getIMM().toString())<<11), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
-			registers.setRegister(mem_wb.ALUOutput, mem_wb.IR, mem_wb.IR11_15);
+			registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.LOAD:
-			registers.setRegister(mem_wb.LMD, mem_wb.IR, mem_wb.IR11_15);
+			
+			// need to check to which register will be store R or F
+			registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
+			registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
 			break;
 		}
 

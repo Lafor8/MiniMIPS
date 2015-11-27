@@ -54,9 +54,10 @@ public class MIPSInstruction {
 		this.opcode = opcode;
 	}
 
-	public BigInteger getzA(){
+	public BigInteger getA(){
 		return BigInteger.ZERO;
 	}
+	
 	
 	public BigInteger getB(){
 		return BigInteger.ZERO;

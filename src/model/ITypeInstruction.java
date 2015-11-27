@@ -46,6 +46,10 @@ public class ITypeInstruction extends MIPSInstruction {
 		return BigInteger.valueOf(val1);
 	}
 	
+	public BigInteger getB(){
+		return BigInteger.valueOf(val2);
+	}
+	
 	public BigInteger getIMM(){
 		return BigInteger.valueOf(immediate);
 	}
