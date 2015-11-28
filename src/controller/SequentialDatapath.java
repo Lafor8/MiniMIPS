@@ -38,6 +38,7 @@ public class SequentialDatapath {
 		pipelineMapManager = pipelineMapManager.getInstance();
 		instructionMemory = new InstructionMemory();
 		registers = new Registers();
+		registers.Initialize();
 		dataMemory = new DataMemory();
 
 		alu = new ALU();
@@ -46,12 +47,14 @@ public class SequentialDatapath {
 		zeroCondition = new ZeroCondition();
 		signExtend = new SignExtend();
 
+		registers.setR(BigInteger.ONE, BigInteger.valueOf(1));
+		registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
+
 		if_id = new InternalRegisters();
 		id_ex = new InternalRegisters();
 		ex_mem = new InternalRegisters();
 		mem_wb = new InternalRegisters();
 
-		registers.Initialize();
 	}
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
@@ -87,7 +90,7 @@ public class SequentialDatapath {
 	}
 
 	public int IF() {
-		if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
+		if (ex_mem.IR != null && ex_mem.IR.getInstructionType() == MIPSInstruction.BRANCH && ex_mem.Cond) {
 			if_id.NPC = ex_mem.ALUOutput;
 		} else {
 			if_id.NPC = adderAlu.add(pc, 4);
@@ -136,6 +139,8 @@ public class SequentialDatapath {
 			// long param1 = multiplexer.select(id_ex.NPC, id_ex.A, id_ex.IR);
 			BigInteger param1 = id_ex.A;
 
+			System.out.println(id_ex.IR.getCondForMultiplexer());
+			
 			BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
 
 			System.out.println(id_ex.B + " " + id_ex.IMM + " " + id_ex.IR.getCondForMultiplexer());
@@ -175,7 +180,7 @@ public class SequentialDatapath {
 		// This is a Multiplexer... kinda
 		switch (mem_wb.IR.getInstructionType()) {
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setR(BigInteger.valueOf(Integer.parseInt(mem_wb.IR.getIMM().toString()) << 11), mem_wb.ALUOutput);
+			registers.setR(mem_wb.IR.get16_20(), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
 			registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);

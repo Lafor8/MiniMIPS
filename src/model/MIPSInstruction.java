@@ -24,18 +24,21 @@ public class MIPSInstruction {
 	}
 
 	public String getOpcodeInHex() {
-//		String paddedOpcode = Long.toHexString(opcode);
-//		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
-//			paddedOpcode = "0" + paddedOpcode;
+		String paddedOpcode = opcode.toString(16);
+		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
+			paddedOpcode = "0" + paddedOpcode;
 
-		return opcode.toString(16);
+		paddedOpcode = paddedOpcode.substring(0, 4) + " " + paddedOpcode.substring(4);
+
+		return paddedOpcode;
 	}
 
 	public String getOpcodeInBinary() {
-//		String paddedOpcode = Long.toBinaryString(opcode);
-//		for (int i = 0, size = paddedOpcode.length(); i < 32 - size; i++)
-//			paddedOpcode = "0" + paddedOpcode;
-		return opcode.toString(2);
+		String paddedOpcode = opcode.toString(2);
+		for (int i = 0, size = paddedOpcode.length(); i < 32 - size; i++)
+			paddedOpcode = "0" + paddedOpcode;
+
+		return paddedOpcode;
 	}
 
 	public BigInteger getA() {
@@ -49,39 +52,50 @@ public class MIPSInstruction {
 	public BigInteger getIMM() {
 		return BigInteger.ZERO;
 	}
+	
+	public BigInteger get16_20(){
+		System.out.println(getOpcodeInBinary().substring(16, 21));
+		return BigInteger.valueOf(Long.parseLong(getOpcodeInBinary().substring(16, 20),2));
+	}
 
 	public String getInstructionType() {
+String retVal;
 		String IR = getOpcodeInBinary();
-		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
+		String op = Long.toString(Long.parseLong(IR.substring(0, 6)));
+
+		System.out.println("MIPS: " + instruction + " " + IR + " " + op);
+
 		switch (op) {
 		case "2":
-			return JUMP;
+			retVal = JUMP;
 		case "4":
-			return BRANCH;
+			retVal = BRANCH;
 		case "35":
 		case "39":
 		case "49":
 		case "53":
-			return LOAD;
+			retVal = LOAD;
 		case "43":
-			return STORE;
+			retVal = STORE;
 		case "12":
 		case "25":
-			return REGISTER_IMMEDIATE;
+			retVal = REGISTER_IMMEDIATE;
 		default:
-			return REGISTER_REGISTER;
+			retVal = REGISTER_REGISTER;
 		}
+		
+		System.out.println("MIPS: " + retVal);
+		return retVal;
 	}
 
 	public Boolean getCondForMultiplexer() {
 
 		switch (getInstructionType()) {
-
-		case "LOAD":
-		case "STORE":
-		case "REGISTER_IMMEDIATE":
+		case LOAD:
+		case STORE:
+		case REGISTER_IMMEDIATE:
 			return false;
-		case "REGISTER_REGISTER":
+		case REGISTER_REGISTER:
 			return true;
 
 		}
