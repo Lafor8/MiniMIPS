@@ -46,23 +46,66 @@ public class MiniMipsController {
 		// sequentialDatapath.runOneCycle();
 
 		sequentialDatapath.IF();
-		
 		sequentialDatapath.ID();
-		
 		sequentialDatapath.EX();
-		
 		sequentialDatapath.MEM();
-		
 		sequentialDatapath.WB();
 
 		sequentialDatapath.IF();
-
 		sequentialDatapath.ID();
-
 		sequentialDatapath.EX();
-
 		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
 
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
 		sequentialDatapath.WB();
 		
 		System.out.println();

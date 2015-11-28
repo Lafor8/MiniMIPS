@@ -75,7 +75,7 @@ public class Registers {
 
 		sb.append("Integer Registers\n\n");
 
-		for (int i = 0; i < 32; ++i) {
+		for (int i = 0; i < 20; ++i) {
 			sb.append("R");
 			sb.append(String.format("%02d", i));
 			sb.append(": ");

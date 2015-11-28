@@ -64,8 +64,6 @@ public class MIPSInstruction {
 		String IR = getOpcodeInBinary();
 		String op = Long.toString(Long.parseLong(IR.substring(0, 6)));
 
-		System.out.println("MIPS: " + instruction + " " + IR + " " + op);
-
 		switch (op) {
 		case "2":
 			retVal = JUMP;
@@ -85,7 +83,6 @@ public class MIPSInstruction {
 			retVal = REGISTER_REGISTER;
 		}
 
-		System.out.println("MIPS: " + retVal);
 		return retVal;
 	}
 

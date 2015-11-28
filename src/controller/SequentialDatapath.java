@@ -56,7 +56,6 @@ public class SequentialDatapath {
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
 		for (MIPSInstruction inst : mipsInst) {
-			System.out.println("Loading: " + inst.address + " " + inst);
 			instructionMemory.setInstructionAddress(inst.address, inst);
 		}
 	}
@@ -98,9 +97,8 @@ public class SequentialDatapath {
 			if_id.NPC = adderAlu.add(pc, 4);
 			pc = if_id.NPC;
 		}
-		
-		System.out.println(pc);
-		System.out.println(if_id.IR);
+
+		System.out.println("IF STAGE: \n" + if_id.toString());
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 
@@ -118,6 +116,8 @@ public class SequentialDatapath {
 		id_ex.B = registers.getR(if_id.IR.getB());
 
 		id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
+
+		System.out.println("ID STAGE: \n" + id_ex.toString());
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
 
@@ -150,6 +150,8 @@ public class SequentialDatapath {
 			ex_mem.Cond = false;
 		}
 
+		System.out.println("EX STAGE: \n" + ex_mem.toString());
+
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 
 		return 0;
@@ -171,6 +173,7 @@ public class SequentialDatapath {
 			break;
 		}
 
+		System.out.println("MEM STAGE: \n" + mem_wb.toString());
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 
 		return 0;
@@ -182,14 +185,11 @@ public class SequentialDatapath {
 
 		// This is a Multiplexer... kinda
 
-		System.out.println("WB STAGE: " + mem_wb.IR + " " + mem_wb.ALUOutput);
-		
 		switch (mem_wb.IR.getInstructionType()) {
 		case MIPSInstruction.REGISTER_REGISTER:
 			if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DMULT) {
 				// TODO: separate top from bottom
 				registers.setHILO(mem_wb.ALUOutput);
-				System.out.println("SAVING MULT OP");
 			} else
 				registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
 			break;
