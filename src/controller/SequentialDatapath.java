@@ -55,8 +55,10 @@ public class SequentialDatapath {
 	}
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
-		for (MIPSInstruction inst : mipsInst)
+		for (MIPSInstruction inst : mipsInst) {
+			System.out.println("Loading: " + inst.address + " " + inst);
 			instructionMemory.setInstructionAddress(inst.address, inst);
+		}
 	}
 
 	public int run() {
@@ -89,13 +91,16 @@ public class SequentialDatapath {
 	public int IF() {
 		if (ex_mem.IR != null && ex_mem.IR.getInstructionType() == MIPSInstruction.BRANCH && ex_mem.Cond) {
 			if_id.NPC = ex_mem.ALUOutput;
+			pc = if_id.NPC;
 		} else {
 			if_id.NPC = adderAlu.add(pc, 4);
+			pc = if_id.NPC;
 		}
 
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
 
-		System.out.println(instructionMemory.instructionMemory.size());
+		System.out.println(pc);
+		System.out.println(if_id.IR);
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 
@@ -137,7 +142,7 @@ public class SequentialDatapath {
 			BigInteger param1 = id_ex.A;
 
 			System.out.println(id_ex.IR.getCondForMultiplexer());
-			
+
 			BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
 
 			System.out.println(id_ex.B + " " + id_ex.IMM + " " + id_ex.IR.getCondForMultiplexer());
@@ -154,7 +159,8 @@ public class SequentialDatapath {
 		mem_wb.IR = ex_mem.IR;
 		mem_wb.ALUOutput = ex_mem.ALUOutput;
 
-		pc = multiplexer.select(if_id.NPC, ex_mem.ALUOutput, ex_mem.Cond);
+		// System.out.println("MEM: " + ex_mem.Cond);
+		// pc = multiplexer.select(if_id.NPC, ex_mem.ALUOutput, ex_mem.Cond);
 
 		switch (ex_mem.IR.getInstructionType()) {
 		case MIPSInstruction.LOAD:

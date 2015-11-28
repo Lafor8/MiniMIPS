@@ -77,6 +77,16 @@ public class Registers {
 			sb.append("\n");
 		}
 
+		sb.append("\n");
+		sb.append("HI");
+		sb.append(": ");
+		sb.append(MiniMipsUtilities.getPaddedHex(this.getHI()));
+		sb.append("\n");
+		sb.append("LO");
+		sb.append(": ");
+		sb.append(MiniMipsUtilities.getPaddedHex(this.getLOW()));
+		sb.append("\n");
+
 //		sb.append("\n\nFloating Point Registers\n\n");
 //
 //		for (int i = 0; i < 32; ++i) {
