@@ -2,10 +2,15 @@ package controller;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class DataMemory {
 	
 	HashMap<BigInteger,BigInteger> dataMemory;
+	
+	public DataMemory(){
+		dataMemory = new HashMap<>();
+	}
 
 	public BigInteger getDataFromMemory(BigInteger index){
 		if(!dataMemory.containsKey(index))
@@ -18,4 +23,18 @@ public class DataMemory {
 		dataMemory.put(index, value);
 	}
 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Data Memory:\n");
+		
+		for(Entry<BigInteger,BigInteger> dataEntry : dataMemory.entrySet()){
+			sb.append(dataEntry.getKey());
+			sb.append(" ");
+			sb.append(dataEntry.getValue());
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
 }

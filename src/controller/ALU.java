@@ -38,6 +38,7 @@ public class ALU {
 			break;
 		case ITypeInstruction.ANDI:
 			answer = param1.and(param2);
+			System.out.println("ANDI: " + param1 + " " + param2);
 			break;
 		case RTypeInstruction.ADDS:
 			answer = param1.add(param2);
@@ -47,7 +48,7 @@ public class ALU {
 			break;
 		case RTypeInstruction.DSLL:
 			System.out.println("DSLL: " + MiniMipsUtilities.getPaddedHex(param2).substring(13, 15));
-			
+
 			String str = MiniMipsUtilities.getPaddedHex(param2).substring(13, 15);
 			long temp = Long.parseLong(str, 16) & 0x7CL;
 			param2 = BigInteger.valueOf(temp / 4);

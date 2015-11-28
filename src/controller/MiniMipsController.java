@@ -108,6 +108,18 @@ public class MiniMipsController {
 		sequentialDatapath.MEM();
 		sequentialDatapath.WB();
 		
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
+		sequentialDatapath.IF();
+		sequentialDatapath.ID();
+		sequentialDatapath.EX();
+		sequentialDatapath.MEM();
+		sequentialDatapath.WB();
+		
 		System.out.println();
 
 		System.out.println(PipelineMapManager.getInstance().toString());
@@ -116,5 +128,9 @@ public class MiniMipsController {
 
 		System.out.println(sequentialDatapath.registers.toString());
 
+		
+		System.out.println();
+
+		System.out.println(sequentialDatapath.dataMemory.toString());
 	}
 }

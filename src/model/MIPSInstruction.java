@@ -41,13 +41,13 @@ public class MIPSInstruction {
 
 		return paddedOpcode;
 	}
-	
-	public BigInteger getBinarySegment(int i, int n){
-		String segment = getOpcodeInBinary().substring(i, n+1);
-System.out.println("SEGMENT: "+segment);
+
+	public BigInteger getBinarySegment(int i, int n) {
+		String segment = getOpcodeInBinary().substring(i, n + 1);
+		System.out.println("SEGMENT: " + segment);
 		return BigInteger.valueOf(Long.parseLong(segment, 2));
 	}
-	
+
 	public BigInteger getA() {
 		return BigInteger.ZERO;
 	}
@@ -63,30 +63,36 @@ System.out.println("SEGMENT: "+segment);
 	public String getInstructionType() {
 		String retVal;
 		String IR = getOpcodeInBinary();
-		String op = Long.toString(Long.parseLong(IR.substring(0, 6)));
+		String op = Long.toString(Long.parseLong(IR.substring(0, 6),2));
 
 		switch (op) {
 		case "2":
 			retVal = JUMP;
+			break;
 		case "4":
 			retVal = BRANCH;
+			break;
 		case "35":
 		case "39":
 		case "49":
-		//case "53":
+			// case "53":
 			retVal = LOAD;
+			break;
 		case "43":
 		case "57":
 			retVal = STORE;
+			break;
 		case "12":
 		case "25":
 			retVal = REGISTER_IMMEDIATE;
+			break;
 		default:
 			retVal = REGISTER_REGISTER;
+			break;
 		}
-		
-		System.out.println("INSTRUCTION: " + this + " " + this.getBinarySegment(26, 31).toString(10));
-		if(this.getBinarySegment(26, 31).toString(10).equals("56"))
+
+		System.out.println("INSTRUCTION: " + this + " " + this.getBinarySegment(26, 31).toString(10) + " " + retVal + " " + op);
+		if (this.getBinarySegment(26, 31).toString(10).equals("56"))
 			retVal = REGISTER_IMMEDIATE;
 
 		return retVal;
