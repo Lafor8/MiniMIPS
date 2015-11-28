@@ -39,86 +39,20 @@ public class MiniMipsController {
 
 		sequentialDatapath.loadInstructions(mipsInst);
 
-		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(12));
-		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(10));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(1));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
 
 		// for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
 		// sequentialDatapath.runOneCycle();
 
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
-		
-		sequentialDatapath.IF();
-		sequentialDatapath.ID();
-		sequentialDatapath.EX();
-		sequentialDatapath.MEM();
-		sequentialDatapath.WB();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
+		sequentialDatapath.runOneCycle();
 		
 		System.out.println();
 
