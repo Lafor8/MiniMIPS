@@ -45,14 +45,7 @@ public class MiniMipsController {
 		// for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
 		// sequentialDatapath.runOneCycle();
 
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
-		sequentialDatapath.runOneCycle();
+		sequentialDatapath.run();
 		
 		System.out.println();
 

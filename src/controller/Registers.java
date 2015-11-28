@@ -65,7 +65,6 @@ public class Registers {
 	}
 	
 	public void setHILO(BigInteger aluOutput){
-		System.out.println(MiniMipsUtilities.getPaddedHex128(aluOutput));
 		this.HI = new BigInteger(MiniMipsUtilities.getPaddedHex128(aluOutput).substring(0, 8),16);
 		this.LO = new BigInteger(MiniMipsUtilities.getPaddedHex128(aluOutput).substring(8),16);
 	}
