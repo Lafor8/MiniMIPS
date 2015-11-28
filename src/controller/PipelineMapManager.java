@@ -61,13 +61,14 @@ public class PipelineMapManager {
 				MIPSInstruction inst = InstEntry.getValue();
 
 				int index;
+				if (inst != null) {
+					if (!tableAux.containsKey(inst.address))
+						tableAux.put(inst.address, runningVal++);
 
-				if (!tableAux.containsKey(inst.address))
-					tableAux.put(inst.address, runningVal++);
+					index = tableAux.get(inst.address);
 
-				index = tableAux.get(inst.address);
-
-				table[index][cycleMap.getKey()] = getStageName(InstEntry.getKey());
+					table[index][cycleMap.getKey()] = getStageName(InstEntry.getKey());
+				}
 			}
 		}
 
