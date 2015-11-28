@@ -44,9 +44,10 @@ public class MIPSInstruction {
 	
 	public BigInteger getBinarySegment(int i, int n){
 		String segment = getOpcodeInBinary().substring(i, n+1);
-
+System.out.println("SEGMENT: "+segment);
 		return BigInteger.valueOf(Long.parseLong(segment, 2));
 	}
+	
 	public BigInteger getA() {
 		return BigInteger.ZERO;
 	}
@@ -72,9 +73,10 @@ public class MIPSInstruction {
 		case "35":
 		case "39":
 		case "49":
-		case "53":
+		//case "53":
 			retVal = LOAD;
 		case "43":
+		case "57":
 			retVal = STORE;
 		case "12":
 		case "25":
@@ -82,6 +84,10 @@ public class MIPSInstruction {
 		default:
 			retVal = REGISTER_REGISTER;
 		}
+		
+		System.out.println("INSTRUCTION: " + this + " " + this.getBinarySegment(26, 31).toString(10));
+		if(this.getBinarySegment(26, 31).toString(10).equals("56"))
+			retVal = REGISTER_IMMEDIATE;
 
 		return retVal;
 	}
