@@ -27,7 +27,7 @@ public class MIPSInstruction {
 
 	public String getOpcodeInHex() {
 		String paddedOpcode;
-		
+
 		paddedOpcode = MiniMipsUtilities.getPaddedHex(opcode);
 		paddedOpcode = paddedOpcode.substring(0, 4) + " " + paddedOpcode.substring(4);
 
@@ -53,18 +53,15 @@ public class MIPSInstruction {
 	public BigInteger getIMM() {
 		return BigInteger.ZERO;
 	}
-	
-	public BigInteger get16_20(){
+
+	public BigInteger get16_20() {
 		String segment = getOpcodeInBinary().substring(16, 21);
-		System.out.println(getOpcodeInBinary().substring(16, 21));
-		System.out.println(Long.parseLong("01010",2));
-		System.out.println(Long.parseLong(segment,2));
-		System.out.println(BigInteger.valueOf(Long.parseLong(getOpcodeInBinary().substring(16, 20),2)));
-		return BigInteger.valueOf(Long.parseLong(segment,2));
+
+		return BigInteger.valueOf(Long.parseLong(segment, 2));
 	}
 
 	public String getInstructionType() {
-String retVal;
+		String retVal;
 		String IR = getOpcodeInBinary();
 		String op = Long.toString(Long.parseLong(IR.substring(0, 6)));
 
@@ -88,7 +85,7 @@ String retVal;
 		default:
 			retVal = REGISTER_REGISTER;
 		}
-		
+
 		System.out.println("MIPS: " + retVal);
 		return retVal;
 	}
