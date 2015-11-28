@@ -11,7 +11,7 @@ public class Registers {
 	List<BigInteger> IntegerRegister = new ArrayList<>(32);
 	List<BigInteger> FloatingRegister = new ArrayList<>(32);
 	BigInteger HI;
-	BigInteger LOW;
+	BigInteger LO;
 
 	public void Initialize() {
 		int i = 0;
@@ -23,7 +23,7 @@ public class Registers {
 		} while (i < 32);
 
 		HI = BigInteger.ZERO;
-		LOW = BigInteger.ZERO;
+		LO = BigInteger.ZERO;
 	}
 
 	public BigInteger getR(BigInteger index) {
@@ -52,16 +52,22 @@ public class Registers {
 		return HI;
 	}
 
-	public void setHI(BigInteger hI) {
-		HI = hI;
+	public void setHI(BigInteger Hi) {
+		HI = Hi;
 	}
 
-	public BigInteger getLOW() {
-		return LOW;
+	public BigInteger getLO() {
+		return LO;
 	}
 
-	public void setLOW(BigInteger lOW) {
-		LOW = lOW;
+	public void setLOW(BigInteger Lo) {
+		LO = Lo;
+	}
+	
+	public void setHILO(BigInteger aluOutput){
+		System.out.println(MiniMipsUtilities.getPaddedHex128(aluOutput));
+		this.HI = new BigInteger(MiniMipsUtilities.getPaddedHex128(aluOutput).substring(0, 8),16);
+		this.LO = new BigInteger(MiniMipsUtilities.getPaddedHex128(aluOutput).substring(8),16);
 	}
 
 	public String toString() {
@@ -84,7 +90,7 @@ public class Registers {
 		sb.append("\n");
 		sb.append("LO");
 		sb.append(": ");
-		sb.append(MiniMipsUtilities.getPaddedHex(this.getLOW()));
+		sb.append(MiniMipsUtilities.getPaddedHex(this.getLO()));
 		sb.append("\n");
 
 //		sb.append("\n\nFloating Point Registers\n\n");

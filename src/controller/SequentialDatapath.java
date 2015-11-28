@@ -89,6 +89,8 @@ public class SequentialDatapath {
 	}
 
 	public int IF() {
+		if_id.IR = instructionMemory.getInstructionAddress(pc);
+
 		if (ex_mem.IR != null && ex_mem.IR.getInstructionType() == MIPSInstruction.BRANCH && ex_mem.Cond) {
 			if_id.NPC = ex_mem.ALUOutput;
 			pc = if_id.NPC;
@@ -96,9 +98,7 @@ public class SequentialDatapath {
 			if_id.NPC = adderAlu.add(pc, 4);
 			pc = if_id.NPC;
 		}
-
-		if_id.IR = instructionMemory.getInstructionAddress(pc);
-
+		
 		System.out.println(pc);
 		System.out.println(if_id.IR);
 
@@ -181,9 +181,17 @@ public class SequentialDatapath {
 		// I wasn't sure what this meant so I'm leaving this out for now
 
 		// This is a Multiplexer... kinda
+
+		System.out.println("WB STAGE: " + mem_wb.IR + " " + mem_wb.ALUOutput);
+		
 		switch (mem_wb.IR.getInstructionType()) {
 		case MIPSInstruction.REGISTER_REGISTER:
-			registers.setR(mem_wb.IR.get16_20(), mem_wb.ALUOutput);
+			if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DMULT) {
+				// TODO: separate top from bottom
+				registers.setHILO(mem_wb.ALUOutput);
+				System.out.println("SAVING MULT OP");
+			} else
+				registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
 			registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);

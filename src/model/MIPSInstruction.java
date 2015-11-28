@@ -41,7 +41,12 @@ public class MIPSInstruction {
 
 		return paddedOpcode;
 	}
+	
+	public BigInteger getBinarySegment(int i, int n){
+		String segment = getOpcodeInBinary().substring(i, n+1);
 
+		return BigInteger.valueOf(Long.parseLong(segment, 2));
+	}
 	public BigInteger getA() {
 		return BigInteger.ZERO;
 	}
@@ -52,12 +57,6 @@ public class MIPSInstruction {
 
 	public BigInteger getIMM() {
 		return BigInteger.ZERO;
-	}
-
-	public BigInteger get16_20() {
-		String segment = getOpcodeInBinary().substring(16, 21);
-
-		return BigInteger.valueOf(Long.parseLong(segment, 2));
 	}
 
 	public String getInstructionType() {

@@ -47,7 +47,6 @@ public class RTypeInstruction extends MIPSInstruction {
 		
 		opcode = BigInteger.valueOf(opcodeBinary);
 	}
-	
 	public BigInteger getA(){
 		
 		if (func == 56)
