@@ -45,7 +45,6 @@ public class MIPSInstruction {
 
 	public BigInteger getBinarySegment(int i, int n) {
 		String segment = getOpcodeInBinary().substring(i, n + 1);
-		System.out.println("SEGMENT: " + segment);
 		return BigInteger.valueOf(Long.parseLong(segment, 2));
 	}
 
@@ -92,7 +91,6 @@ public class MIPSInstruction {
 			break;
 		}
 
-		System.out.println("INSTRUCTION: " + this + " " + this.getBinarySegment(26, 31).toString(10) + " " + retVal + " " + op);
 		if (this.getBinarySegment(26, 31).toString(10).equals("56"))
 			retVal = REGISTER_IMMEDIATE;
 

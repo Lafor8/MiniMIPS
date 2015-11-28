@@ -3,7 +3,6 @@ package controller;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
@@ -13,7 +12,6 @@ public class InstructionIdentifier {
 
 	public InstructionIdentifier() {
 		labelsMap = new HashMap<>();
-		InternalRegisters r = null;
 		
 	}
 
@@ -80,7 +78,6 @@ public class InstructionIdentifier {
 		
 		
 		for (int i = 0, j = 0; i < param.length; ++i) {
-			// System.out.println("param: "+param[i]);
 
 			temp = param[i].trim();
 			// TODO: check if any excess will be considered

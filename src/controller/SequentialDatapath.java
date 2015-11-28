@@ -103,8 +103,6 @@ public class SequentialDatapath {
 				pc = if_id.NPC;
 			}
 
-			System.out.println("IF STAGE: \n" + if_id.toString());
-
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.IF_STAGE, if_id.IR);
 		}
 		return 0;
@@ -122,18 +120,12 @@ public class SequentialDatapath {
 			if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
 				id_ex.A = registers.getR(if_id.IR.getBinarySegment(11, 15));
 				id_ex.B = registers.getR(if_id.IR.getBinarySegment(16, 20));
-				System.out.println(if_id.IR.getOpcodeInBinary());
-				System.out.println(if_id.IR);
-				System.out.println(if_id.IR.getBinarySegment(11, 15));
-				System.out.println(if_id.IR.getBinarySegment(16, 20));
 			} else {
 				id_ex.A = registers.getR(if_id.IR.getA());
 				id_ex.B = registers.getR(if_id.IR.getB());
 			}
 
 			id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
-
-			System.out.println("ID STAGE: \n" + id_ex.toString());
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
 		}
@@ -160,17 +152,11 @@ public class SequentialDatapath {
 				// id_ex.IR);
 				BigInteger param1 = id_ex.A;
 
-				System.out.println(id_ex.IR.getCondForMultiplexer());
-
 				BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
 
-				System.out.println(id_ex.IR + " " + id_ex.B + " " + id_ex.IMM + " " + id_ex.IR.getCondForMultiplexer() + " " + id_ex.IR.getInstructionType());
-				System.out.println("PARAM: " + param2);
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 				ex_mem.Cond = false;
 			}
-
-			System.out.println("EX STAGE: \n" + ex_mem.toString());
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 		}
@@ -196,7 +182,6 @@ public class SequentialDatapath {
 				break;
 			}
 
-			System.out.println("MEM STAGE: \n" + mem_wb.toString());
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 		}
 		return 0;
@@ -219,7 +204,6 @@ public class SequentialDatapath {
 				break;
 			case MIPSInstruction.REGISTER_IMMEDIATE:
 
-				System.out.println("WB: " + mem_wb.IR.getB() + " " + mem_wb.ALUOutput);
 				if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL)
 					registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
 				else
@@ -233,6 +217,7 @@ public class SequentialDatapath {
 				break;
 			}
 
+			// System.out.println(mem_wb.IR);
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.WB_STAGE, mem_wb.IR);
 		} else
 			keepRunning = false;
