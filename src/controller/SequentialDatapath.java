@@ -114,15 +114,23 @@ public class SequentialDatapath {
 		if (!id_ex.IR.isLastInstruction) {
 			id_ex.NPC = if_id.NPC;
 
-			// need to add special case when instruction is DSLL and floating
-
-			// get from R register and get from F register
+			// need to update the PC
+			
 			if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
 				id_ex.A = registers.getR(if_id.IR.getBinarySegment(11, 15));
 				id_ex.B = registers.getR(if_id.IR.getBinarySegment(16, 20));
 			} else {
-				id_ex.A = registers.getR(if_id.IR.getA());
-				id_ex.B = registers.getR(if_id.IR.getB());
+				
+				if(Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
+				   Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+					id_ex.A = registers.getF(if_id.IR.getA());
+					id_ex.B = registers.getF(if_id.IR.getB());
+				}else{
+					id_ex.A = registers.getR(if_id.IR.getA());
+					id_ex.B = registers.getR(if_id.IR.getB());	
+				}
+				
+				
 			}
 
 			id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
@@ -148,12 +156,8 @@ public class SequentialDatapath {
 				ex_mem.Cond = true;
 				break;
 			default:
-				// long param1 = multiplexer.select(id_ex.NPC, id_ex.A,
-				// id_ex.IR);
 				BigInteger param1 = id_ex.A;
-
 				BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
-
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 				ex_mem.Cond = false;
 			}
@@ -199,8 +203,14 @@ public class SequentialDatapath {
 				if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DMULT) {
 					// TODO: separate top from bottom
 					registers.setHILO(mem_wb.ALUOutput);
-				} else
-					registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
+				} else{
+					if(Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
+				   Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+						registers.setF(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
+					}else{
+						registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
+					}
+				}
 				break;
 			case MIPSInstruction.REGISTER_IMMEDIATE:
 
@@ -210,10 +220,12 @@ public class SequentialDatapath {
 					registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
 				break;
 			case MIPSInstruction.LOAD:
-
-				// need to check to which register will be store R or F
-				registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
-				registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
+				if(Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
+				   Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+					registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
+				}else{
+					registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
+				}
 				break;
 			}
 
