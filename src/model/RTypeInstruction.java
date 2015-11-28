@@ -27,8 +27,6 @@ public class RTypeInstruction extends MIPSInstruction {
 	public int val3;
 	public int val4;
 	public int func;
-	public long opcodeBinary;
-	public String opcodeHex;
 
 	public RTypeInstruction(int op, int val1, int val2, int val3, int val4, int func) {
 		this.op = op;
@@ -38,14 +36,16 @@ public class RTypeInstruction extends MIPSInstruction {
 		this.val4 = val4;
 		this.func = func;
 		
+		long opcodeBinary = 0;
+		
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
 		opcodeBinary += val3 << 11;
 		opcodeBinary += val4 << 6;
 		opcodeBinary += func;
-		opcode = opcodeBinary;
-		opcodeHex = Long.toHexString(opcodeBinary);
+		
+		opcode = BigInteger.valueOf(opcodeBinary);
 	}
 	
 	public BigInteger getA(){

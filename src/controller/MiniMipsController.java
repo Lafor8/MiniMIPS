@@ -29,7 +29,7 @@ public class MiniMipsController {
 
 		for (MIPSInstruction inst : mipsInst) {
 			if (inst != null) {
-				String paddedInst = String.format("%1$-" + 30 + "s", inst.getInstruction());
+				String paddedInst = String.format("%1$-" + 30 + "s", inst.instruction);
 				System.out.println(paddedInst + " - " + inst.getOpcodeInHex());
 			}
 		}

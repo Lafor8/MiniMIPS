@@ -23,8 +23,6 @@ public class ITypeInstruction extends MIPSInstruction {
 	int val1;
 	int val2;
 	int immediate;
-	long opcodeBinary;
-	String opcodeHex;
 
 	public ITypeInstruction(int op, int val1, int val2, int immediate) {
 		this.op = op;
@@ -32,14 +30,14 @@ public class ITypeInstruction extends MIPSInstruction {
 		this.val2 = val2;
 		this.immediate = immediate;
 		
+		long opcodeBinary = 0;
+		
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
 		opcodeBinary += immediate & 0x0FFFF;
 		opcodeBinary = opcodeBinary & 0x0FFFFFFFFL; 
-		opcode = opcodeBinary;
-		
-		opcodeHex = Long.toHexString(opcodeBinary);
+		opcode = BigInteger.valueOf(opcodeBinary);
 	}
 	
 	public BigInteger getA(){

@@ -169,7 +169,7 @@ public class InstructionIdentifier {
 		if (MIPSInst == null)
 			MIPSInst = new MIPSInstruction();
 
-		MIPSInst.setInstruction(instruction);
+		MIPSInst.instruction = instruction;
 		MIPSInst.address = address;
 
 		return MIPSInst;

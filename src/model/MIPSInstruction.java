@@ -4,12 +4,12 @@ import java.math.BigInteger;
 
 public class MIPSInstruction {
 
-	protected String instruction;
-	protected long opcode;
+	public BigInteger address;
+	public String instruction;
+	public BigInteger opcode;
 
 	public boolean isValid;
 	public String errorMsg;
-	public BigInteger address;
 
 	public static final String BRANCH = "Branch";
 	public static final String JUMP = "Jump";
@@ -24,34 +24,18 @@ public class MIPSInstruction {
 	}
 
 	public String getOpcodeInHex() {
-		String paddedOpcode = Long.toHexString(opcode);
-		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
-			paddedOpcode = "0" + paddedOpcode;
+//		String paddedOpcode = Long.toHexString(opcode);
+//		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
+//			paddedOpcode = "0" + paddedOpcode;
 
-		return paddedOpcode;
+		return opcode.toString(16);
 	}
 
 	public String getOpcodeInBinary() {
-		String paddedOpcode = Long.toBinaryString(opcode);
-		for (int i = 0, size = paddedOpcode.length(); i < 32 - size; i++)
-			paddedOpcode = "0" + paddedOpcode;
-		return paddedOpcode;
-	}
-
-	public String getInstruction() {
-		return instruction;
-	}
-
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
-	}
-
-	public long getOpcode() {
-		return opcode;
-	}
-
-	public void setOpcode(long opcode) {
-		this.opcode = opcode;
+//		String paddedOpcode = Long.toBinaryString(opcode);
+//		for (int i = 0, size = paddedOpcode.length(); i < 32 - size; i++)
+//			paddedOpcode = "0" + paddedOpcode;
+		return opcode.toString(2);
 	}
 
 	public BigInteger getA() {

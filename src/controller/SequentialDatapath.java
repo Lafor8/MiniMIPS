@@ -87,13 +87,11 @@ public class SequentialDatapath {
 	}
 
 	public int IF() {
-
-		// if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
-		// if_id.NPC = ex_mem.ALUOutput;
-		// }
-		// else {
-		if_id.NPC = adderAlu.add(pc, 4);
-		// }
+		if (ex_mem.IR.getInstructionType() == "BRANCH" && ex_mem.Cond) {
+			if_id.NPC = ex_mem.ALUOutput;
+		} else {
+			if_id.NPC = adderAlu.add(pc, 4);
+		}
 
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
 
