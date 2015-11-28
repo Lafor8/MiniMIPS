@@ -48,6 +48,8 @@ public class PipelineMapManager {
 		}
 		sb.append("\n");
 
+		
+		
 		for (Entry<Integer, HashMap<Integer, MIPSInstruction>> cycleMap : pipelineMap.entrySet()) {
 			sb.append(cycleMap.getKey());
 			sb.append("\t" + cycleMap.getValue());

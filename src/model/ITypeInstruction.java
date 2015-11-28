@@ -36,7 +36,7 @@ public class ITypeInstruction extends MIPSInstruction {
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
 		opcodeBinary += immediate & 0x0FFFF;
-		opcodeBinary = opcodeBinary & 0x0FFFFFFFF; 
+		opcodeBinary = opcodeBinary & 0x0FFFFFFFFL; 
 		opcode = opcodeBinary;
 		
 		opcodeHex = Long.toHexString(opcodeBinary);

@@ -37,7 +37,7 @@ public class MiniMipsController {
 		SequentialDatapath sequentialDatapath = new SequentialDatapath();
 		sequentialDatapath.loadInstructions(mipsInst);
 
-		for (int i = 0; i < Math.min(3, mipsInst.size()); ++i)
+		for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
 			sequentialDatapath.runOneCycle();
 
 		System.out.println();

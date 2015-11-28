@@ -18,7 +18,4 @@ public class InternalRegisters {
 	public Boolean Cond;
 	
 	public BigInteger LMD;
-	
-	public long Opcode;
-	
 }

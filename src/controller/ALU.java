@@ -7,6 +7,16 @@ import model.MIPSInstruction;
 import model.RTypeInstruction;
 
 public class ALU {
+	
+	public static void main(String args[]) {
+		ALU alu = new ALU();
+
+		BigInteger param1, param2;
+		param1 = BigInteger.ONE;
+		param2 = BigInteger.valueOf(2);
+		// TODO:
+		//System.out.println(alu.apply(param1, param2, new ));
+	}
 
 	public BigInteger apply(BigInteger param1, BigInteger param2, MIPSInstruction Instruction) {
 		BigInteger answer = BigInteger.valueOf(0);
@@ -44,5 +54,4 @@ public class ALU {
 		}
 		return answer;
 	}
-
 }
