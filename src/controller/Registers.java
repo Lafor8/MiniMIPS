@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilities.MiniMipsUtilities;
+
 public class Registers {
 
 	List<BigInteger> IntegerRegister = new ArrayList<>(32);
@@ -25,6 +27,7 @@ public class Registers {
 	}
 
 	public BigInteger getR(BigInteger index) {
+		System.out.println("GETR: "+ index);
 		if (index.equals(BigInteger.ZERO))
 			return BigInteger.ZERO;
 		return IntegerRegister.get(Integer.parseInt(index.toString()));
@@ -37,6 +40,8 @@ public class Registers {
 	}
 
 	public void setR(BigInteger index, BigInteger value) {
+
+		System.out.println("SETR: "+ index + " <- " + value);
 		if (!(index.compareTo(BigInteger.ZERO) == 0))
 			IntegerRegister.set(Integer.parseInt(index.toString()), value);
 	}
@@ -62,4 +67,29 @@ public class Registers {
 		LOW = lOW;
 	}
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Integer Registers\n");
+
+		for (int i = 0; i < 32; ++i) {
+			sb.append("R");
+			sb.append(String.format("%02d", i));
+			sb.append(": ");
+			sb.append(MiniMipsUtilities.getPaddedHex(this.IntegerRegister.get(i)));
+			sb.append("\n");
+		}
+
+		sb.append("\n\nFloating Point Registers\n");
+
+		for (int i = 0; i < 32; ++i) {
+			sb.append("F");
+			sb.append(String.format("%02d", i));
+			sb.append(": ");
+			sb.append(MiniMipsUtilities.getPaddedHex(this.FloatingRegister.get(i)));
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
 }

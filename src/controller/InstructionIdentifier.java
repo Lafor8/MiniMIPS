@@ -36,12 +36,12 @@ public class InstructionIdentifier {
 			}
 			normalizedInst = (i * 4) + ":" + normalizedInst;
 
-			System.out.println(normalizedInst);
+//			System.out.println(normalizedInst);
 
 			normalizedInstList.add(normalizedInst);
 		}
 
-		System.out.println();
+//		System.out.println();
 
 		// display label map
 		for (Entry<String, Integer> item : labelsMap.entrySet()) {

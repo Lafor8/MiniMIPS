@@ -7,32 +7,32 @@ import model.*;
 
 public class SequentialDatapath {
 	// Program Counter
-	private BigInteger pc = new BigInteger("0000000000000000");
+	public BigInteger pc = new BigInteger("0000000000000000");
 
 	// Internal Registers
-	private InternalRegisters if_id;
-	private InternalRegisters id_ex;
-	private InternalRegisters ex_mem;
-	private InternalRegisters mem_wb;
+	public InternalRegisters if_id;
+	public InternalRegisters id_ex;
+	public InternalRegisters ex_mem;
+	public InternalRegisters mem_wb;
 
 	// Registers and Memory
-	private InstructionMemory instructionMemory;
-	private Registers registers;
-	private DataMemory dataMemory;
+	public InstructionMemory instructionMemory;
+	public Registers registers;
+	public DataMemory dataMemory;
 
 	// Operators
-	private ALU alu;
-	private AdderALU adderAlu;
-	private Multiplexer multiplexer;
-	private ZeroCondition zeroCondition;
-	private SignExtend signExtend;
+	public ALU alu;
+	public AdderALU adderAlu;
+	public Multiplexer multiplexer;
+	public ZeroCondition zeroCondition;
+	public SignExtend signExtend;
 
 	// Auxillary variables
-	private boolean keepRunning;
-	private int cycles;
+	public boolean keepRunning;
+	public int cycles;
 
 	// Pipeline Mapping
-	private PipelineMapManager pipelineMapManager;
+	public PipelineMapManager pipelineMapManager;
 
 	public SequentialDatapath() {
 		pipelineMapManager = pipelineMapManager.getInstance();
@@ -46,9 +46,6 @@ public class SequentialDatapath {
 		multiplexer = new Multiplexer();
 		zeroCondition = new ZeroCondition();
 		signExtend = new SignExtend();
-
-		registers.setR(BigInteger.ONE, BigInteger.valueOf(1));
-		registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
 
 		if_id = new InternalRegisters();
 		id_ex = new InternalRegisters();

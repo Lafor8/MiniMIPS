@@ -2,6 +2,8 @@ package model;
 
 import java.math.BigInteger;
 
+import utilities.MiniMipsUtilities;
+
 public class MIPSInstruction {
 
 	public BigInteger address;
@@ -24,10 +26,9 @@ public class MIPSInstruction {
 	}
 
 	public String getOpcodeInHex() {
-		String paddedOpcode = opcode.toString(16);
-		for (int i = 0, size = paddedOpcode.length(); i < 8 - size; i++)
-			paddedOpcode = "0" + paddedOpcode;
-
+		String paddedOpcode;
+		
+		paddedOpcode = MiniMipsUtilities.getPaddedHex(opcode);
 		paddedOpcode = paddedOpcode.substring(0, 4) + " " + paddedOpcode.substring(4);
 
 		return paddedOpcode;
@@ -54,8 +55,12 @@ public class MIPSInstruction {
 	}
 	
 	public BigInteger get16_20(){
+		String segment = getOpcodeInBinary().substring(16, 21);
 		System.out.println(getOpcodeInBinary().substring(16, 21));
-		return BigInteger.valueOf(Long.parseLong(getOpcodeInBinary().substring(16, 20),2));
+		System.out.println(Long.parseLong("01010",2));
+		System.out.println(Long.parseLong(segment,2));
+		System.out.println(BigInteger.valueOf(Long.parseLong(getOpcodeInBinary().substring(16, 20),2)));
+		return BigInteger.valueOf(Long.parseLong(segment,2));
 	}
 
 	public String getInstructionType() {

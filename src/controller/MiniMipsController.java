@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,19 +36,28 @@ public class MiniMipsController {
 		}
 
 		SequentialDatapath sequentialDatapath = new SequentialDatapath();
+
 		sequentialDatapath.loadInstructions(mipsInst);
 
-//		for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
-//			sequentialDatapath.runOneCycle();
+		sequentialDatapath.registers.setR(BigInteger.ONE, BigInteger.valueOf(1));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
+
+		// for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
+		// sequentialDatapath.runOneCycle();
 
 		sequentialDatapath.IF();
 		sequentialDatapath.ID();
 		sequentialDatapath.EX();
 		sequentialDatapath.MEM();
 		sequentialDatapath.WB();
-		
+
 		System.out.println();
 
 		System.out.println(PipelineMapManager.getInstance().toString());
+
+		System.out.println();
+
+		System.out.println(sequentialDatapath.registers.toString());
+
 	}
 }
