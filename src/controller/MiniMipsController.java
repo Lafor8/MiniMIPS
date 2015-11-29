@@ -6,6 +6,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import view.MainFrame;
+import view.RegistersView;
+
 import model.MIPSInstruction;
 
 public class MiniMipsController {
@@ -54,10 +57,16 @@ public class MiniMipsController {
 		System.out.println();
 
 		System.out.println(sequentialDatapath.registers.toString());
-
-		
+	
 		System.out.println();
 
 		System.out.println(sequentialDatapath.dataMemory.toString());
+		
+		MainFrame frame = new MainFrame();
+		frame.refreshRegisters(sequentialDatapath.registers);
+		frame.refreshCodeSegment(mipsInst);
+		frame.refreshDataSegment(sequentialDatapath.dataMemory);
+		frame.setVisible(true);
+		
 	}
 }
