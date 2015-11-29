@@ -8,7 +8,7 @@ import utilities.MiniMipsUtilities;
 
 public class DataMemory {
 
-	HashMap<BigInteger, BigInteger> dataMemory;
+	public HashMap<BigInteger, BigInteger> dataMemory;
 
 	public DataMemory() {
 		dataMemory = new HashMap<>();
