@@ -182,7 +182,8 @@ public class SequentialDatapath {
 				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
 				break;
 			case MIPSInstruction.STORE:
-				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.B);
+				System.out.println("MEM: " + mem_wb.IR + "\n\t" +ex_mem.A+ "\n\t"+ ex_mem.B+"\n\t"+ex_mem.IMM +"\n\t"+ ex_mem.ALUOutput);
+				dataMemory.setDataToMemory(mem_wb.ALUOutput, ex_mem.B);
 				break;
 			}
 

@@ -40,10 +40,10 @@ public class ALU {
 			answer = param1.and(param2);
 			break;
 		case RTypeInstruction.ADDS:
-			answer = param1.add(param2);
+			answer = param1.add(param2); //TODO: needs revision
 			break;
 		case RTypeInstruction.MULS:
-			answer = param1.multiply(param2);
+			answer = param1.multiply(param2); // TODO: needs revision
 			break;
 		case RTypeInstruction.DSLL:
 			String str = MiniMipsUtilities.getPaddedHex(param2).substring(13, 15);
@@ -53,6 +53,31 @@ public class ALU {
 			answer = param1.multiply(BigInteger.valueOf(2).pow(Integer.parseInt(param2.toString())));
 			break;
 
+			
+			// TODO: Double check these all
+		case ITypeInstruction.LW:
+			answer = param1.add(param2);
+			break;
+			
+		case ITypeInstruction.SW:
+			answer = param1.add(param2);
+			break;
+			
+		case ITypeInstruction.LWU:
+			answer = param1.add(param2);
+			break;
+			
+		case ITypeInstruction.SS:
+			answer = param1.add(param2);
+			break;
+			
+		case ITypeInstruction.LS:
+			answer = param1.add(param2);
+			break;
+			
+			
+			//TODO: LW, LWU, SW, L.S, S.S, ADD.S, MUL.S
+			
 		// Double check whether all the alu operations work
 		}
 		return answer;

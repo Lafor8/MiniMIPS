@@ -35,12 +35,14 @@ public class MiniMipsController {
 			}
 		}
 
+		System.out.println();
 		SequentialDatapath sequentialDatapath = new SequentialDatapath();
 
 		sequentialDatapath.loadInstructions(mipsInst);
 
-		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(1));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(7));
 		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(3), BigInteger.valueOf(3));
 
 		// for (int i = 0; i < Math.min(1, mipsInst.size()); ++i)
 		// sequentialDatapath.runOneCycle();
