@@ -13,7 +13,7 @@ import controller.PipelinedDatapath;
 public class BackEndTester {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		Scanner in = new Scanner(new File("Data/sampleCode.txt"));
+		Scanner in = new Scanner(new File("Data/sampleCode2.txt"));
 
 		InstructionIdentifier identifier = new InstructionIdentifier();
 		// ArrayList<MIPSInstruction> instructions = new ArrayList<>();

@@ -39,7 +39,7 @@ public class InstructionIdentifier {
 			if (normalizedInst.matches("(((//)|;).*)|(\\s*)"))
 				normalizedInst = "$:" + this.LINE_IGNORE;
 			// Case 2: Invalid chars
-			else if (!normalizedInst.matches("[A-z0-9:\\._,\\s]+"))
+			else if (!normalizedInst.matches("[A-z0-9:\\._,\\s\\(\\)]+"))
 				normalizedInst = "~:" + this.LINE_INVALID_CHARS;
 			// Case 3: Invalid format
 			else if (!GeneralInstructionFormat.check(normalizedInst))
