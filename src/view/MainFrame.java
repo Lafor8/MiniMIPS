@@ -34,6 +34,7 @@ public class MainFrame extends JFrame {
 	private InternalRegistersView internalRegisters;
 	RegistersView register2;
 	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -91,29 +92,31 @@ public class MainFrame extends JFrame {
 					.addGroup(gl_codePanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_codePanel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(error, GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE))
+							.addComponent(error, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+							.addGap(18))
 						.addGroup(gl_codePanel.createSequentialGroup()
 							.addGap(15)
-							.addComponent(codeView, GroupLayout.PREFERRED_SIZE, 638, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addComponent(data, GroupLayout.PREFERRED_SIZE, 402, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(register1, GroupLayout.PREFERRED_SIZE, 419, GroupLayout.PREFERRED_SIZE)
-					.addGap(15))
+							.addComponent(codeView, GroupLayout.PREFERRED_SIZE, 589, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(data, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(register1, GroupLayout.PREFERRED_SIZE, 399, GroupLayout.PREFERRED_SIZE)
+					.addGap(118))
 		);
 		gl_codePanel.setVerticalGroup(
 			gl_codePanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_codePanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_codePanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(register1, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
-						.addComponent(data, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)))
+						.addComponent(register1, GroupLayout.PREFERRED_SIZE, 662, GroupLayout.PREFERRED_SIZE)
+						.addComponent(data, GroupLayout.PREFERRED_SIZE, 662, GroupLayout.PREFERRED_SIZE)))
 				.addGroup(Alignment.TRAILING, gl_codePanel.createSequentialGroup()
 					.addGap(14)
 					.addComponent(codeView, GroupLayout.PREFERRED_SIZE, 472, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-					.addComponent(error, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(error, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+					.addGap(74))
 		);
 		error.setLayout(new GridLayout(1, 0, 0, 0));
 		register1.setLayout(new GridLayout(1, 0, 0, 0));
@@ -132,18 +135,18 @@ public class MainFrame extends JFrame {
 		GroupLayout gl_ExecutionPanel = new GroupLayout(ExecutionPanel);
 		gl_ExecutionPanel.setHorizontalGroup(
 			gl_ExecutionPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_ExecutionPanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_ExecutionPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_ExecutionPanel.createSequentialGroup()
 							.addComponent(dataSegment, GroupLayout.PREFERRED_SIZE, 451, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE))
-						.addComponent(pipelineMap, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1142, Short.MAX_VALUE)
-						.addComponent(codeSegment, GroupLayout.DEFAULT_SIZE, 1142, Short.MAX_VALUE))
+							.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE))
+						.addComponent(pipelineMap, GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE)
+						.addComponent(codeSegment, GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(register2, GroupLayout.PREFERRED_SIZE, 428, GroupLayout.PREFERRED_SIZE)
-					.addGap(4))
+					.addComponent(register2, GroupLayout.PREFERRED_SIZE, 394, GroupLayout.PREFERRED_SIZE)
+					.addGap(116))
 		);
 		gl_ExecutionPanel.setVerticalGroup(
 			gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
@@ -156,10 +159,10 @@ public class MainFrame extends JFrame {
 							.addComponent(pipelineMap, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataSegment, GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
-								.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)))
-						.addComponent(register2, GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE))
-					.addContainerGap())
+								.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+								.addComponent(dataSegment, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(register2, GroupLayout.PREFERRED_SIZE, 666, GroupLayout.PREFERRED_SIZE))
+					.addGap(77))
 		);
 		pipelineMap.setLayout(new GridLayout(1, 0, 0, 0));
 		codeSegment.setLayout(new GridLayout(1, 0, 0, 0));
