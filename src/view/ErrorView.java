@@ -1,6 +1,5 @@
 package view;
 
-
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -23,7 +22,6 @@ public class ErrorView extends JPanel {
 		add(scrollPane, "cell 0 0,grow");
 
 		errorTextPane = new JTextPane();
-		errorTextPane.setText("asda");
 		scrollPane.setViewportView(errorTextPane);
 	}
 
@@ -37,12 +35,12 @@ public class ErrorView extends JPanel {
 		System.err.println(sb.toString());
 		System.err.println(errorTextPane.getText());
 		errorTextPane.setText(sb.toString());
-		errorTextPane.updateUI();
-		errorTextPane.revalidate();
-		errorTextPane.validate();
-		errorTextPane.removeAll();
-		
-		System.err.println("GET TEXT: "+ errorTextPane.getText());
+		// errorTextPane.updateUI();
+		// errorTextPane.revalidate();
+		// errorTextPane.validate();
+		// errorTextPane.removeAll();
+
+		System.err.println("GET TEXT: " + errorTextPane.getText());
 		System.err.println(sb.toString());
 	}
 
