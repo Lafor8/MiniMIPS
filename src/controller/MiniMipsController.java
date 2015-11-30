@@ -1,10 +1,13 @@
 package controller;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.UIManager;
 
 import view.MainFrame;
 import view.RegistersView;
@@ -35,6 +38,12 @@ public class MiniMipsController {
 
 	public void run() {
 		refreshAll();
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
 		mainFrame.setVisible(true);
 
 	}

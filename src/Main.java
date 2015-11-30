@@ -15,6 +15,8 @@ public class Main {
 		MiniMipsController miniMips = new MiniMipsController();
 		miniMips.run();
 		
+		
+		
 		System.out.println("BEQ R1, R2, L1".matches("[A-z0-9:\\._,\\s]+"));
 	}
 }
