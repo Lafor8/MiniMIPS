@@ -1,8 +1,10 @@
 package controller;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import utilities.MiniMipsUtilities;
 
@@ -33,7 +35,10 @@ public class DataMemory {
 		if (dataMemory.entrySet().size() == 0)
 			sb.append("No Data Segments Affected\n");
 
-		for (Entry<BigInteger, BigInteger> dataEntry : dataMemory.entrySet()) {
+		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
+		map.putAll(dataMemory);
+
+		for (Entry<BigInteger, BigInteger> dataEntry : map.entrySet()) {
 			sb.append(MiniMipsUtilities.getPaddedHex(dataEntry.getKey()).substring(4));
 			sb.append(" ");
 			sb.append(MiniMipsUtilities.getPaddedHex(dataEntry.getValue()));

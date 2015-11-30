@@ -44,11 +44,13 @@ public class PipelineMapManager {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append("\t\t");
 		for (int i = 0; i < pipelineMap.size(); ++i) {
 			sb.append("\t" + i);
 		}
 		sb.append("\n");
 
+		String instStr[] = new String[100];
 		String table[][] = new String[100][pipelineMap.size()];
 
 		HashMap<BigInteger, Integer> tableAux = new HashMap<>();
@@ -66,16 +68,21 @@ public class PipelineMapManager {
 						tableAux.put(inst.address, runningVal++);
 
 					index = tableAux.get(inst.address);
+					if (InstEntry.getKey() == this.WB_STAGE) {
+						tableAux.remove(inst.address);
+					}
 
+					instStr[index] = InstEntry.getValue().toString();
 					table[index][cycleMap.getKey()] = getStageName(InstEntry.getKey());
 				}
 			}
 		}
 
 		System.out.println("Table Size: " + runningVal + "x" + pipelineMap.size());
-
 		for (int i = 0; i < runningVal; ++i) {
-			sb.append("\t");
+
+			String paddedInst = String.format("%1$-" + 20 + "s", instStr[i]);
+			sb.append(paddedInst + "\t");
 			for (int j = 0; j < pipelineMap.size(); ++j) {
 				if (table[i][j] != null)
 					sb.append(table[i][j]);

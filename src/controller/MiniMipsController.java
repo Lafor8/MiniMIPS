@@ -25,8 +25,9 @@ public class MiniMipsController {
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
 
-			if (line.length() > 0)
+			if (line.length() > 0 && !line.matches("//.*")) {
 				lines.add(line);
+			}
 		}
 
 		mipsInst = identifier.parseInstructions(lines);
@@ -43,10 +44,10 @@ public class MiniMipsController {
 
 		sequentialDatapath.loadInstructions(mipsInst);
 
-		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(1));
+		sequentialDatapath.registers.setR(BigInteger.valueOf(1), BigInteger.valueOf(3));
 		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
 		sequentialDatapath.registers.setR(BigInteger.valueOf(3), BigInteger.valueOf(3));
-		
+
 		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(1), BigInteger.valueOf(17));
 		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(10), BigInteger.valueOf(18));
 		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(24), BigInteger.valueOf(19));
@@ -55,7 +56,7 @@ public class MiniMipsController {
 		// sequentialDatapath.runOneCycle();
 
 		sequentialDatapath.run();
-		
+
 		System.out.println();
 
 		System.out.println(PipelineMapManager.getInstance().toString());
@@ -63,16 +64,16 @@ public class MiniMipsController {
 		System.out.println();
 
 		System.out.println(sequentialDatapath.registers.toString());
-	
+
 		System.out.println();
 
 		System.out.println(sequentialDatapath.dataMemory.toString());
-		
-		MainFrame frame = new MainFrame();
-		frame.refreshRegisters(sequentialDatapath.registers);
-		frame.refreshCodeSegment(mipsInst);
-		frame.refreshDataSegment(sequentialDatapath.dataMemory);
-		frame.setVisible(true);
-		
+
+		// MainFrame frame = new MainFrame();
+		// frame.refreshRegisters(sequentialDatapath.registers);
+		// frame.refreshCodeSegment(mipsInst);
+		// frame.refreshDataSegment(sequentialDatapath.dataMemory);
+		// frame.setVisible(true);
+
 	}
 }

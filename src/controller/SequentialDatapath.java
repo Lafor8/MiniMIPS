@@ -31,6 +31,8 @@ public class SequentialDatapath {
 	public boolean keepRunning;
 	public int cycles;
 
+	public int stallCount;
+
 	// Pipeline Mapping
 	public PipelineMapManager pipelineMapManager;
 
@@ -108,6 +110,8 @@ public class SequentialDatapath {
 		return 0;
 	}
 
+	public int branchCount = 2;
+
 	public int ID() {
 		id_ex.IR = if_id.IR;
 
@@ -115,22 +119,20 @@ public class SequentialDatapath {
 			id_ex.NPC = if_id.NPC;
 
 			// need to update the PC
-			
+
 			if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
 				id_ex.A = registers.getR(if_id.IR.getBinarySegment(11, 15));
 				id_ex.B = registers.getR(if_id.IR.getBinarySegment(16, 20));
 			} else {
-				
-				if(Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
-				   Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+
+				if (Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
 					id_ex.A = registers.getF(if_id.IR.getA());
 					id_ex.B = registers.getF(if_id.IR.getB());
-				}else{
+				} else {
 					id_ex.A = registers.getR(if_id.IR.getA());
-					id_ex.B = registers.getR(if_id.IR.getB());	
+					id_ex.B = registers.getR(if_id.IR.getB());
 				}
-				
-				
+
 			}
 
 			id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
@@ -149,7 +151,13 @@ public class SequentialDatapath {
 			switch (id_ex.IR.getInstructionType()) {
 			case MIPSInstruction.BRANCH:
 				ex_mem.ALUOutput = id_ex.NPC.add(id_ex.IMM.multiply(BigInteger.valueOf(4)));
-				ex_mem.Cond = zeroCondition.check(id_ex.A);
+				if (branchCount > 0) {
+					ex_mem.Cond = zeroCondition.check(id_ex.A);
+					branchCount--;
+				}
+
+				System.out.println("ID STAGE: " + id_ex.IR + " " + id_ex.A + " " + id_ex.B + " " + id_ex.IMM);
+				System.out.println("BRANCH: " + ex_mem.ALUOutput + " " + id_ex.A + " " + ex_mem.Cond);
 				break;
 			case MIPSInstruction.JUMP:
 				ex_mem.ALUOutput = id_ex.IMM.multiply(BigInteger.valueOf(4));
@@ -182,10 +190,11 @@ public class SequentialDatapath {
 				mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
 				break;
 			case MIPSInstruction.STORE:
-				System.out.println("MEM: " + mem_wb.IR + "\n\t" +ex_mem.A+ "\n\t"+ ex_mem.B+"\n\t"+ex_mem.IMM +"\n\t"+ ex_mem.ALUOutput);
 				dataMemory.setDataToMemory(mem_wb.ALUOutput, ex_mem.B);
 				break;
 			}
+
+			System.out.println(mem_wb.IR);
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 		}
@@ -204,11 +213,10 @@ public class SequentialDatapath {
 				if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DMULT) {
 					// TODO: separate top from bottom
 					registers.setHILO(mem_wb.ALUOutput);
-				} else{
-					if(Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
-				   Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+				} else {
+					if (Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
 						registers.setF(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
-					}else{
+					} else {
 						registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
 					}
 				}
@@ -221,10 +229,9 @@ public class SequentialDatapath {
 					registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
 				break;
 			case MIPSInstruction.LOAD:
-				if(Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 49 ||
-				   Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2)== 57){
+				if (Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
 					registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
-				}else{
+				} else {
 					registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
 				}
 				break;
