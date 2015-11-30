@@ -77,12 +77,13 @@ public class InstructionIdentifier {
 	private MIPSInstruction identifyInstruction(String instruction, int lineNo) {
 		MIPSInstruction MIPSInst = null;
 
+		String errorMsg = "Error at line " + (lineNo + 1);
+
 		String segments[] = instruction.split(":");
 
 		// Error
 		if (segments[0].equals("~")) {
 			MIPSInst = new MIPSInstruction();
-			String errorMsg = "Error at line " + (lineNo+1);
 
 			switch (Integer.parseInt(segments[1])) {
 			case LINE_INVALID_FORMAT:
@@ -101,10 +102,51 @@ public class InstructionIdentifier {
 		BigInteger address = BigInteger.valueOf(Long.parseLong(segments[0]));
 
 		System.out.println(instruction);
-		instruction = segments[1];
+		instruction = segments[1].toLowerCase();
 
 		String inst[] = instruction.trim().split(" ", 2);
 		String param[] = inst[1].split(",");
+
+		if (!inst[0].matches(GeneralInstructionFormat.availableCommands)) {
+
+			MIPSInst = new MIPSInstruction();
+			errorMsg += ": Command " + inst[0].toUpperCase() + " is not available";
+			System.err.println(errorMsg);
+			MIPSInst.setError(errorMsg);
+			return MIPSInst;
+		}
+		
+		if(inst[1].matches(".*\\([Ff][0-9]+\\).*")){
+			MIPSInst = new MIPSInstruction();
+			errorMsg += ": Address offset cannot come from Floating Point Registry";
+			System.err.println(errorMsg);
+			MIPSInst.setError(errorMsg);
+			return MIPSInst;
+		}
+		
+		if(inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.fpParams)){
+			MIPSInst = new MIPSInstruction();
+			errorMsg += ": Instructions that use floating point values cannot use the Integer Registry";
+			System.err.println(errorMsg);
+			MIPSInst.setError(errorMsg);
+			return MIPSInst;
+		}
+		
+		if(!inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.intParams)){
+			MIPSInst = new MIPSInstruction();
+			errorMsg += ": Instructions that use integer values cannot use the Floating Point Registry";
+			System.err.println(errorMsg);
+			MIPSInst.setError(errorMsg);
+			return MIPSInst;
+		}
+		
+		if(!inst[1].matches(GeneralInstructionFormat.strictParams)){
+			MIPSInst = new MIPSInstruction();
+			errorMsg += ": The range of valid indices for both registries is 0-31";
+			System.err.println(errorMsg);
+			MIPSInst.setError(errorMsg);
+			return MIPSInst;
+		}
 
 		int regs[] = new int[3];
 		int regsFound = 0;
@@ -118,7 +160,7 @@ public class InstructionIdentifier {
 
 			temp = param[i].trim();
 			// TODO: check if any excess will be considered
-			if (Pattern.matches("[RrFf][1-3]?[0-9]", temp)) {
+			if (Pattern.matches("[RrFf][0-9]+", temp)) {
 				regs[j++] = Integer.parseInt(temp.substring(1));
 				regsFound++;
 

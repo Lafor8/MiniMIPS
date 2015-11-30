@@ -16,7 +16,9 @@ public class Main {
 		miniMips.run();
 		
 		
-		
+		String regRegisterStrict = "[RrFf]0*(([0-9])|([12][0-9])|(3[0-1]))\\s*";
 		System.out.println("BEQ R1, R2, L1".matches("[A-z0-9:\\._,\\s]+"));
+		for(int i =0; i < 40; ++i)
+		System.out.println(i+ " "+("R0"+i).matches(regRegisterStrict));
 	}
 }

@@ -67,9 +67,8 @@ public class CodeView extends JPanel {
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
 
-			if (line.length() > 0 && !line.matches("//.*")) {
 				lines.add(line);
-			}
+			
 		}
 
 		mipsInst = identifier.parseInstructions(lines);
