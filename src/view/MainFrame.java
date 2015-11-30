@@ -17,6 +17,8 @@ import controller.Registers;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 import javax.swing.JTable;
@@ -209,4 +211,10 @@ public class MainFrame extends JFrame {
 		if(errors.size() > 0)
 			codeSegment.removeAll();
 	}
+	
+	public void getRegisterValuesFromUI(){
+		Registers newValues = register1.getRegisterValuesFromUI();
+		refreshRegisters(newValues);
+	}
+	
 }
