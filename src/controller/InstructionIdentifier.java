@@ -102,12 +102,12 @@ public class InstructionIdentifier {
 		BigInteger address = BigInteger.valueOf(Long.parseLong(segments[0]));
 
 		System.out.println(instruction);
-		instruction = segments[1].toLowerCase();
+		instruction = segments[1];
 
 		String inst[] = instruction.trim().split(" ", 2);
 		String param[] = inst[1].split(",");
 
-		if (!inst[0].matches(GeneralInstructionFormat.availableCommands)) {
+		if (!inst[0].toLowerCase().matches(GeneralInstructionFormat.availableCommands)) {
 
 			MIPSInst = new MIPSInstruction();
 			errorMsg += ": Command " + inst[0].toUpperCase() + " is not available";
@@ -238,6 +238,9 @@ public class InstructionIdentifier {
 
 		// j - type
 		case "J":
+			System.err.println("TRIAL: " + this.labelsMap +" "
+					
+					+ label);
 			MIPSInst = new JTypeInstruction(JTypeInstruction.J, (int) (this.labelsMap.get(label) >> 2));
 			break;
 		}

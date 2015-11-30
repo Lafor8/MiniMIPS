@@ -67,8 +67,8 @@ public class CodeView extends JPanel {
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
 
-				lines.add(line);
-			
+			lines.add(line);
+
 		}
 
 		mipsInst = identifier.parseInstructions(lines);
@@ -78,7 +78,7 @@ public class CodeView extends JPanel {
 
 		for (MIPSInstruction inst : mipsInst) {
 			if (inst != null) {
-				hasError |= inst.isValid;
+				hasError |= !inst.isValid;
 				if (!inst.isValid)
 					errors.add(inst.errorMsg);
 				else {
@@ -89,9 +89,10 @@ public class CodeView extends JPanel {
 		}
 
 		System.out.println();
+		System.err.println(hasError);
 		System.err.println(errors.size());
-System.err.println(MiniMipsController.getInstance());
-System.err.println(MiniMipsController.getInstance().mainFrame);
+		System.err.println(MiniMipsController.getInstance());
+		System.err.println(MiniMipsController.getInstance().mainFrame);
 		if (hasError)
 			MiniMipsController.getInstance().mainFrame.refreshErrorView(errors);
 		else
