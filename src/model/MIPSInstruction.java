@@ -35,7 +35,8 @@ public class MIPSInstruction {
 
 	public String getOpcodeInHex() {
 		String paddedOpcode;
-
+		if (opcode == null)
+			return null;
 		paddedOpcode = MiniMipsUtilities.getPaddedHex(opcode);
 		paddedOpcode = paddedOpcode.substring(0, 4) + " " + paddedOpcode.substring(4);
 
