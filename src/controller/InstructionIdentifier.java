@@ -115,32 +115,32 @@ public class InstructionIdentifier {
 			MIPSInst.setError(errorMsg);
 			return MIPSInst;
 		}
-		
-		if(inst[1].matches(".*\\([Ff][0-9]+\\).*")){
+
+		if (inst[1].matches(".*\\([Ff][0-9]+\\).*")) {
 			MIPSInst = new MIPSInstruction();
 			errorMsg += ": Address offset cannot come from Floating Point Registry";
 			System.err.println(errorMsg);
 			MIPSInst.setError(errorMsg);
 			return MIPSInst;
 		}
-		
-		if(inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.fpParams)){
+
+		if (inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.fpParams)) {
 			MIPSInst = new MIPSInstruction();
 			errorMsg += ": Instructions that use floating point values cannot use the Integer Registry";
 			System.err.println(errorMsg);
 			MIPSInst.setError(errorMsg);
 			return MIPSInst;
 		}
-		
-		if(!inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.intParams)){
+
+		if (!inst[0].contains(".") && !inst[1].matches(GeneralInstructionFormat.intParams)) {
 			MIPSInst = new MIPSInstruction();
 			errorMsg += ": Instructions that use integer values cannot use the Floating Point Registry";
 			System.err.println(errorMsg);
 			MIPSInst.setError(errorMsg);
 			return MIPSInst;
 		}
-		
-		if(!inst[1].matches(GeneralInstructionFormat.strictParams)){
+
+		if (!inst[1].matches(GeneralInstructionFormat.strictParams)) {
 			MIPSInst = new MIPSInstruction();
 			errorMsg += ": The range of valid indices for both registries is 0-31";
 			System.err.println(errorMsg);
@@ -208,7 +208,15 @@ public class InstructionIdentifier {
 			break;
 
 		// I -type // fix for offset
+			
 		case "BEQ":
+			if (!this.labelsMap.containsKey(label)) {
+				MIPSInst = new MIPSInstruction();
+				errorMsg += ": The label \"" + label + "\" does not exist";
+				System.err.println(errorMsg);
+				MIPSInst.setError(errorMsg);
+				return MIPSInst;
+			}
 			MIPSInst = new ITypeInstruction(ITypeInstruction.BEQ, regs[0], regs[1], (int) (this.labelsMap.get(label) - Long.valueOf(address.toString()) - 4 >> 2));
 			break;
 		case "LW":
@@ -238,9 +246,13 @@ public class InstructionIdentifier {
 
 		// j - type
 		case "J":
-			System.err.println("TRIAL: " + this.labelsMap +" "
-					
-					+ label);
+			if (!this.labelsMap.containsKey(label)) {
+				MIPSInst = new MIPSInstruction();
+				errorMsg += ": The label \"" + label + "\" does not exist";
+				System.err.println(errorMsg);
+				MIPSInst.setError(errorMsg);
+				return MIPSInst;
+			}
 			MIPSInst = new JTypeInstruction(JTypeInstruction.J, (int) (this.labelsMap.get(label) >> 2));
 			break;
 		}
