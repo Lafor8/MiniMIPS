@@ -36,16 +36,18 @@ public class CodeSegmentView extends JPanel {
 		codeSegmentTable = new JTable(codeSegmentModel);
 			
 		for(MIPSInstruction i: inst){
-			addInst(i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
+			addInst(i.address.toString(),i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
 		}
-
+		
+		codeSegmentTable.getColumnModel().getColumn(0).setPreferredWidth(35);
+		
 		JScrollPane js=new JScrollPane(codeSegmentTable);
 		js.setVisible(true);
 		add(js);
 	}
 	
-	public void addInst(String instruction, String binary, String hex){
-		String[] a = new String[]{null,instruction, binary, hex};
+	public void addInst(String address,String instruction, String binary, String hex){
+		String[] a = new String[]{address,instruction, binary, hex};
 		codeSegmentModel.addRow(a);
 	}
 

@@ -39,9 +39,9 @@ public class RegistersView extends JPanel{
 		
 		registersTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		registersTable.getColumnModel().getColumn(0).setPreferredWidth(35);
-		registersTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		registersTable.getColumnModel().getColumn(1).setPreferredWidth(145);
 		registersTable.getColumnModel().getColumn(2).setPreferredWidth(35);
-		registersTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+		registersTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		
 		JScrollPane js=new JScrollPane(registersTable);
 		js.setVisible(true);
@@ -73,9 +73,9 @@ public class RegistersView extends JPanel{
 		
 		registersTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		registersTable.getColumnModel().getColumn(0).setPreferredWidth(35);
-		registersTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		registersTable.getColumnModel().getColumn(1).setPreferredWidth(145);
 		registersTable.getColumnModel().getColumn(2).setPreferredWidth(35);
-		registersTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+		registersTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		
 		
 		JScrollPane js=new JScrollPane(registersTable);
