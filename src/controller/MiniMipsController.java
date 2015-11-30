@@ -14,7 +14,7 @@ import model.MIPSInstruction;
 public class MiniMipsController {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		Scanner in = new Scanner(new File("Data/sampleCode2.txt"));
+		Scanner in = new Scanner(new File("Data/sampleCode3.txt"));
 
 		InstructionIdentifier identifier = new InstructionIdentifier();
 		// ArrayList<MIPSInstruction> instructions = new ArrayList<>();
