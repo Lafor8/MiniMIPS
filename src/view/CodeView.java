@@ -85,6 +85,8 @@ public class CodeView extends JPanel {
 		
 		System.out.println();
 		
+		
+		
 		MiniMipsController.getInstance().mainFrame.refreshCodeSegment(mipsInst);
 	}
 }
