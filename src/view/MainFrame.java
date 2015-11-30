@@ -18,11 +18,12 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import javax.swing.UIManager;
+import javax.swing.JTextPane;
+import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
-	private CodeView code;
 	private ErrorView error;
 	private DataSegmentView data;
 	private RegistersView register1;
@@ -76,46 +77,49 @@ public class MainFrame extends JFrame {
 				.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
 		);
 		
-		JPanel CodePanel = new JPanel();
-		tabbedPane.addTab("Code Tab", null, CodePanel, null);
-		
-		code = new CodeView();	
+		JPanel codePanel = new JPanel();
+		tabbedPane.addTab("Code Tab", null, codePanel, null);
 		error = new ErrorView();
 		data = new DataSegmentView();
 		register1 = new RegistersView();
+		
+		CodeView codeView = new CodeView();
 
-		GroupLayout gl_CodePanel = new GroupLayout(CodePanel);
-		gl_CodePanel.setHorizontalGroup(
-			gl_CodePanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_CodePanel.createSequentialGroup()
-					.addContainerGap(20, Short.MAX_VALUE)
-					.addGroup(gl_CodePanel.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(error, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(code, GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE))
+		GroupLayout gl_codePanel = new GroupLayout(codePanel);
+		gl_codePanel.setHorizontalGroup(
+			gl_codePanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_codePanel.createSequentialGroup()
+					.addGroup(gl_codePanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_codePanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(error, GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE))
+						.addGroup(gl_codePanel.createSequentialGroup()
+							.addGap(15)
+							.addComponent(codeView, GroupLayout.PREFERRED_SIZE, 638, GroupLayout.PREFERRED_SIZE)))
 					.addGap(18)
 					.addComponent(data, GroupLayout.PREFERRED_SIZE, 402, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(register1, GroupLayout.PREFERRED_SIZE, 419, GroupLayout.PREFERRED_SIZE)
 					.addGap(15))
 		);
-		gl_CodePanel.setVerticalGroup(
-			gl_CodePanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_CodePanel.createSequentialGroup()
+		gl_codePanel.setVerticalGroup(
+			gl_codePanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_codePanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_CodePanel.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_codePanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(register1, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
-						.addComponent(data, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
-						.addGroup(gl_CodePanel.createSequentialGroup()
-							.addComponent(code, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(error, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)
-							.addGap(6))))
+						.addComponent(data, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)))
+				.addGroup(Alignment.TRAILING, gl_codePanel.createSequentialGroup()
+					.addGap(14)
+					.addComponent(codeView, GroupLayout.PREFERRED_SIZE, 472, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+					.addComponent(error, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
-		code.setLayout(new GridLayout(1, 0, 0, 0));
 		error.setLayout(new GridLayout(1, 0, 0, 0));
 		register1.setLayout(new GridLayout(1, 0, 0, 0));
 		data.setLayout(new GridLayout(1, 0, 0, 0));
-		CodePanel.setLayout(gl_CodePanel);
+		codePanel.setLayout(gl_codePanel);
 		
 		JPanel ExecutionPanel = new JPanel();
 		tabbedPane.addTab("Execution Tab", null, ExecutionPanel, null);
@@ -189,5 +193,4 @@ public class MainFrame extends JFrame {
 		dataSegment.removeAll();
 		dataSegment.refresh(dataMemory);
 	}
-	
 }

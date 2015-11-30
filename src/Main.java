@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import controller.InstructionIdentifier;
+import controller.MiniMipsController;
 
 import model.MIPSInstruction;
 import model.RTypeInstruction;
@@ -11,7 +12,8 @@ import model.RTypeInstruction;
 public class Main {
 
 	public static void main(String[] args) {
-	
+		MiniMipsController miniMips = new MiniMipsController();
+		miniMips.run();
 	}
 }
 

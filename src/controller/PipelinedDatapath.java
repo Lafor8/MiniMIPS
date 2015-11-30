@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import model.*;
 
-public class SequentialDatapath {
+public class PipelinedDatapath {
 	// Program Counter
 	public BigInteger pc = new BigInteger("0000000000000000");
 
@@ -39,7 +39,7 @@ public class SequentialDatapath {
 	// Pipeline Mapping
 	public PipelineMapManager pipelineMapManager;
 
-	public SequentialDatapath() {
+	public PipelinedDatapath() {
 		pipelineMapManager = pipelineMapManager.getInstance();
 		instructionMemory = new InstructionMemory();
 		registers = new Registers();
