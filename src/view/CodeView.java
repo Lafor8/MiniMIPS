@@ -95,7 +95,9 @@ public class CodeView extends JPanel {
 		System.err.println(MiniMipsController.getInstance().mainFrame);
 		if (hasError)
 			MiniMipsController.getInstance().mainFrame.refreshErrorView(errors);
-		else
+		else{
+			MiniMipsController.getInstance().mainFrame.refreshErrorView(errors);
 			MiniMipsController.getInstance().mainFrame.refreshCodeSegment(mipsInst);
+		}
 	}
 }

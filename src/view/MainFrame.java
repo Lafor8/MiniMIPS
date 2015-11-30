@@ -205,5 +205,8 @@ public class MainFrame extends JFrame {
 
 	public void refreshErrorView(ArrayList<String> errors) {
 		error.refresh(errors);
+		
+		if(errors.size() > 0)
+			codeSegment.removeAll();
 	}
 }
