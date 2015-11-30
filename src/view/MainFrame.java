@@ -37,6 +37,7 @@ public class MainFrame extends JFrame {
 	private DataSegmentView dataSegment;
 	private InternalRegistersView internalRegisters;
 	RegistersView register2;
+	private JButton btnExecuteAll;
 	
 	
 	/**
@@ -150,19 +151,28 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		btnExecuteAll = new JButton("Execute All");
+		btnExecuteAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				executeAllCycles();
+			}
+		});
+		
 		GroupLayout gl_ExecutionPanel = new GroupLayout(ExecutionPanel);
 		gl_ExecutionPanel.setHorizontalGroup(
 			gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_ExecutionPanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_ExecutionPanel.createSequentialGroup()
 							.addComponent(dataSegment, GroupLayout.PREFERRED_SIZE, 451, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
-						.addComponent(codeSegment, GroupLayout.DEFAULT_SIZE, 1064, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, gl_ExecutionPanel.createSequentialGroup()
-							.addComponent(btnNewButton)
+							.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE))
+						.addComponent(codeSegment, GroupLayout.DEFAULT_SIZE, 1089, Short.MAX_VALUE)
+						.addGroup(gl_ExecutionPanel.createSequentialGroup()
+							.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnExecuteAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 							.addGap(18)
 							.addComponent(pipelineMap, GroupLayout.PREFERRED_SIZE, 941, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -182,7 +192,9 @@ public class MainFrame extends JFrame {
 									.addComponent(pipelineMap, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_ExecutionPanel.createSequentialGroup()
 									.addGap(53)
-									.addComponent(btnNewButton)))
+									.addComponent(btnNewButton)
+									.addGap(15)
+									.addComponent(btnExecuteAll)))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_ExecutionPanel.createParallelGroup(Alignment.LEADING)
 								.addComponent(internalRegisters, GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
@@ -231,6 +243,11 @@ public class MainFrame extends JFrame {
 	
 	public void executeOneCycle(){
 		MiniMipsController.getInstance().sequentialDatapath.runOneCycle();
+		MiniMipsController.getInstance().refreshAll();
+	}
+	
+	public void executeAllCycles(){
+		MiniMipsController.getInstance().sequentialDatapath.run();
 		MiniMipsController.getInstance().refreshAll();
 	}
 }

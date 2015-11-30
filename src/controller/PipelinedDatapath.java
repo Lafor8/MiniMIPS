@@ -256,7 +256,7 @@ public class PipelinedDatapath {
 
 	public int IF() {
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
-System.err.println(if_id.IR + " "+ pc+" ");
+System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.size());
 		if (if_id.IR == null)
 			return -1;
 
