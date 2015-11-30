@@ -13,20 +13,36 @@ import model.MIPSInstruction;
 
 public class MiniMipsController {
 
-	MainFrame mainFrame;
-	PipelinedDatapath sequentialDatapath;
+	// UI Components
+	public MainFrame mainFrame;
+	
+	// Backend Components
+	public PipelinedDatapath sequentialDatapath;
 
+	// Main Controller
+	public static MiniMipsController miniMipsController;
+
+	
 	public MiniMipsController() {
 		mainFrame = new MainFrame();
 		sequentialDatapath = new PipelinedDatapath();
+		miniMipsController = this;
+	}
+
+	public static MiniMipsController getInstance() {
+		return miniMipsController;
 	}
 
 	public void run() {
-
-		mainFrame.refreshRegisters(sequentialDatapath.registers);
-		// frame.refreshCodeSegment(mipsInst);
-		mainFrame.refreshDataSegment(sequentialDatapath.dataMemory);
+		refreshAll();
 		mainFrame.setVisible(true);
 
+	}
+	
+	public void refreshAll(){
+		mainFrame.refreshRegisters(sequentialDatapath.registers);
+		//mainFrame.refreshCodeSegment(mipsInst);
+		mainFrame.refreshDataSegment(sequentialDatapath.dataMemory);
+		mainFrame.refreshInternalRegisters();
 	}
 }

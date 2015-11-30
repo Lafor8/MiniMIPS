@@ -34,7 +34,6 @@ public class MainFrame extends JFrame {
 	private InternalRegistersView internalRegisters;
 	RegistersView register2;
 	
-	
 	/**
 	 * Launch the application.
 	 */

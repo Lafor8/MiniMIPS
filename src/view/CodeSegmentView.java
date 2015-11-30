@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import model.MIPSInstruction;
+import net.miginfocom.swing.MigLayout;
 
 public class CodeSegmentView extends JPanel {
 	
@@ -19,6 +20,13 @@ public class CodeSegmentView extends JPanel {
 	
 	public CodeSegmentView(){
 		setBorder(title);
+		setLayout(new MigLayout("", "[grow]", "[grow]"));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		add(scrollPane, "cell 0 0,grow");
+		
+		JTable table = new JTable();
+		scrollPane.setViewportView(table);
 	}
 	
 	public void refresh(ArrayList<MIPSInstruction> inst){

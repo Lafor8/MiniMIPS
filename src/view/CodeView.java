@@ -20,6 +20,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import controller.InstructionIdentifier;
+import controller.MiniMipsController;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -51,6 +52,7 @@ public class CodeView extends JPanel {
 		add(scrollPane, "flowy,cell 0 0,grow");
 		
 		codeInputTextPane = new JTextPane();
+		codeInputTextPane.setText("DADDU R10, R1, R2\r\nDMULT R1 , R2\r\nL1:OR R11, R1,R2\r\nSLT R13, R1, R2\r\n\r\n//BEQ R13, R0, L2\r\nLW R14, 0000(R1)\r\nLWU R15, 0008(R2)\r\nSW R1, 0010(R3)\r\nDSLL R16, R1, 2\r\nANDI R17, R1, 12\r\nDADDIU R18, R1, 4\r\n//BEQ R13, R0, L1\r\n\r\nJ L2\r\n\r\nL.S F10, 0018(R4)\r\nS.S F1, 0020 (R5)\r\nL2:ADD.S F11,F1,F2\r\nMUL.S F12, F1,F2");
 		scrollPane.setViewportView(codeInputTextPane);
 		add(btnCompile, "cell 0 1,alignx right,aligny bottom");
 	}
@@ -82,5 +84,7 @@ public class CodeView extends JPanel {
 		
 		
 		System.out.println();
+		
+		MiniMipsController.getInstance().mainFrame.refreshCodeSegment(mipsInst);
 	}
 }
