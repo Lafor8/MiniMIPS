@@ -6,14 +6,21 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import utilities.GeneralInstructionFormat;
+
 import model.*;
 
 public class InstructionIdentifier {
 
 	public InstructionIdentifier() {
 		labelsMap = new HashMap<>();
-		
+
 	}
+
+	// public static int LINE_ERROR = 0;
+	public static final int LINE_INVALID_FORMAT = 1;
+	public static final int LINE_IGNORE = 2;
+	public static final int LINE_INVALID_CHARS = 3;
 
 	HashMap<String, Integer> labelsMap;
 
@@ -25,21 +32,31 @@ public class InstructionIdentifier {
 
 		// remove labels & affix address
 		for (int i = 0; i < instList.size(); ++i) {
+
 			normalizedInst = instList.get(i).trim();
 
-			if (normalizedInst.contains(":")) {
-				String tokens[] = normalizedInst.split(":");
-				labelsMap.put(tokens[0].trim(), i * 4);
-				normalizedInst = tokens[1].trim();
+			// Case 1: Comment or Empty Line
+			if (normalizedInst.matches("(((//)|;).*)|(\\s*)"))
+				normalizedInst = "$:" + this.LINE_IGNORE;
+			// Case 2: Invalid chars
+			else if (!normalizedInst.matches("[A-z0-9:\\._]"))
+				normalizedInst = "~:" + this.LINE_INVALID_CHARS;
+			// Case 3: Invalid format
+			else if (!GeneralInstructionFormat.check(normalizedInst))
+				normalizedInst = "~:" + this.LINE_INVALID_FORMAT;
+			else {
+				if (normalizedInst.contains(":")) {
+					String tokens[] = normalizedInst.split(":");
+					labelsMap.put(tokens[0].trim(), i * 4);
+					normalizedInst = tokens[1].trim();
+				}
+				normalizedInst = (i * 4) + ":" + normalizedInst;
 			}
-			normalizedInst = (i * 4) + ":" + normalizedInst;
-
-//			System.out.println(normalizedInst);
 
 			normalizedInstList.add(normalizedInst);
 		}
 
-//		System.out.println();
+		// System.out.println();
 
 		// display label map
 		for (Entry<String, Integer> item : labelsMap.entrySet()) {
@@ -49,21 +66,38 @@ public class InstructionIdentifier {
 		System.out.println();
 
 		// create mips objects
-		for (String inst : normalizedInstList) {
-			mipsInstList.add(this.identifyInstruction(inst));
+		for (int i = 0; i < normalizedInstList.size(); ++i) {
+			if (!normalizedInstList.get(i).contains("$"))
+				mipsInstList.add(this.identifyInstruction(normalizedInstList.get(i), i));
 		}
 
 		return mipsInstList;
 	}
 
-	private MIPSInstruction identifyInstruction(String instruction) {
+	private MIPSInstruction identifyInstruction(String instruction, int lineNo) {
 		MIPSInstruction MIPSInst = null;
 
 		String segments[] = instruction.split(":");
 
+		// Error
+		if (segments[0].equals("~")) {
+			MIPSInst = new MIPSInstruction();
+			String errorMsg = "Error at line " + lineNo;
+
+			switch (Integer.parseInt(segments[1])) {
+			case LINE_INVALID_FORMAT:
+				errorMsg += ": Invalid command format";
+				break;
+			case LINE_INVALID_CHARS:
+				errorMsg += ": Invalid characters (only alphanumeric, ',', '_', and ':' are allowed)";
+				break;
+			}
+
+			MIPSInst.setError(errorMsg);
+		}
+
 		BigInteger address = BigInteger.valueOf(Long.parseLong(segments[0]));
 
-		
 		System.out.println(instruction);
 		instruction = segments[1];
 
@@ -77,8 +111,7 @@ public class InstructionIdentifier {
 		boolean isFloatInst = false;
 
 		String temp;
-		
-		
+
 		for (int i = 0, j = 0; i < param.length; ++i) {
 
 			temp = param[i].trim();
@@ -91,7 +124,7 @@ public class InstructionIdentifier {
 				segments = temp.split("\\(");
 				label = segments[0].trim();
 				temp = segments[1].trim();
-				
+
 				regs[j++] = Integer.parseInt((temp.substring(1, temp.length() - 1)).trim());
 				regsFound++;
 
@@ -135,13 +168,13 @@ public class InstructionIdentifier {
 			MIPSInst = new ITypeInstruction(ITypeInstruction.BEQ, regs[0], regs[1], (int) (this.labelsMap.get(label) - Long.valueOf(address.toString()) - 4 >> 2));
 			break;
 		case "LW":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LW, regs[1], regs[0], Integer.parseInt(label,16));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LW, regs[1], regs[0], Integer.parseInt(label, 16));
 			break;
 		case "LWU":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[1], regs[0], Integer.parseInt(label,16));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LWU, regs[1], regs[0], Integer.parseInt(label, 16));
 			break;
 		case "SW":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[1], regs[0], Integer.parseInt(label,16));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.SW, regs[1], regs[0], Integer.parseInt(label, 16));
 			break;
 
 		case "ANDI":
@@ -153,10 +186,10 @@ public class InstructionIdentifier {
 
 		// Change the values that are being passed
 		case "L.S":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[1], regs[0],Integer.parseInt(label,16));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.LS, regs[1], regs[0], Integer.parseInt(label, 16));
 			break;
 		case "S.S":
-			MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[1], regs[0], Integer.parseInt(label,16));
+			MIPSInst = new ITypeInstruction(ITypeInstruction.SS, regs[1], regs[0], Integer.parseInt(label, 16));
 			break;
 
 		// j - type
@@ -170,6 +203,7 @@ public class InstructionIdentifier {
 
 		MIPSInst.instruction = instruction;
 		MIPSInst.address = address;
+		MIPSInst.isValid = true;
 
 		return MIPSInst;
 	}

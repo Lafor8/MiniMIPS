@@ -28,8 +28,8 @@ public class MIPSInstruction {
 		isFloatInst = false;
 	}
 
-	public void setError(boolean isValid, String errorMsg) {
-		this.isValid = isValid;
+	public void setError(String errorMsg) {
+		this.isValid = false;
 		this.errorMsg = errorMsg;
 	}
 
