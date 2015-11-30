@@ -219,7 +219,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void refreshInternalRegisters(){
-		
+		this.internalRegisters.refreshAll();
 	}
 
 	public void refreshCodeSegment(ArrayList<MIPSInstruction> mipsInst){
@@ -247,6 +247,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void executeAllCycles(){
+		
 		MiniMipsController.getInstance().sequentialDatapath.run();
 		MiniMipsController.getInstance().refreshAll();
 	}
