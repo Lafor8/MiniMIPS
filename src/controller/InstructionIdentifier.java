@@ -82,7 +82,7 @@ public class InstructionIdentifier {
 		// Error
 		if (segments[0].equals("~")) {
 			MIPSInst = new MIPSInstruction();
-			String errorMsg = "Error at line " + lineNo;
+			String errorMsg = "Error at line " + (lineNo+1);
 
 			switch (Integer.parseInt(segments[1])) {
 			case LINE_INVALID_FORMAT:

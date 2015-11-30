@@ -202,4 +202,8 @@ public class MainFrame extends JFrame {
 		dataSegment.removeAll();
 		dataSegment.refresh(dataMemory);
 	}
+
+	public void refreshErrorView(ArrayList<String> errors) {
+		error.refresh(errors);
+	}
 }

@@ -1,5 +1,6 @@
 package view;
 
+
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -9,32 +10,40 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-public class ErrorView extends JPanel{
-	
+public class ErrorView extends JPanel {
+
 	TitledBorder title = BorderFactory.createTitledBorder("Error");
-	private JTextPane textPane;
-	
-	public ErrorView(){
+	private JTextPane errorTextPane;
+
+	public ErrorView() {
 		setBorder(title);
 		setLayout(new MigLayout("", "[grow]", "[grow]"));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, "cell 0 0,grow");
-		
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		scrollPane.setViewportView(textPane);
+
+		errorTextPane = new JTextPane();
+		errorTextPane.setText("asda");
+		scrollPane.setViewportView(errorTextPane);
 	}
-	
-	public void setErrorText(ArrayList<String> errors){
+
+	public void refresh(ArrayList<String> errors) {
 		StringBuilder sb = new StringBuilder();
-		
-		for(String str : errors){
+
+		for (String str : errors) {
 			sb.append(str);
 			sb.append("\n");
 		}
+		System.err.println(sb.toString());
+		System.err.println(errorTextPane.getText());
+		errorTextPane.setText(sb.toString());
+		errorTextPane.updateUI();
+		errorTextPane.revalidate();
+		errorTextPane.validate();
+		errorTextPane.removeAll();
 		
-		textPane.setText(sb.toString());
+		System.err.println("GET TEXT: "+ errorTextPane.getText());
+		System.err.println(sb.toString());
 	}
 
 }
