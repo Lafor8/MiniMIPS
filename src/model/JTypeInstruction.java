@@ -23,4 +23,9 @@ public class JTypeInstruction extends MIPSInstruction {
 		opcodeBinary += offset & 0x3FFFFFF;
 		opcode = BigInteger.valueOf(opcodeBinary);
 	}
+
+	public BigInteger getIMM() {
+
+		return BigInteger.valueOf(offset);
+	}
 }
