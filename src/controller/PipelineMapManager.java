@@ -18,6 +18,8 @@ public class PipelineMapManager {
 	public static final int ST_STAGE = 10; // Stall
 	public static final int BR_STAGE = 11; // Branch
 	public static final int J_STAGE = 12; // Jump
+	
+	public static final int NOP_STAGE = -1;
 
 
 	public HashMap<Integer, HashMap<Integer, MIPSInstruction>> pipelineMap;
@@ -116,6 +118,18 @@ public class PipelineMapManager {
 			break;
 		case PipelineMapManager.WB_STAGE:
 			str = "WB";
+			break;
+
+		case PipelineMapManager.ST_STAGE:
+			str = "ST";
+			break;
+
+		case PipelineMapManager.BR_STAGE:
+			str = "BR";
+			break;
+			
+		case PipelineMapManager.NOP_STAGE:
+			str="NOP";
 			break;
 		}
 		return str;

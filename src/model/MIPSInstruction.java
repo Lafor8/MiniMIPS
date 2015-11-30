@@ -11,7 +11,6 @@ public class MIPSInstruction {
 	public BigInteger opcode;
 
 	public boolean isValid;
-	public boolean isLastInstruction;
 	public String errorMsg;
 
 	public static final String BRANCH = "Branch";

@@ -63,6 +63,8 @@ public class InstructionIdentifier {
 
 		BigInteger address = BigInteger.valueOf(Long.parseLong(segments[0]));
 
+		
+		System.out.println(instruction);
 		instruction = segments[1];
 
 		String inst[] = instruction.trim().split(" ", 2);
