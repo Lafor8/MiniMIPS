@@ -11,7 +11,7 @@ public class InstructionMemory {
 	
 	public InstructionMemory(){
 		instructionMemory = new HashMap<>();
-		lastAddress = BigInteger.valueOf(4);
+		lastAddress = BigInteger.valueOf(0);
 	}
 	
 	public MIPSInstruction getInstructionAddress(BigInteger index){

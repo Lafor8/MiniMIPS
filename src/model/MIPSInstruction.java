@@ -21,6 +21,14 @@ public class MIPSInstruction {
 	public static final String REGISTER_REGISTER = "Register_Register";
 	public static final String REGISTER_IMMEDIATE = "Register_Immediate";
 
+	public boolean isFloatInst;
+	public double salt;
+
+	public MIPSInstruction() {
+		salt = Math.random();
+		isFloatInst = false;
+	}
+
 	public void setError(boolean isValid, String errorMsg) {
 		this.isValid = isValid;
 		this.errorMsg = errorMsg;
@@ -63,7 +71,7 @@ public class MIPSInstruction {
 	public String getInstructionType() {
 		String retVal;
 		String IR = getOpcodeInBinary();
-		String op = Long.toString(Long.parseLong(IR.substring(0, 6),2));
+		String op = Long.toString(Long.parseLong(IR.substring(0, 6), 2));
 
 		switch (op) {
 		case "2":

@@ -2,6 +2,7 @@ package controller;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.*;
 
@@ -31,6 +32,9 @@ public class SequentialDatapath {
 	public boolean keepRunning;
 	public int cycles;
 
+	// Data Dependency
+	public HashMap<BigInteger, Double> dependencyDeclarationR;
+	public HashMap<BigInteger, Double> dependencyDeclarationF;
 	public int stallCount;
 
 	// Pipeline Mapping
@@ -54,6 +58,8 @@ public class SequentialDatapath {
 		ex_mem = new InternalRegisters();
 		mem_wb = new InternalRegisters();
 
+		dependencyDeclarationR = new HashMap<>();
+		dependencyDeclarationF = new HashMap<>();
 	}
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
@@ -91,7 +97,7 @@ public class SequentialDatapath {
 	}
 
 	public int IF() {
-		if (instructionMemory.lastAddress.compareTo(pc) < 0) {
+		if (instructionMemory.lastAddress.compareTo(pc) == 0) {
 			if_id.IR = new MIPSInstruction();
 			if_id.IR.isLastInstruction = true;
 		} else {
@@ -125,7 +131,7 @@ public class SequentialDatapath {
 				id_ex.B = registers.getR(if_id.IR.getBinarySegment(16, 20));
 			} else {
 
-				if (Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(id_ex.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
+				if (id_ex.IR.isFloatInst) {
 					id_ex.A = registers.getF(if_id.IR.getA());
 					id_ex.B = registers.getF(if_id.IR.getB());
 				} else {
@@ -136,6 +142,39 @@ public class SequentialDatapath {
 			}
 
 			id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
+
+			// DECLARING WRITE DEPENDENCY
+
+			BigInteger target = BigInteger.valueOf(-1);
+			boolean isFloat = id_ex.IR.isFloatInst;
+
+			switch (id_ex.IR.getInstructionType()) {
+			case MIPSInstruction.REGISTER_REGISTER:
+				// TODO: check dependency for DMULT
+
+				target = id_ex.IR.getBinarySegment(16, 20);
+				break;
+			case MIPSInstruction.REGISTER_IMMEDIATE:
+				if (Integer.parseInt(id_ex.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL)
+					target = id_ex.IR.getBinarySegment(16, 20);
+				else
+					target = id_ex.IR.getB();
+				break;
+			case MIPSInstruction.STORE:
+			case MIPSInstruction.LOAD:
+				target = id_ex.IR.getB();
+				break;
+			}
+
+			if (target.equals(BigInteger.valueOf(-1))) {
+				System.err.println("ERROR: ID Stage: Dependency Declaration at " + id_ex.IR);
+				System.err.println(id_ex.IR.getInstructionType());
+			} else {
+				if (isFloat) {
+					this.dependencyDeclarationF.put(target, id_ex.IR.salt);
+				} else
+					this.dependencyDeclarationR.put(target, id_ex.IR.salt);
+			}
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
 		}
@@ -169,7 +208,7 @@ public class SequentialDatapath {
 				ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 				ex_mem.Cond = false;
 			}
-
+			System.out.println(ex_mem.IR);
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 		}
 		return 0;
@@ -194,7 +233,7 @@ public class SequentialDatapath {
 				break;
 			}
 
-			System.out.println(mem_wb.IR);
+			// System.out.println(mem_wb.IR);
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 		}
@@ -214,7 +253,7 @@ public class SequentialDatapath {
 					// TODO: separate top from bottom
 					registers.setHILO(mem_wb.ALUOutput);
 				} else {
-					if (Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
+					if (mem_wb.IR.isFloatInst) {
 						registers.setF(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
 					} else {
 						registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
@@ -229,7 +268,7 @@ public class SequentialDatapath {
 					registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
 				break;
 			case MIPSInstruction.LOAD:
-				if (Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 49 || Integer.parseInt(mem_wb.IR.getOpcodeInBinary().substring(0, 6), 2) == 57) {
+				if (mem_wb.IR.isFloatInst) {
 					registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
 				} else {
 					registers.setR(mem_wb.IR.getB(), mem_wb.LMD);

@@ -32,6 +32,9 @@ public class ITypeInstruction extends MIPSInstruction {
 		
 		long opcodeBinary = 0;
 		
+		if(op == 49 || op == 57)
+			this.isFloatInst = true;
+		
 		opcodeBinary += op << 26;
 		opcodeBinary += val1 << 21;
 		opcodeBinary += val2 << 16;
