@@ -31,7 +31,7 @@ public class InstructionIdentifier {
 		String normalizedInst;
 
 		// remove labels & affix address
-		for (int i = 0; i < instList.size(); ++i) {
+		for (int i = 0, j = 0; i < instList.size(); ++i) {
 
 			normalizedInst = instList.get(i).trim();
 
@@ -47,10 +47,10 @@ public class InstructionIdentifier {
 			else {
 				if (normalizedInst.contains(":")) {
 					String tokens[] = normalizedInst.split(":");
-					labelsMap.put(tokens[0].trim(), i * 4);
+					labelsMap.put(tokens[0].trim(), j * 4);
 					normalizedInst = tokens[1].trim();
 				}
-				normalizedInst = (i * 4) + ":" + normalizedInst;
+				normalizedInst = (j++ * 4) + ":" + normalizedInst;
 			}
 
 			normalizedInstList.add(normalizedInst);

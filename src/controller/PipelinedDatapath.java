@@ -245,7 +245,7 @@ public class PipelinedDatapath {
 			pc = if_id.NPC;
 			branchWait = true;
 			ex_mem.Cond = false;
-			System.err.println(ex_mem.ALUOutput);
+
 			return 0;
 		} else {
 			if_id.NPC = adderAlu.add(pc, 4);
@@ -256,14 +256,14 @@ public class PipelinedDatapath {
 
 	public int IF() {
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
-
+System.err.println(if_id.IR + " "+ pc+" ");
 		if (if_id.IR == null)
 			return -1;
 
 		if (ex_mem.IR != null && (ex_mem.IR.getInstructionType() == MIPSInstruction.BRANCH || ex_mem.IR.getInstructionType() == MIPSInstruction.JUMP) && ex_mem.Cond) {
 			if_id.NPC = ex_mem.ALUOutput;
 			pc = if_id.NPC;
-			System.err.println("YO");
+
 		} else {
 			if_id.NPC = adderAlu.add(pc, 4);
 			pc = if_id.NPC;
