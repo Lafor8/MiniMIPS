@@ -15,6 +15,11 @@ public class PipelineMapManager {
 	public static final int MEM_STAGE = 3;
 	public static final int WB_STAGE = 4;
 
+	public static final int ST_STAGE = 10; // Stall
+	public static final int BR_STAGE = 11; // Branch
+	public static final int J_STAGE = 12; // Jump
+
+
 	public HashMap<Integer, HashMap<Integer, MIPSInstruction>> pipelineMap;
 	public static PipelineMapManager pipelineMapManager;
 

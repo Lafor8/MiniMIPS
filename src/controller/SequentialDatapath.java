@@ -3,6 +3,7 @@ package controller;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import model.*;
 
@@ -35,7 +36,6 @@ public class SequentialDatapath {
 	// Data Dependency
 	public HashMap<BigInteger, Double> dependencyDeclarationR;
 	public HashMap<BigInteger, Double> dependencyDeclarationF;
-	public int stallCount;
 
 	// Pipeline Mapping
 	public PipelineMapManager pipelineMapManager;
@@ -60,6 +60,9 @@ public class SequentialDatapath {
 
 		dependencyDeclarationR = new HashMap<>();
 		dependencyDeclarationF = new HashMap<>();
+
+		runQueue = new LinkedList<>();
+		runQueue.add(PipelineMapManager.IF_STAGE);
 	}
 
 	public void loadInstructions(ArrayList<MIPSInstruction> mipsInst) {
@@ -73,30 +76,93 @@ public class SequentialDatapath {
 
 		cycles = 0;
 		keepRunning = true;
-		while (keepRunning) {
+		// int rem = 1;
+		while (runQueue.size() > 0) {
 			runOneCycle();
 		}
 
 		return 0;
 	}
 
+	public LinkedList<Integer> runQueue;
+
 	public int runOneCycle() {
-		if (mem_wb.IR != null)
-			WB();
-		if (ex_mem.IR != null)
-			MEM();
-		if (id_ex.IR != null)
-			EX();
-		if (if_id.IR != null)
-			ID();
-		IF();
+		LinkedList<Integer> nextRunQueue = new LinkedList<>();
+
+		System.out.println("Cycle #" + (cycles + 1));
+		for (Integer stg : runQueue) {
+			System.out.print(PipelineMapManager.getStageName(stg) + "\t");
+		}
+		System.out.println();
+
+		while (runQueue.size() > 0) {
+			int stage = runQueue.remove();
+
+			switch (stage) {
+			case PipelineMapManager.IF_STAGE:
+				IF();
+				nextRunQueue.add(PipelineMapManager.ID_STAGE);
+				nextRunQueue.add(PipelineMapManager.IF_STAGE);
+				break;
+			case PipelineMapManager.ID_STAGE:
+				int action = ID();
+				if (action == PipelineMapManager.ST_STAGE) {
+					nextRunQueue.add(PipelineMapManager.ID_STAGE);
+					runQueue.clear();
+				} else
+					nextRunQueue.add(PipelineMapManager.EX_STAGE);
+				break;
+			case PipelineMapManager.EX_STAGE:
+				EX();
+				nextRunQueue.add(PipelineMapManager.MEM_STAGE);
+				break;
+			case PipelineMapManager.MEM_STAGE:
+				MEM();
+				nextRunQueue.add(PipelineMapManager.WB_STAGE);
+				break;
+			case PipelineMapManager.WB_STAGE:
+				IF();
+				break;
+			case PipelineMapManager.ST_STAGE:
+				ST();
+				break;
+			case PipelineMapManager.BR_STAGE:
+				BR();
+				break;
+			}
+		}
+		// if (mem_wb.IR != null)
+		// WB();
+		// if (ex_mem.IR != null)
+		// MEM();
+		// if (id_ex.IR != null)
+		// if (stallAt == null || stallAt.salt != id_ex.IR.salt) {
+		// System.out.println("runOneCycle: "+ stallAt);
+		// if (stallAt != null )System.out.println("runOneCycle: "+ stallAt.salt + " " + id_ex.IR.salt);
+		// EX();
+		//
+		// }
+		// if (if_id.IR != null)
+		// ID();
+		// IF();
 
 		cycles++;
 
-		return 0;
+		runQueue = nextRunQueue;
+
+		return runQueue.size();
+	}
+
+	public int ST() {
+		return -1;
+	}
+
+	public int BR() {
+		return -1;
 	}
 
 	public int IF() {
+
 		if (instructionMemory.lastAddress.compareTo(pc) == 0) {
 			if_id.IR = new MIPSInstruction();
 			if_id.IR.isLastInstruction = true;
@@ -121,24 +187,46 @@ public class SequentialDatapath {
 	public int ID() {
 		id_ex.IR = if_id.IR;
 
-		if (!id_ex.IR.isLastInstruction) {
+		System.out.println("ID: " + cycles + " " + id_ex.IR);
+
+		//if (!id_ex.IR.isLastInstruction) {
 			id_ex.NPC = if_id.NPC;
 
-			// need to update the PC
+			// Loading & possible stall
+
+			BigInteger AIndex, BIndex;
 
 			if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
-				id_ex.A = registers.getR(if_id.IR.getBinarySegment(11, 15));
-				id_ex.B = registers.getR(if_id.IR.getBinarySegment(16, 20));
+				AIndex = if_id.IR.getBinarySegment(11, 15);
+				BIndex = if_id.IR.getBinarySegment(16, 20);
 			} else {
+				AIndex = if_id.IR.getA();
+				BIndex = if_id.IR.getB();
+			}
 
-				if (id_ex.IR.isFloatInst) {
-					id_ex.A = registers.getF(if_id.IR.getA());
-					id_ex.B = registers.getF(if_id.IR.getB());
+			// Check if need to stall
+
+			if (id_ex.IR.isFloatInst) {
+				if (this.dependencyDeclarationF.containsKey(AIndex) && this.dependencyDeclarationF.containsKey(BIndex)) {
+					return PipelineMapManager.ST_STAGE;
 				} else {
-					id_ex.A = registers.getR(if_id.IR.getA());
-					id_ex.B = registers.getR(if_id.IR.getB());
+					// stall = false;
+					// stallAt = null;
 				}
-
+				id_ex.A = registers.getF(AIndex);
+				id_ex.B = registers.getF(BIndex);
+			} else {
+				if (this.dependencyDeclarationR.containsKey(AIndex) && this.dependencyDeclarationR.containsKey(BIndex)) {
+					// stall = true;
+					// System.out.println("HELLLO");
+					// stallAt = id_ex.IR;
+					return PipelineMapManager.ST_STAGE;
+				} else {
+					// stall = false;
+					// this.stallAt = null;
+				}
+				id_ex.A = registers.getR(AIndex);
+				id_ex.B = registers.getR(BIndex);
 			}
 
 			id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
@@ -160,24 +248,19 @@ public class SequentialDatapath {
 				else
 					target = id_ex.IR.getB();
 				break;
-			case MIPSInstruction.STORE:
+			// case MIPSInstruction.STORE:
 			case MIPSInstruction.LOAD:
 				target = id_ex.IR.getB();
 				break;
 			}
 
-			if (target.equals(BigInteger.valueOf(-1))) {
-				System.err.println("ERROR: ID Stage: Dependency Declaration at " + id_ex.IR);
-				System.err.println(id_ex.IR.getInstructionType());
-			} else {
-				if (isFloat) {
-					this.dependencyDeclarationF.put(target, id_ex.IR.salt);
-				} else
-					this.dependencyDeclarationR.put(target, id_ex.IR.salt);
-			}
+			if (isFloat) {
+				this.dependencyDeclarationF.put(target, id_ex.IR.salt);
+			} else
+				this.dependencyDeclarationR.put(target, id_ex.IR.salt);
 
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
-		}
+		//}
 		return 0;
 	}
 
@@ -247,34 +330,48 @@ public class SequentialDatapath {
 		// This is a Multiplexer... kinda
 		if (!mem_wb.IR.isLastInstruction) {
 
+			BigInteger target = BigInteger.valueOf(-1);
+			BigInteger value = BigInteger.ZERO;
+
 			switch (mem_wb.IR.getInstructionType()) {
 			case MIPSInstruction.REGISTER_REGISTER:
 				if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DMULT) {
 					// TODO: separate top from bottom
 					registers.setHILO(mem_wb.ALUOutput);
 				} else {
-					if (mem_wb.IR.isFloatInst) {
-						registers.setF(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
-					} else {
-						registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
-					}
+					target = mem_wb.IR.getBinarySegment(16, 20);
+					value = mem_wb.ALUOutput;
 				}
 				break;
 			case MIPSInstruction.REGISTER_IMMEDIATE:
-
 				if (Integer.parseInt(mem_wb.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL)
-					registers.setR(mem_wb.IR.getBinarySegment(16, 20), mem_wb.ALUOutput);
+					target = mem_wb.IR.getBinarySegment(16, 20);
 				else
-					registers.setR(mem_wb.IR.getB(), mem_wb.ALUOutput);
+					target = mem_wb.IR.getB();
+				value = mem_wb.ALUOutput;
 				break;
 			case MIPSInstruction.LOAD:
-				if (mem_wb.IR.isFloatInst) {
-					registers.setF(mem_wb.IR.getB(), mem_wb.LMD);
-				} else {
-					registers.setR(mem_wb.IR.getB(), mem_wb.LMD);
-				}
+				target = mem_wb.IR.getB();
+				value = mem_wb.LMD;
+
 				break;
 			}
+
+			if (!target.equals(BigInteger.valueOf(-1))) {
+				if (mem_wb.IR.isFloatInst) {
+					registers.setF(target, value);
+					Double depIndex = this.dependencyDeclarationF.get(target);
+					if (depIndex != null && depIndex.equals(mem_wb.IR.salt))
+						this.dependencyDeclarationF.remove(target);
+				} else {
+					registers.setR(target, value);
+					Double depIndex = this.dependencyDeclarationR.get(target);
+					if (depIndex != null && depIndex.equals(mem_wb.IR.salt))
+						this.dependencyDeclarationR.remove(target);
+				}
+			}
+
+			// Clear dependency
 
 			// System.out.println(mem_wb.IR);
 			pipelineMapManager.addEntry(cycles, PipelineMapManager.WB_STAGE, mem_wb.IR);
