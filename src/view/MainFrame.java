@@ -218,9 +218,10 @@ public class MainFrame extends JFrame {
 			codeSegment.removeAll();
 	}
 
-	public void getRegisterValuesFromUI() {
+	public Registers getRegisterValuesFromUI() {
 		Registers newValues = register1.getRegisterValuesFromUI();
 		refreshRegisters(newValues);
+		return newValues;
 	}
 
 	public void refreshPipeLineView() {
@@ -238,9 +239,10 @@ public class MainFrame extends JFrame {
 		MiniMipsController.getInstance().refreshAll();
 	}
 
-	public void getDataSegementValuesFromUI() {
+	public DataMemory getDataSegementValuesFromUI() {
 		DataMemory newValues = data.getDataSegementValuesFromUI();
 		refreshDataSegment(newValues);
+		return newValues;
 	}
 
 }

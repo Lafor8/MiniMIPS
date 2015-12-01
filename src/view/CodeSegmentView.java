@@ -9,6 +9,8 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import utilities.MiniMipsUtilities;
+
 import model.MIPSInstruction;
 import net.miginfocom.swing.MigLayout;
 
@@ -41,7 +43,7 @@ public class CodeSegmentView extends JPanel {
 		codeSegmentTable = new JTable(codeSegmentModel);
 			
 		for(MIPSInstruction i: inst){
-			addInst(i.address.toString(),i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
+			addInst(MiniMipsUtilities.getPaddedHex(i.address).substring(4),i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
 		}
 		
 		codeSegmentTable.getColumnModel().getColumn(0).setPreferredWidth(35);

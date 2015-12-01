@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import model.*;
 
@@ -68,6 +70,38 @@ public class PipelinedDatapath {
 		for (MIPSInstruction inst : mipsInst) {
 			instructionMemory.setInstructionAddress(inst.address, inst);
 		}
+	}
+	
+	public void loadDataMemory(DataMemory loadData){
+		String a = new BigInteger("8192").toString(16);
+		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
+		map.putAll(loadData.dataMemory);
+		
+		//System.out.println(loadData.dataMemory.size());
+		for (Entry<BigInteger, BigInteger> dataEntry : map.entrySet()) {
+
+			//String a = new BigInteger("8192").toString(16);
+			dataMemory.setDataToMemory(dataEntry.getKey(), dataEntry.getValue());
+			//String a = new BigInteger("8192").toString(16);
+			//System.out.println("TRY ADDING " + dataEntry.getKey().add(new BigInteger(a)));
+		}
+		
+		//System.out.println("SIZE       " + dataMemory.dataMemory.size());
+		//for(int i = 0; i < dataMemory.dataMemory.size(); i++)
+			//System.out.println("VALUE "+dataMemory.getDataFromMemory(BigInteger.valueOf(i*4).add(new BigInteger(a))));
+	}
+	
+	public void loadRegisters(Registers loadRegister){
+		for(int i = 0; i < loadRegister.IntegerRegister.size(); i++){
+			registers.setR(BigInteger.valueOf(i), loadRegister.getR(BigInteger.valueOf(i)));
+		}
+		
+		for(int j = 0; j < loadRegister.FloatingRegister.size(); j++){
+			registers.setF(BigInteger.valueOf(j), loadRegister.getF(BigInteger.valueOf(j)));
+		}
+		
+		registers.setHI(loadRegister.HI);
+		registers.setLOW(loadRegister.LO);
 	}
 
 	public int run() {
