@@ -446,6 +446,7 @@ public class PipelinedDatapath {
 		switch (ex_mem.IR.getInstructionType()) {
 		case MIPSInstruction.LOAD:
 			mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
+			System.err.println(mem_wb.IR + " " +ex_mem.ALUOutput + " "+mem_wb.LMD);
 			break;
 		case MIPSInstruction.STORE:
 			dataMemory.setDataToMemory(mem_wb.ALUOutput, ex_mem.B);
