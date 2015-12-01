@@ -47,13 +47,14 @@ public class PipelineMapManager {
 		pipelineMap.put(cycleNo, cycleMap);
 	}
 
-	public String[][] getPipelineMap() {
-		String instStr[] = new String[1000];
-		String table[][] = new String[1000][pipelineMap.size() + 1];
+	public String[][] getInstList() {
+		String instStr[] = new String[200];
+		String table[][] = new String[200][1];
+		String newTable[][];
 
 		HashMap<BigInteger, Integer> tableAux = new HashMap<>();
 		int runningVal = 0;
-		
+
 		for (Entry<Integer, HashMap<Integer, MIPSInstruction>> cycleMap : pipelineMap.entrySet()) {
 			HashMap<Integer, MIPSInstruction> InstMap = cycleMap.getValue();
 
@@ -71,21 +72,62 @@ public class PipelineMapManager {
 					}
 
 					instStr[index] = InstEntry.getValue().toString();
-					table[index][cycleMap.getKey() + 1] = getStageName(InstEntry.getKey());
 				}
 			}
 		}
 
 		System.out.println("Table Size: " + runningVal + "x" + pipelineMap.size());
 
+		newTable = new String[runningVal][1];
+
 		for (int i = 0; i < runningVal; ++i) {
-			table[i][0] = instStr[i];
-			for (int j = 1; j <= pipelineMap.size(); ++j) {
-				if (table[i][j] == null)
-					table[i][j] = "";
+			newTable[i][0] = instStr[i];
+		}
+		return newTable;
+	}
+
+	public String[][] getPipelineMap() {
+		String instStr[] = new String[200];
+		String table[][] = new String[200][pipelineMap.size()];
+
+		HashMap<BigInteger, Integer> tableAux = new HashMap<>();
+		int runningVal = 0;
+		for (Entry<Integer, HashMap<Integer, MIPSInstruction>> cycleMap : pipelineMap.entrySet()) {
+			HashMap<Integer, MIPSInstruction> InstMap = cycleMap.getValue();
+
+			for (Entry<Integer, MIPSInstruction> InstEntry : InstMap.entrySet()) {
+				MIPSInstruction inst = InstEntry.getValue();
+
+				int index;
+				if (inst != null) {
+					if (!tableAux.containsKey(inst.address))
+						tableAux.put(inst.address, runningVal++);
+
+					index = tableAux.get(inst.address);
+					if (InstEntry.getKey() == this.WB_STAGE) {
+						tableAux.remove(inst.address);
+					}
+
+					instStr[index] = InstEntry.getValue().toString();
+					table[index][cycleMap.getKey()] = getStageName(InstEntry.getKey());
+
+				}
 			}
 		}
-		return table;
+
+		System.out.println("Table Size: " + runningVal + "x" + pipelineMap.size());
+
+		String newTable[][] = new String[runningVal][pipelineMap.size()];
+
+		for (int i = 0; i < runningVal; ++i) {
+			for (int j = 0; j < pipelineMap.size(); ++j) {
+				if (table[i][j] == null)
+					newTable[i][j] = "";
+				else
+					newTable[i][j] = table[i][j];
+			}
+		}
+		return newTable;
 	}
 
 	public String toString() {
@@ -97,8 +139,8 @@ public class PipelineMapManager {
 		}
 		sb.append("\n");
 
-		String instStr[] = new String[1000];
-		String table[][] = new String[1000][pipelineMap.size()];
+		String instStr[] = new String[200];
+		String table[][] = new String[200][pipelineMap.size()];
 
 		HashMap<BigInteger, Integer> tableAux = new HashMap<>();
 		int runningVal = 0;

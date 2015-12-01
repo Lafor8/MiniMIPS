@@ -22,17 +22,17 @@ import javax.swing.table.*;
  */
 public class FixedColumnTable implements ChangeListener, PropertyChangeListener
 {
-	private JTable main;
-	private JTable fixed;
-	private JScrollPane scrollPane;
+	public JTable main;
+	public JTable fixed;
+	public JScrollPane scrollPane;
 
 	/*
 	 *  Specify the number of columns to be fixed and the scroll pane
 	 *  containing the table.
 	 */
-	public FixedColumnTable(int fixedColumns, JScrollPane scrollPane)
+	public FixedColumnTable(int fixedColumns, JScrollPane scrollPaneX)
 	{
-		this.scrollPane = scrollPane;
+		this.scrollPane = scrollPaneX;
 
 		main = ((JTable)scrollPane.getViewport().getView());
 		main.setAutoCreateColumnsFromModel( false );
