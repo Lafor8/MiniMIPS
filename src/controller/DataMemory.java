@@ -11,9 +11,11 @@ import utilities.MiniMipsUtilities;
 public class DataMemory {
 
 	public HashMap<BigInteger, BigInteger> dataMemory;
+	public BigInteger lastAddress;
 
 	public DataMemory() {
 		dataMemory = new HashMap<>();
+		lastAddress = BigInteger.valueOf(0);
 	}
 
 	public BigInteger getDataFromMemory(BigInteger index) {
@@ -25,6 +27,7 @@ public class DataMemory {
 
 	public void setDataToMemory(BigInteger index, BigInteger value) {
 		dataMemory.put(index, value);
+		lastAddress = lastAddress.add(BigInteger.valueOf(4));
 	}
 
 	public String toString() {

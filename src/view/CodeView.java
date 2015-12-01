@@ -101,5 +101,6 @@ public class CodeView extends JPanel {
 		}
 		
 		MiniMipsController.getInstance().mainFrame.getRegisterValuesFromUI();
+		MiniMipsController.getInstance().mainFrame.getDataSegementValuesFromUI();
 	}
 }

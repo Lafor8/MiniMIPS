@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
 	private ErrorView error;
-	private DataSegmentView data;
+	private InteractiveForm data;
 	private RegistersView register1;
 	
 	private CodeSegmentView codeSegment;
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
 		JPanel codePanel = new JPanel();
 		tabbedPane.addTab("Code Tab", null, codePanel, null);
 		error = new ErrorView();
-		data = new DataSegmentView();
+		data = new InteractiveForm();
 		register1 = new RegistersView();
 		
 		CodeView codeView = new CodeView();
@@ -215,6 +215,11 @@ public class MainFrame extends JFrame {
 	public void getRegisterValuesFromUI(){
 		Registers newValues = register1.getRegisterValuesFromUI();
 		refreshRegisters(newValues);
+	}
+	
+	public void getDataSegementValuesFromUI(){
+		DataMemory newValues = data.getDataSegementValuesFromUI();
+		refreshDataSegment(newValues);
 	}
 	
 }
