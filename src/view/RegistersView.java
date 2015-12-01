@@ -77,6 +77,44 @@ public class RegistersView extends JPanel{
 		registersTable.getColumnModel().getColumn(2).setPreferredWidth(35);
 		registersTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		
+		registersTable.getTableHeader().setReorderingAllowed(false);
+		
+		JScrollPane js=new JScrollPane(registersTable);
+		js.setVisible(true);
+		add(js);
+		
+		add(js);
+			
+	}
+	
+	public void RefreshNonEditable(Registers r){
+		
+		String[] columnNames = {"","Integer", "","Floating"};
+		registerModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;//This causes all cells to be not editable
+		    }
+		  };
+		registersTable = new JTable(registerModel);
+		
+		for(int i = 0; i < 32; i++){
+			addR(i, r.getR(BigInteger.valueOf(i)), r.getF(BigInteger.valueOf(i)));
+		}
+		
+		String[] hi = new String[]{"HI", MiniMipsUtilities.getPaddedHex128(registers.getHI())};
+		String[] low = new String[]{"LOW", MiniMipsUtilities.getPaddedHex128(registers.getLO())};
+		registerModel.addRow(new String[]{});
+		registerModel.addRow(hi);
+		registerModel.addRow(low);
+		
+		registersTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		registersTable.getColumnModel().getColumn(0).setPreferredWidth(35);
+		registersTable.getColumnModel().getColumn(1).setPreferredWidth(145);
+		registersTable.getColumnModel().getColumn(2).setPreferredWidth(35);
+		registersTable.getColumnModel().getColumn(3).setPreferredWidth(145);
+		
+		registersTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(registersTable);
 		js.setVisible(true);
@@ -99,24 +137,34 @@ public class RegistersView extends JPanel{
 			}
 			else if(row > 32){
 				switch(row){
-				case 33: newValues.setHI( new BigInteger((String) registersTable.getValueAt(row, 1))); break;
-				case 34: newValues.setLOW( new BigInteger((String) registersTable.getValueAt(row, 1))); break;
+				case 33: newValues.setHI( registerChecker((String) registersTable.getValueAt(row, 1))); break;
+				case 34: newValues.setLOW( registerChecker((String) registersTable.getValueAt(row, 1))); break;
 				}
 			}
 			else{
 			    for(int column = 0; column < registersTable.getColumnCount(); column++) {
 				       switch(column) {
 				            case 1:				              
-				                  newValues.setR(BigInteger.valueOf(row), new BigInteger((String) registersTable.getValueAt(row, column)));
+				                  newValues.setR(BigInteger.valueOf(row), registerChecker((String) registersTable.getValueAt(row, column)));
 				                  break;
 				             case 3: 
-				            	  newValues.setF(BigInteger.valueOf(row), new BigInteger((String) registersTable.getValueAt(row, column)));
+				            	  newValues.setF(BigInteger.valueOf(row), registerChecker((String) registersTable.getValueAt(row, column)));
 				                  break;
 				       }
 				    }
 			}
 		}
 		return newValues;
+	}
+	
+	
+	public BigInteger registerChecker(String value){
+		
+		if(!value.matches("[0-9A-Fa-f]{1,16}"))
+			return BigInteger.ZERO;
+		
+		return new BigInteger(value);
+		
 	}
 	
 

@@ -9,6 +9,8 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import utilities.MiniMipsUtilities;
+
 import model.MIPSInstruction;
 import net.miginfocom.swing.MigLayout;
 
@@ -32,14 +34,21 @@ public class CodeSegmentView extends JPanel {
 	public void refresh(ArrayList<MIPSInstruction> inst){
 		
 		String[] columnNames = {"Address","Code","Binary","Hex"};
-		codeSegmentModel = new DefaultTableModel(null, columnNames);
+		codeSegmentModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;//This causes all cells to be not editable
+		    }
+		  };
 		codeSegmentTable = new JTable(codeSegmentModel);
 			
 		for(MIPSInstruction i: inst){
-			addInst(i.address.toString(),i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
+			addInst(MiniMipsUtilities.getPaddedHex(i.address).substring(4),i.toString(), i.getOpcodeInBinary(), i.getOpcodeInHex());
 		}
 		
 		codeSegmentTable.getColumnModel().getColumn(0).setPreferredWidth(35);
+		
+		codeSegmentTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(codeSegmentTable);
 		js.setVisible(true);

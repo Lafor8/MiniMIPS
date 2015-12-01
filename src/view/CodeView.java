@@ -19,8 +19,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import controller.DataMemory;
 import controller.InstructionIdentifier;
 import controller.MiniMipsController;
+import controller.Registers;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -103,7 +105,11 @@ public class CodeView extends JPanel {
 			MiniMipsController.getInstance().sequentialDatapath.loadInstructions(mipsInst);
 		}
 		
-		MiniMipsController.getInstance().mainFrame.getRegisterValuesFromUI();
-		MiniMipsController.getInstance().mainFrame.getDataSegementValuesFromUI();
+		Registers reg = MiniMipsController.getInstance().mainFrame.getRegisterValuesFromUI();
+		MiniMipsController.getInstance().sequentialDatapath.loadRegisters(reg);
+		DataMemory data = MiniMipsController.getInstance().mainFrame.getDataSegementValuesFromUI();
+		MiniMipsController.getInstance().sequentialDatapath.loadDataMemory(data);
+		
+		
 	}
 }

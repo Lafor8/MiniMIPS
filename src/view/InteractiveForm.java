@@ -117,24 +117,47 @@ public class InteractiveForm extends JPanel {
     
     public DataMemory getDataSegementValuesFromUI(){
     	DataMemory newValues = new DataMemory();
+    	JTable tempTable = table;
     	
     	for(int row = 0; row < table.getRowCount(); row++){
     		if(table.getValueAt(row, 1)!= ""){
-        		newValues.setDataToMemory(BigInteger.valueOf(row),  new BigInteger((String) table.getValueAt(row, 1)));
+    			if(registerChecker((String) table.getValueAt(row, 1))){
+    				String a = new BigInteger("8192").toString(16);
+    				newValues.setDataToMemory(BigInteger.valueOf(row*4).add(new BigInteger(a)),  new BigInteger((String) table.getValueAt(row, 1)));
+    			}
+    			else{
+    				tableModel.removeRow(row);
+    				row--;
+    			}
+    				
     		}
     	}
-    	
+   	
+    	table.setModel(tableModel);
     	return newValues;
     }
     
-	public void refresh(DataMemory dataMemory){
+    public Boolean registerChecker(String value){
 		
+		if(value.matches("[0-9A-Fa-f]{1,8}"))
+			return true;
+		
+		return false;
+		
+	}
+    
+	public void refresh(DataMemory dataMemory){
 		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
 		map.putAll(dataMemory.dataMemory);
 		int i = 0;
 		for (Entry<BigInteger, BigInteger> dataEntry : map.entrySet()) {
-				tableModel.setValueAt(MiniMipsUtilities.getPaddedHex(dataEntry.getKey()).substring(4), i,0);
+				String a = new BigInteger("8192").toString(16);
+				//System.out.println("KEY" + dataEntry.getKey());
+				//System.out.println("TESTING" + dataEntry.getKey().add(new BigInteger(a)));
+				tableModel.setValueAt(dataEntry.getKey(), i,0);
 				tableModel.setValueAt(MiniMipsUtilities.getPaddedHex(dataEntry.getValue()), i, 1);
+				//System.out.println("KEY " + MiniMipsUtilities.getPaddedHex(dataEntry.getKey()).substring(4) + "ROW" + i + "Column" + 0);
+				//System.out.println("VALUE" + MiniMipsUtilities.getPaddedHex(dataEntry.getValue()) + "ROW" + i + "Column" + 1);
 				i++;	
 			}
 		}

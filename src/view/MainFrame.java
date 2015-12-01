@@ -192,7 +192,7 @@ public class MainFrame extends JFrame {
 		register1.removeAll();
 		register1.Refresh(r);
 		register2.removeAll();
-		register2.Refresh(r);
+		register2.RefreshNonEditable(r);
 	}
 
 	public void refreshInternalRegisters() {
@@ -205,7 +205,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void refreshDataSegment(DataMemory dataMemory) {
-		data.removeAll();
+		//data.removeAll();
 		data.refresh(dataMemory);
 		dataSegment.removeAll();
 		dataSegment.refresh(dataMemory);
@@ -218,9 +218,10 @@ public class MainFrame extends JFrame {
 			codeSegment.removeAll();
 	}
 
-	public void getRegisterValuesFromUI() {
+	public Registers getRegisterValuesFromUI() {
 		Registers newValues = register1.getRegisterValuesFromUI();
 		refreshRegisters(newValues);
+		return newValues;
 	}
 
 	public void refreshPipeLineView() {
@@ -238,9 +239,10 @@ public class MainFrame extends JFrame {
 		MiniMipsController.getInstance().refreshAll();
 	}
 
-	public void getDataSegementValuesFromUI() {
+	public DataMemory getDataSegementValuesFromUI() {
 		DataMemory newValues = data.getDataSegementValuesFromUI();
 		refreshDataSegment(newValues);
+		return newValues;
 	}
 
 }

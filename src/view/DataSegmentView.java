@@ -29,6 +29,7 @@ public class DataSegmentView extends JPanel{
 		};
 		//dataMemoryModel = new DefaultTableModel(columnData, columnNames);
 		dataMemoryTable = new JTable(columnData, columnNames);
+		dataMemoryTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(dataMemoryTable);
 		js.setVisible(true);
@@ -37,13 +38,25 @@ public class DataSegmentView extends JPanel{
 	
 	public void refresh(DataMemory dataMemory){
 		
+		//System.out.println("SIZE 3:" + dataMemory.dataMemory.size());
+		
 		String[] columnNames = {"Address","Data"};
-		dataMemoryModel = new DefaultTableModel(null, columnNames);
+		dataMemoryModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;
+		    }
+		  };
+		
 		dataMemoryTable = new JTable(dataMemoryModel);
 	
 		for(int i = 0; i < dataMemory.dataMemory.size(); i++){
-			addD(i, dataMemory.getDataFromMemory(BigInteger.valueOf(i)));
+			String a = new BigInteger("8192").toString(16);
+			
+			addD(BigInteger.valueOf(i*4).add(new BigInteger(a)), dataMemory.getDataFromMemory(BigInteger.valueOf(i*4).add(new BigInteger(a))));
 		}
+		
+		dataMemoryTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(dataMemoryTable);
 		js.setVisible(true);
@@ -51,8 +64,8 @@ public class DataSegmentView extends JPanel{
 		
 	}
 	
-	public void addD(int index, BigInteger data){
-		String[] a = new String[]{Integer.toString(index), MiniMipsUtilities.getPaddedHex128(data)};
+	public void addD(BigInteger index, BigInteger data){
+		String[] a = new String[]{index.toString(), MiniMipsUtilities.getPaddedHex(data)};
 		dataMemoryModel.addRow(a);
 	}
 

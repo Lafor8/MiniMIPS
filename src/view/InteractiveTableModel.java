@@ -88,4 +88,10 @@ public class InteractiveTableModel extends AbstractTableModel {
            dataVector.size() - 1,
            dataVector.size() - 1);
     }
+
+	public void removeRow(int row) {
+		 dataVector.removeElementAt(row);
+		
+	}
+    
 }

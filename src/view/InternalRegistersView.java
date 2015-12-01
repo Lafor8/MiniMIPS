@@ -35,6 +35,7 @@ public class InternalRegistersView extends JPanel {
 		irTable = new JTable(IRData, ColumnNames);
 
 		// add(irTable);
+		irTable.getTableHeader().setReorderingAllowed(false);
 
 		JScrollPane js = new JScrollPane(irTable);
 		js.setVisible(true);
@@ -43,7 +44,12 @@ public class InternalRegistersView extends JPanel {
 
 	public void refreshAll() {
 
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel(){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;//This causes all cells to be not editable
+		    }
+		  };
 		List<String> list = new ArrayList<String>();
 
 		list.add("Register");
@@ -116,6 +122,7 @@ public class InternalRegistersView extends JPanel {
 		model.addRow(row);
 
 		irTable.setModel(model);
+		irTable.getTableHeader().setReorderingAllowed(false);
 
 	}
 
