@@ -46,6 +46,8 @@ public class CodeSegmentView extends JPanel {
 		
 		codeSegmentTable.getColumnModel().getColumn(0).setPreferredWidth(35);
 		
+		codeSegmentTable.getTableHeader().setReorderingAllowed(false);
+		
 		JScrollPane js=new JScrollPane(codeSegmentTable);
 		js.setVisible(true);
 		add(js);

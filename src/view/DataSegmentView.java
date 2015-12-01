@@ -29,6 +29,7 @@ public class DataSegmentView extends JPanel{
 		};
 		//dataMemoryModel = new DefaultTableModel(columnData, columnNames);
 		dataMemoryTable = new JTable(columnData, columnNames);
+		dataMemoryTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(dataMemoryTable);
 		js.setVisible(true);
@@ -50,6 +51,8 @@ public class DataSegmentView extends JPanel{
 		for(int i = 0; i < dataMemory.dataMemory.size(); i++){
 			addD(i, dataMemory.getDataFromMemory(BigInteger.valueOf(i)));
 		}
+		
+		dataMemoryTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane js=new JScrollPane(dataMemoryTable);
 		js.setVisible(true);

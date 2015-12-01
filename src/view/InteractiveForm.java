@@ -127,8 +127,17 @@ public class InteractiveForm extends JPanel {
     	return newValues;
     }
     
+    public BigInteger registerChecker(String value){
+		
+		if(!value.matches("[0-9A-Fa-f]{1,8}"))
+			return BigInteger.ZERO;
+		
+		return new BigInteger(value);
+		
+	}
+    
 	public void refresh(DataMemory dataMemory){
-		System.out.println("GDIGDCOUF");
+		
 		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
 		map.putAll(dataMemory.dataMemory);
 		int i = 0;
