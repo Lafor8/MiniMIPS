@@ -37,24 +37,38 @@ public class PipelineMapView extends JPanel {
 
 	public void refresh() {
 
-		DefaultTableModel dtm = new DefaultTableModel();
+		DefaultTableModel dtmPipelineMap = new DefaultTableModel();
+		DefaultTableModel dtmInst = new DefaultTableModel();
 
 		String[][] pipelineMap = PipelineMapManager.getInstance().getPipelineMap();
-		String[] colHeaders = new String[pipelineMap[0].length+1];
-		
-		colHeaders[0] = "Instruction";
-		for(int i = 1; i < colHeaders.length; ++i)
-			colHeaders[i] = i+"";
-		
-		
-		dtm.setColumnIdentifiers(colHeaders);
-		for(String[] row: pipelineMap){
-			dtm.addRow(row);
+		String[][] instList = PipelineMapManager.getInstance().getInstList();
+		if (pipelineMap.length != 0) {
+			String[] colHeaders = new String[pipelineMap[0].length];
+
+			for (int i = 0; i < colHeaders.length; ++i)
+				colHeaders[i] = (i+1) + "";
+
+			String[] fixedColHeaders = { "Instruction" };
+
+			dtmInst.setColumnIdentifiers(fixedColHeaders);
+
+			dtmPipelineMap.setColumnIdentifiers(colHeaders);
+
+			for (String[] row : pipelineMap) {
+				dtmPipelineMap.addRow(row);
+			}
+			for (String[] row : instList) {
+				dtmInst.addRow(row);
+			}
+
+			// table.setModel(dtmPipelineMap);
+
+			FixedColumnPane fcp = (FixedColumnPane) scrollPane;
+
+			fcp.fixed.setModel(dtmInst);
+			fcp.main.setModel(dtmPipelineMap);
+			fcp.resizeTables();
 		}
-		
-		table.setModel(dtm);
-		
-		
 		//
 		// JScrollPane js = new JScrollPane(pipelineMapTable,
 		// JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
