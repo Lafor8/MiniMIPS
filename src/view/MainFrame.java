@@ -263,4 +263,10 @@ public class MainFrame extends JFrame {
 		MiniMipsController.getInstance().refreshAll();
 	}
 
+	public void getDataSegementValuesFromUI() {
+		DataMemory newValues = data.getDataSegementValuesFromUI();
+		refreshDataSegment(newValues);
+		
+	}
+
 }
