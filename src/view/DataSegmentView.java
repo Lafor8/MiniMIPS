@@ -21,12 +21,23 @@ public class DataSegmentView extends JPanel{
 	TitledBorder title = BorderFactory.createTitledBorder("Data Segment");
 	
 	public DataSegmentView(){
+		
 		setBorder(title);
+		String[] columnNames = {"Memory","Data"};
+		String[][] columnData = {
+				{"", ""}
+		};
+		//dataMemoryModel = new DefaultTableModel(columnData, columnNames);
+		dataMemoryTable = new JTable(columnData, columnNames);
+		
+		JScrollPane js=new JScrollPane(dataMemoryTable);
+		js.setVisible(true);
+		add(js);
 	}
 	
 	public void refresh(DataMemory dataMemory){
 		
-		String[] columnNames = {"Memory","Data"};
+		String[] columnNames = {"Address","Data"};
 		dataMemoryModel = new DefaultTableModel(null, columnNames);
 		dataMemoryTable = new JTable(dataMemoryModel);
 	

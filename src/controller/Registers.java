@@ -38,7 +38,7 @@ public class Registers {
 		return FloatingRegister.get(Integer.parseInt(index.toString()));
 	}
 
-	public void setR(BigInteger index, BigInteger value) {
+	public void setR(BigInteger index, BigInteger value) {	
 		if (!(index.compareTo(BigInteger.ZERO) == 0))
 			IntegerRegister.set(Integer.parseInt(index.toString()), value);
 	}

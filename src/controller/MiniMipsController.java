@@ -18,7 +18,7 @@ public class MiniMipsController {
 
 	// UI Components
 	public MainFrame mainFrame;
-
+	
 	// Backend Components
 	public PipelinedDatapath sequentialDatapath;
 
@@ -50,7 +50,7 @@ public class MiniMipsController {
 	public void refreshAll() {
 		mainFrame.refreshRegisters(sequentialDatapath.registers);
 		// mainFrame.refreshCodeSegment(mipsInst);
-		mainFrame.refreshDataSegment(sequentialDatapath.dataMemory);
+		//mainFrame.refreshDataSegment(sequentialDatapath.dataMemory);
 		mainFrame.refreshInternalRegisters();
 		mainFrame.refreshPipeLineView();
 	}

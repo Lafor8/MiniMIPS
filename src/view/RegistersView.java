@@ -1,4 +1,4 @@
-package view;
+	package view;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -84,6 +84,39 @@ public class RegistersView extends JPanel{
 		
 		add(js);
 			
+	}
+	
+	
+	public Registers getRegisterValuesFromUI(){
+		
+		Registers newValues = new Registers();
+		newValues.Initialize();
+		
+		for(int row = 0; row < registersTable.getRowCount(); row++) {
+			
+			if(row == 32){
+				
+			}
+			else if(row > 32){
+				switch(row){
+				case 33: newValues.setHI( new BigInteger((String) registersTable.getValueAt(row, 1))); break;
+				case 34: newValues.setLOW( new BigInteger((String) registersTable.getValueAt(row, 1))); break;
+				}
+			}
+			else{
+			    for(int column = 0; column < registersTable.getColumnCount(); column++) {
+				       switch(column) {
+				            case 1:				              
+				                  newValues.setR(BigInteger.valueOf(row), new BigInteger((String) registersTable.getValueAt(row, column)));
+				                  break;
+				             case 3: 
+				            	  newValues.setF(BigInteger.valueOf(row), new BigInteger((String) registersTable.getValueAt(row, column)));
+				                  break;
+				       }
+				    }
+			}
+		}
+		return newValues;
 	}
 	
 

@@ -18,6 +18,8 @@ import controller.Registers;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
 import javax.swing.JTable;
@@ -29,7 +31,7 @@ public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
 	private ErrorView error;
-	private DataSegmentView data;
+	private InteractiveForm data;
 	private RegistersView register1;
 	
 	private CodeSegmentView codeSegment;
@@ -92,7 +94,7 @@ public class MainFrame extends JFrame {
 		JPanel codePanel = new JPanel();
 		tabbedPane.addTab("Code Tab", null, codePanel, null);
 		error = new ErrorView();
-		data = new DataSegmentView();
+		data = new InteractiveForm();
 		register1 = new RegistersView();
 		
 		CodeView codeView = new CodeView();
@@ -241,6 +243,11 @@ public class MainFrame extends JFrame {
 			codeSegment.removeAll();
 	}
 	
+	public void getRegisterValuesFromUI(){
+		Registers newValues = register1.getRegisterValuesFromUI();
+		refreshRegisters(newValues);
+	}
+	
 	public void refreshPipeLineView(){
 		this.pipelineMap.refresh();
 	}
@@ -255,4 +262,5 @@ public class MainFrame extends JFrame {
 		MiniMipsController.getInstance().sequentialDatapath.run();
 		MiniMipsController.getInstance().refreshAll();
 	}
+
 }
