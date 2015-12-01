@@ -18,14 +18,13 @@ public class MiniMipsController {
 
 	// UI Components
 	public MainFrame mainFrame;
-	
+
 	// Backend Components
 	public PipelinedDatapath sequentialDatapath;
 
 	// Main Controller
 	public static MiniMipsController miniMipsController;
 
-	
 	public MiniMipsController() {
 		mainFrame = new MainFrame();
 		sequentialDatapath = new PipelinedDatapath();
@@ -43,15 +42,16 @@ public class MiniMipsController {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
+
 		mainFrame.setVisible(true);
 
 	}
-	
-	public void refreshAll(){
+
+	public void refreshAll() {
 		mainFrame.refreshRegisters(sequentialDatapath.registers);
-		//mainFrame.refreshCodeSegment(mipsInst);
+		// mainFrame.refreshCodeSegment(mipsInst);
 		mainFrame.refreshDataSegment(sequentialDatapath.dataMemory);
 		mainFrame.refreshInternalRegisters();
+		mainFrame.refreshPipeLineView();
 	}
 }

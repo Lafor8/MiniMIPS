@@ -241,6 +241,10 @@ public class MainFrame extends JFrame {
 			codeSegment.removeAll();
 	}
 	
+	public void refreshPipeLineView(){
+		this.pipelineMap.refresh();
+	}
+	
 	public void executeOneCycle(){
 		MiniMipsController.getInstance().sequentialDatapath.runOneCycle();
 		MiniMipsController.getInstance().refreshAll();
