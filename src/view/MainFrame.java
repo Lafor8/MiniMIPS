@@ -192,7 +192,7 @@ public class MainFrame extends JFrame {
 		register1.removeAll();
 		register1.Refresh(r);
 		register2.removeAll();
-		register2.Refresh(r);
+		register2.RefreshNonEditable(r);
 	}
 
 	public void refreshInternalRegisters() {
@@ -205,7 +205,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void refreshDataSegment(DataMemory dataMemory) {
-		data.removeAll();
+		//data.removeAll();
 		data.refresh(dataMemory);
 		dataSegment.removeAll();
 		dataSegment.refresh(dataMemory);

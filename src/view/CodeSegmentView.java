@@ -32,7 +32,12 @@ public class CodeSegmentView extends JPanel {
 	public void refresh(ArrayList<MIPSInstruction> inst){
 		
 		String[] columnNames = {"Address","Code","Binary","Hex"};
-		codeSegmentModel = new DefaultTableModel(null, columnNames);
+		codeSegmentModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;//This causes all cells to be not editable
+		    }
+		  };
 		codeSegmentTable = new JTable(codeSegmentModel);
 			
 		for(MIPSInstruction i: inst){

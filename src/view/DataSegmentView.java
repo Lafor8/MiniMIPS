@@ -38,7 +38,13 @@ public class DataSegmentView extends JPanel{
 	public void refresh(DataMemory dataMemory){
 		
 		String[] columnNames = {"Address","Data"};
-		dataMemoryModel = new DefaultTableModel(null, columnNames);
+		dataMemoryModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;
+		    }
+		  };
+		
 		dataMemoryTable = new JTable(dataMemoryModel);
 	
 		for(int i = 0; i < dataMemory.dataMemory.size(); i++){

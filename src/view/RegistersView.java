@@ -86,6 +86,42 @@ public class RegistersView extends JPanel{
 			
 	}
 	
+	public void RefreshNonEditable(Registers r){
+		
+		String[] columnNames = {"","Integer", "","Floating"};
+		registerModel = new DefaultTableModel(null, columnNames){
+		    public boolean isCellEditable(int row, int column)
+		    {
+		      return false;//This causes all cells to be not editable
+		    }
+		  };
+		registersTable = new JTable(registerModel);
+		
+		for(int i = 0; i < 32; i++){
+			addR(i, r.getR(BigInteger.valueOf(i)), r.getF(BigInteger.valueOf(i)));
+		}
+		
+		String[] hi = new String[]{"HI", MiniMipsUtilities.getPaddedHex128(registers.getHI())};
+		String[] low = new String[]{"LOW", MiniMipsUtilities.getPaddedHex128(registers.getLO())};
+		registerModel.addRow(new String[]{});
+		registerModel.addRow(hi);
+		registerModel.addRow(low);
+		
+		registersTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		registersTable.getColumnModel().getColumn(0).setPreferredWidth(35);
+		registersTable.getColumnModel().getColumn(1).setPreferredWidth(145);
+		registersTable.getColumnModel().getColumn(2).setPreferredWidth(35);
+		registersTable.getColumnModel().getColumn(3).setPreferredWidth(145);
+		
+		
+		JScrollPane js=new JScrollPane(registersTable);
+		js.setVisible(true);
+		add(js);
+		
+		add(js);
+			
+	}
+	
 	
 	public Registers getRegisterValuesFromUI(){
 		

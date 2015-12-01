@@ -128,13 +128,15 @@ public class InteractiveForm extends JPanel {
     }
     
 	public void refresh(DataMemory dataMemory){
-		
+		System.out.println("GDIGDCOUF");
 		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
 		map.putAll(dataMemory.dataMemory);
 		int i = 0;
 		for (Entry<BigInteger, BigInteger> dataEntry : map.entrySet()) {
 				tableModel.setValueAt(MiniMipsUtilities.getPaddedHex(dataEntry.getKey()).substring(4), i,0);
 				tableModel.setValueAt(MiniMipsUtilities.getPaddedHex(dataEntry.getValue()), i, 1);
+				//System.out.println("KEY " + MiniMipsUtilities.getPaddedHex(dataEntry.getKey()).substring(4) + "ROW" + i + "Column" + 0);
+				//System.out.println("VALUE" + MiniMipsUtilities.getPaddedHex(dataEntry.getValue()) + "ROW" + i + "Column" + 1);
 				i++;	
 			}
 		}
