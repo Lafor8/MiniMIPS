@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import model.*;
+import utilities.MiniMipsUtilities;
 
 public class PipelinedDatapath {
 	// Program Counter
@@ -71,35 +72,38 @@ public class PipelinedDatapath {
 			instructionMemory.setInstructionAddress(inst.address, inst);
 		}
 	}
-	
-	public void loadDataMemory(DataMemory loadData){
+
+	public void loadDataMemory(DataMemory loadData) {
 		String a = new BigInteger("8192").toString(16);
 		TreeMap<BigInteger, BigInteger> map = new TreeMap<>();
 		map.putAll(loadData.dataMemory);
-		
-		//System.out.println(loadData.dataMemory.size());
+
+		// System.out.println(loadData.dataMemory.size());
 		for (Entry<BigInteger, BigInteger> dataEntry : map.entrySet()) {
 
-			//String a = new BigInteger("8192").toString(16);
+			// String a = new BigInteger("8192").toString(16);
 			dataMemory.setDataToMemory(dataEntry.getKey(), dataEntry.getValue());
-			//String a = new BigInteger("8192").toString(16);
-			//System.out.println("TRY ADDING " + dataEntry.getKey().add(new BigInteger(a)));
+			// String a = new BigInteger("8192").toString(16);
+			// System.out.println("TRY ADDING " + dataEntry.getKey().add(new
+			// BigInteger(a)));
 		}
-		
-		//System.out.println("SIZE       " + dataMemory.dataMemory.size());
-		//for(int i = 0; i < dataMemory.dataMemory.size(); i++)
-			//System.out.println("VALUE "+dataMemory.getDataFromMemory(BigInteger.valueOf(i*4).add(new BigInteger(a))));
+
+		// System.out.println("SIZE " + dataMemory.dataMemory.size());
+		// for(int i = 0; i < dataMemory.dataMemory.size(); i++)
+		// System.out.println("VALUE
+		// "+dataMemory.getDataFromMemory(BigInteger.valueOf(i*4).add(new
+		// BigInteger(a))));
 	}
-	
-	public void loadRegisters(Registers loadRegister){
-		for(int i = 0; i < loadRegister.IntegerRegister.size(); i++){
+
+	public void loadRegisters(Registers loadRegister) {
+		for (int i = 0; i < loadRegister.IntegerRegister.size(); i++) {
 			registers.setR(BigInteger.valueOf(i), loadRegister.getR(BigInteger.valueOf(i)));
 		}
-		
-		for(int j = 0; j < loadRegister.FloatingRegister.size(); j++){
+
+		for (int j = 0; j < loadRegister.FloatingRegister.size(); j++) {
 			registers.setF(BigInteger.valueOf(j), loadRegister.getF(BigInteger.valueOf(j)));
 		}
-		
+
 		registers.setHI(loadRegister.HI);
 		registers.setLOW(loadRegister.LO);
 	}
@@ -427,6 +431,8 @@ public class PipelinedDatapath {
 
 		}
 
+		System.err.println(ex_mem.IR + " " + MiniMipsUtilities.getPaddedHex(ex_mem.ALUOutput) + " " + ex_mem.IR.getInstructionType());
+
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 
 		return 0;
@@ -466,8 +472,13 @@ public class PipelinedDatapath {
 				// TODO: separate top from bottom
 				registers.setHILO(mem_wb.ALUOutput);
 			} else {
-				target = mem_wb.IR.getBinarySegment(16, 20);
-				value = mem_wb.ALUOutput;
+				if (Integer.parseInt(mem_wb.IR.getBinarySegment(0,5).toString()) == RTypeInstruction.OP) {
+					target = mem_wb.IR.getBinarySegment(21, 25);
+					value = mem_wb.ALUOutput;
+				} else {
+					target = mem_wb.IR.getBinarySegment(16, 20);
+					value = mem_wb.ALUOutput;
+				}
 			}
 			break;
 		case MIPSInstruction.REGISTER_IMMEDIATE:
@@ -497,7 +508,7 @@ public class PipelinedDatapath {
 					this.dependencyDeclarationR.remove(target);
 			}
 		}
-
+System.err.println(mem_wb.IR + " " + target);
 		// Clear dependency
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.WB_STAGE, mem_wb.IR);

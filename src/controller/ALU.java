@@ -48,16 +48,18 @@ public class ALU {
 				float v1 = Float.intBitsToFloat(Integer.parseUnsignedInt(MiniMipsUtilities.getPaddedHex64(param1).substring(8), 16));
 				float v2 = Float.intBitsToFloat(Integer.parseUnsignedInt(MiniMipsUtilities.getPaddedHex64(param2).substring(8), 16));
 
-				answer = BigInteger.valueOf(Float.floatToIntBits(v1 + v2));
-				System.err.println("ANSWER: " + v1 + " " + v2 + " " + answer + " " + Float.floatToIntBits(v1 + v2));
-				answer = BigInteger.ZERO;
+				answer = new BigInteger(Integer.toHexString(Float.floatToIntBits(v1 + v2)), 16);
+				// System.err.println("ANSWER: " + v1 + " " + v2 + " " +
+				// MiniMipsUtilities.getPaddedHex(answer) + " " +
+				// Integer.toHexString(Float.floatToIntBits(v1 + v2)));
+				// answer = BigInteger.ZERO;
 			} else if (func == RTypeInstruction.MULS) {
 				float v1 = Float.intBitsToFloat(Integer.parseUnsignedInt(MiniMipsUtilities.getPaddedHex64(param1).substring(8), 16));
 				float v2 = Float.intBitsToFloat(Integer.parseUnsignedInt(MiniMipsUtilities.getPaddedHex64(param2).substring(8), 16));
 
-				answer = BigInteger.valueOf((long) Float.floatToIntBits(v1 * v2));
-				System.err.println("ANSWER: " + answer);
-				answer = BigInteger.ZERO;
+				answer = new BigInteger(Integer.toHexString(Float.floatToIntBits(v1 * v2)), 16);
+				 System.err.println("ANSWER: " + MiniMipsUtilities.getPaddedHex(answer));
+				// answer = BigInteger.ZERO;
 			}
 
 			break;
