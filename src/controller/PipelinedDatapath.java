@@ -91,11 +91,11 @@ public class PipelinedDatapath {
 
 		System.out.println("Cycle #" + (cycles + 1));
 
-		System.out.print("Curr: ");
-		for (Integer stg : runQueue) {
-			System.out.print(PipelineMapManager.getStageName(stg) + "\t");
-		}
-		System.out.println();
+		// System.out.print("Curr: ");
+		// for (Integer stg : runQueue) {
+		// System.out.print(PipelineMapManager.getStageName(stg) + "\t");
+		// }
+		// System.out.println();
 
 		while (runQueue.size() > 0) {
 			int stage = runQueue.remove();
@@ -165,12 +165,6 @@ public class PipelinedDatapath {
 			}
 		}
 
-		// System.out.print("Next: ");
-		// for (Integer stg : nextRunQueue) {
-		// System.out.print(PipelineMapManager.getStageName(stg) + "\t");
-		// }
-		// System.out.println();
-
 		cycles++;
 
 		runQueue = nextRunQueue;
@@ -185,7 +179,6 @@ public class PipelinedDatapath {
 		BigInteger AIndex, BIndex;
 
 		boolean stall;
-		System.out.println(if_id.IR);
 
 		if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
 			AIndex = if_id.IR.getBinarySegment(11, 15);
@@ -195,10 +188,14 @@ public class PipelinedDatapath {
 			BIndex = if_id.IR.getB();
 		}
 
-		System.out.println("\t" + this.dependencyDeclarationF.containsKey(AIndex) + " " + this.dependencyDeclarationF.containsKey(BIndex));
-		System.out.println("\t" + this.dependencyDeclarationR.containsKey(AIndex) + " " + this.dependencyDeclarationR.containsKey(BIndex));
-		System.out.println("\t" + this.dependencyDeclarationF);
-		System.out.println("\t" + this.dependencyDeclarationR);
+		// System.out.println("\t" +
+		// this.dependencyDeclarationF.containsKey(AIndex) + " " +
+		// this.dependencyDeclarationF.containsKey(BIndex));
+		// System.out.println("\t" +
+		// this.dependencyDeclarationR.containsKey(AIndex) + " " +
+		// this.dependencyDeclarationR.containsKey(BIndex));
+		// System.out.println("\t" + this.dependencyDeclarationF);
+		// System.out.println("\t" + this.dependencyDeclarationR);
 		if (id_ex.IR.isFloatInst) {
 			if (this.dependencyDeclarationF.containsKey(AIndex) || this.dependencyDeclarationF.containsKey(BIndex))
 				stall = true;
@@ -210,7 +207,6 @@ public class PipelinedDatapath {
 			else
 				stall = false;
 		}
-		System.out.println("\t" + (stall));
 
 		if (stall) {
 			return 1;
@@ -256,7 +252,6 @@ public class PipelinedDatapath {
 
 	public int IF() {
 		if_id.IR = instructionMemory.getInstructionAddress(pc);
-System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.size());
 		if (if_id.IR == null)
 			return -1;
 
@@ -287,9 +282,7 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 			AIndex = if_id.IR.getA();
 			BIndex = if_id.IR.getB();
 		}
-		System.out.println("\t" + this.dependencyDeclarationF.containsKey(AIndex) + " " + this.dependencyDeclarationF.containsKey(BIndex));
-		System.out.println("\t" + this.dependencyDeclarationF);
-		System.out.println("\t" + this.dependencyDeclarationR);
+
 		if (if_id.IR.isFloatInst) {
 			if (this.dependencyDeclarationF.containsKey(AIndex) || this.dependencyDeclarationF.containsKey(BIndex))
 				stall = true;
@@ -343,8 +336,6 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 	public int ID() {
 		id_ex.IR = if_id.IR;
 
-		// System.out.println("ID: " + cycles + " " + id_ex.IR);
-
 		// if (!id_ex.IR.isLastInstruction) {
 		id_ex.NPC = if_id.NPC;
 
@@ -352,23 +343,30 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 
 		BigInteger AIndex, BIndex;
 
-		if (Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString()) == RTypeInstruction.DSLL) {
+		int op = Integer.parseInt(if_id.IR.getBinarySegment(0, 5).toString());
+		int func = Integer.parseInt(if_id.IR.getBinarySegment(26, 31).toString());
+
+		if (func == RTypeInstruction.DSLL || op == RTypeInstruction.OP) {
 			AIndex = if_id.IR.getBinarySegment(11, 15);
 			BIndex = if_id.IR.getBinarySegment(16, 20);
 		} else {
 			AIndex = if_id.IR.getA();
 			BIndex = if_id.IR.getB();
 		}
-
-		id_ex.A = registers.getR(AIndex);
-		id_ex.B = registers.getR(BIndex);
+		if (id_ex.IR.isFloatInst) {
+			id_ex.A = registers.getF(AIndex);
+			id_ex.B = registers.getF(BIndex);
+		} else {
+			id_ex.A = registers.getR(AIndex);
+			id_ex.B = registers.getR(BIndex);
+		}
 
 		id_ex.IMM = signExtend.getImmAndExtend(if_id.IR.getIMM());
-		System.err.println(id_ex.IR + " "  +id_ex.IMM + " " +if_id.IR.getIMM());
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.ID_STAGE, id_ex.IR);
 		// }
 		return 0;
+
 	}
 
 	public int EX() {
@@ -381,21 +379,20 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 
 			ex_mem.Cond = zeroCondition.check(id_ex.A);
 
-			// System.out.println("ID STAGE: " + id_ex.IR + " " + id_ex.A + " " + id_ex.B + " " + id_ex.IMM);
-			// System.out.println("BRANCH: " + ex_mem.ALUOutput + " " + id_ex.A + " " + ex_mem.Cond);
 			break;
 		case MIPSInstruction.JUMP:
 			ex_mem.ALUOutput = id_ex.IMM.multiply(BigInteger.valueOf(4));
-			System.err.println("YO: " + id_ex.IMM);
 			ex_mem.Cond = true;
 			break;
 		default:
+
 			BigInteger param1 = id_ex.A;
 			BigInteger param2 = multiplexer.select(id_ex.B, id_ex.IMM, id_ex.IR.getCondForMultiplexer());
 			ex_mem.ALUOutput = alu.apply(param1, param2, id_ex.IR);
 			ex_mem.Cond = false;
+
 		}
-		// System.out.println(ex_mem.IR);
+
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.EX_STAGE, ex_mem.IR);
 
 		return 0;
@@ -406,10 +403,6 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 
 		mem_wb.ALUOutput = ex_mem.ALUOutput;
 
-		// System.out.println("MEM: " + ex_mem.Cond);
-		// pc = multiplexer.select(if_id.NPC, ex_mem.ALUOutput,
-		// ex_mem.Cond);
-
 		switch (ex_mem.IR.getInstructionType()) {
 		case MIPSInstruction.LOAD:
 			mem_wb.LMD = dataMemory.getDataFromMemory(ex_mem.ALUOutput);
@@ -418,8 +411,6 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 			dataMemory.setDataToMemory(mem_wb.ALUOutput, ex_mem.B);
 			break;
 		}
-
-		// System.out.println(mem_wb.IR);
 
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.MEM_STAGE, mem_wb.IR);
 
@@ -475,7 +466,6 @@ System.err.println(if_id.IR + " "+ pc+" " + instructionMemory.instructionMemory.
 
 		// Clear dependency
 
-		// System.out.println(mem_wb.IR);
 		pipelineMapManager.addEntry(cycles, PipelineMapManager.WB_STAGE, mem_wb.IR);
 
 		return 0;

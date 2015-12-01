@@ -44,6 +44,7 @@ public class Registers {
 	}
 
 	public void setF(BigInteger index, BigInteger value) {
+		System.err.println(Float.intBitsToFloat(Integer.parseUnsignedInt(value.toString(16),16))+"");
 		if (!(index.compareTo(BigInteger.ZERO) == 0))
 			FloatingRegister.set(Integer.parseInt(index.toString()), value);
 	}
@@ -92,15 +93,15 @@ public class Registers {
 		sb.append(MiniMipsUtilities.getPaddedHex(this.getLO()));
 		sb.append("\n");
 
-//		sb.append("\n\nFloating Point Registers\n\n");
-//
-//		for (int i = 0; i < 32; ++i) {
-//			sb.append("F");
-//			sb.append(String.format("%02d", i));
-//			sb.append(": ");
-//			sb.append(MiniMipsUtilities.getPaddedHex(this.FloatingRegister.get(i)));
-//			sb.append("\n");
-//		}
+		sb.append("\n\nFloating Point Registers\n\n");
+
+		for (int i = 0; i < 20; ++i) {
+			sb.append("F");
+			sb.append(String.format("%02d", i));
+			sb.append(": ");
+			sb.append(MiniMipsUtilities.getPaddedHex(this.FloatingRegister.get(i)));
+			sb.append("\n");
+		}
 
 		return sb.toString();
 	}

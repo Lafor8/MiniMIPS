@@ -44,7 +44,10 @@ public class BackEndTester {
 		sequentialDatapath.registers.setR(BigInteger.valueOf(2), BigInteger.valueOf(2));
 		sequentialDatapath.registers.setR(BigInteger.valueOf(3), BigInteger.valueOf(3));
 
-		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(1), BigInteger.valueOf(17));
+		sequentialDatapath.registers.setF(BigInteger.valueOf(1), BigInteger.valueOf(Long.parseLong("3f800000", 16)));
+		sequentialDatapath.registers.setF(BigInteger.valueOf(2), BigInteger.valueOf(Long.parseLong("c0000000", 16)));
+
+		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(3), BigInteger.valueOf(17));
 		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(10), BigInteger.valueOf(18));
 		sequentialDatapath.dataMemory.setDataToMemory(BigInteger.valueOf(24), BigInteger.valueOf(19));
 
